@@ -1,9 +1,7 @@
-import React from "react";
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../src/context/AuthContext";
-import { EmailIcon, LoadingIcon } from "../../src/icons";
+import { useAuth } from "../../context/AuthContext";
+import { EmailIcon, LoadingIcon } from "../../icons";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");

@@ -1,0 +1,15 @@
+// Export all icons from this file for easy imports
+export { default as UserIcon } from "./UserIcon";
+export { default as LockIcon } from "./LockIcon";
+export { default as EmailIcon } from "./EmailIcon";
+export { default as EyeIcon } from "./EyeIcon";
+export { default as EyeOffIcon } from "./EyeOffIcon";
+export { default as HomeIcon } from "./HomeIcon";
+export { default as TestIcon } from "./TestIcon";
+export { default as ResultIcon } from "./ResultIcon";
+export { default as LoadingIcon } from "./LoadingIcon";
+export { default as LogoutIcon } from "./LogoutIcon";
+export { default as CheckIcon } from "./CheckIcon";
+export { default as XIcon } from "./XIcon";
+export { default as MenuIcon } from "./MenuIcon";
+export { default as CloseIcon } from "./CloseIcon";
