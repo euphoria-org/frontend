@@ -24,7 +24,7 @@ export const mbtiService = {
       const response = await apiConnector(
         "POST",
         API_ENDPOINTS.MBTI.SUBMIT_TEST,
-        { answers }
+        { responses: answers }
       );
       return response;
     } catch (error) {
@@ -40,7 +40,7 @@ export const mbtiService = {
     try {
       const response = await apiConnector(
         "GET",
-        `${API_ENDPOINTS.MBTI.GET_RESULT}/${resultId}`
+        API_ENDPOINTS.MBTI.GET_RESULT(resultId)
       );
       return response;
     } catch (error) {

@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useReducer } from "react";
 import { mbtiService } from "../services/mbtiService";
 
-// Initial state
 const initialState = {
   questions: [],
   currentQuestion: 0,
@@ -13,7 +12,6 @@ const initialState = {
   testInProgress: false,
 };
 
-// Action types
 const MBTIActionTypes = {
   SET_LOADING: "SET_LOADING",
   SET_QUESTIONS: "SET_QUESTIONS",
@@ -192,11 +190,13 @@ export const MBTIProvider = ({ children }) => {
       const response = await mbtiService.submitTest(answersArray);
 
       if (response.success) {
+        const resultData = response.data;
+        
         dispatch({
           type: MBTIActionTypes.SET_RESULT,
-          payload: response.data,
+          payload: resultData,
         });
-        return { success: true, result: response.data };
+        return { success: true, result: resultData };
       } else {
         dispatch({
           type: MBTIActionTypes.SET_ERROR,
@@ -245,22 +245,18 @@ export const MBTIProvider = ({ children }) => {
     }
   };
 
-  // Reset test
   const resetTest = () => {
     dispatch({ type: MBTIActionTypes.RESET_TEST });
   };
 
-  // Clear error
   const clearError = () => {
     dispatch({ type: MBTIActionTypes.CLEAR_ERROR });
   };
 
-  // Check if test is complete
   const isTestComplete = () => {
     return Object.keys(state.answers).length === state.questions.length;
   };
 
-  // Get progress percentage
   const getProgress = () => {
     if (state.questions.length === 0) return 0;
     return Math.round(
