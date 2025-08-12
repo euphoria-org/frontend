@@ -15,7 +15,7 @@ const OAuthCallback = () => {
 
     const handleOAuthCallback = async () => {
       setHasProcessed(true);
-      
+
       const token = searchParams.get("token");
       const error = searchParams.get("error");
 
@@ -33,14 +33,15 @@ const OAuthCallback = () => {
       if (token) {
         try {
           const result = await oauthLogin(token);
-          
+
           if (result.success) {
             // Redirect to home page
             navigate("/", { replace: true });
           } else {
             navigate("/login", {
               state: {
-                message: result.message || "Authentication failed. Please try again.",
+                message:
+                  result.message || "Authentication failed. Please try again.",
               },
             });
           }
@@ -63,7 +64,7 @@ const OAuthCallback = () => {
     };
 
     handleOAuthCallback();
-  }, [searchParams, navigate, hasProcessed]); // Removed oauthLogin from dependencies
+  }, [searchParams, navigate, hasProcessed]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">

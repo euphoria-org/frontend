@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useReducer, useEffect, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useCallback,
+} from "react";
 import { authService } from "../services/authService";
 
 // Initial state
@@ -248,7 +254,7 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const userData = await response.json();
-        
+
         // Store user data
         localStorage.setItem("user", JSON.stringify(userData.user));
 
@@ -264,7 +270,7 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       const errorMessage = error.message || "OAuth authentication failed";
-      
+
       // Clean up storage
       localStorage.removeItem("token");
       localStorage.removeItem("user");
@@ -273,7 +279,7 @@ export const AuthProvider = ({ children }) => {
         type: AuthActionTypes.SET_ERROR,
         payload: errorMessage,
       });
-      
+
       return { success: false, message: errorMessage };
     }
   }, []);
