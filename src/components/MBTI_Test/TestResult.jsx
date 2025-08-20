@@ -1,18 +1,15 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { useMBTI } from "../../context/MBTIContext";
 
 const TestResult = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const { result } = useMBTI();
 
-  const rawResultData = location.state?.result || result;
+  const result = location.state?.result;
 
-  const resultData = rawResultData?.result || rawResultData;
-
+  // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -20,13 +17,13 @@ const TestResult = () => {
     }
 
     // Redirect if no result data
-    if (!resultData) {
+    if (!result) {
       navigate("/test");
       return;
     }
-  }, [isAuthenticated, resultData, navigate]);
+  }, [isAuthenticated, result, navigate]);
 
-  if (!resultData) {
+  if (!result) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
         <div className="text-center">
@@ -51,10 +48,11 @@ const TestResult = () => {
         "Determined",
       ],
       weaknesses: [
-        "Overly critical",
         "Arrogant",
         "Judgmental",
+        "Overly analytical",
         "Loathe highly structured environments",
+        "Clueless in romance",
       ],
     },
     INTP: {
@@ -63,32 +61,36 @@ const TestResult = () => {
         "Innovative inventors with an unquenchable thirst for knowledge.",
       traits: ["Logical", "Abstract", "Creative", "Innovative"],
       strengths: [
-        "Great analysts",
-        "Imaginative",
+        "Great analysts and abstract thinkers",
+        "Imaginative and original",
         "Open-minded",
         "Enthusiastic",
         "Objective",
+        "Honest and straightforward",
       ],
       weaknesses: [
-        "Very private",
+        "Very private and withdrawn",
         "Insensitive",
         "Absent-minded",
         "Condescending",
+        "Loathe rules and guidelines",
+        "Second-guess themselves",
       ],
     },
     ENTJ: {
       title: "The Commander",
-      description:
-        "Bold, imaginative and strong-willed leaders, always finding a way or making one.",
-      traits: ["Efficient", "Energetic", "Self-confident", "Strong-willed"],
+      description: "Bold, imaginative and strong-willed leaders.",
+      traits: ["Leader", "Strategic", "Efficient", "Energetic"],
       strengths: [
         "Efficient",
         "Energetic",
         "Self-confident",
         "Strong-willed",
         "Strategic thinkers",
+        "Charismatic and inspiring",
       ],
       weaknesses: [
+        "Intolerant",
         "Impatient",
         "Arrogant",
         "Poor handling of emotions",
@@ -99,65 +101,71 @@ const TestResult = () => {
       title: "The Debater",
       description:
         "Smart and curious thinkers who cannot resist an intellectual challenge.",
-      traits: ["Knowledgeable", "Quick", "Original", "Excellent brainstormers"],
+      traits: ["Innovative", "Enthusiastic", "Strategic", "Charismatic"],
       strengths: [
         "Knowledgeable",
         "Quick thinkers",
         "Original",
         "Excellent brainstormers",
         "Charismatic",
+        "Energetic",
       ],
       weaknesses: [
         "Very argumentative",
         "Insensitive",
         "Intolerant",
-        "Can find it difficult to focus",
+        "Find it difficult to focus",
+        "Dislike practical matters",
       ],
     },
     INFJ: {
       title: "The Advocate",
       description:
         "Quiet and mystical, yet very inspiring and tireless idealists.",
-      traits: ["Creative", "Insightful", "Inspiring", "Convincing"],
+      traits: ["Idealistic", "Creative", "Insightful", "Inspiring"],
       strengths: [
         "Creative",
         "Insightful",
-        "Inspiring",
-        "Convincing",
+        "Inspiring and convincing",
         "Decisive",
-        "Determined",
+        "Determined and passionate",
+        "Altruistic",
       ],
       weaknesses: [
         "Sensitive",
         "Extremely private",
         "Perfectionist",
         "Always need to have a cause",
+        "Can burn out easily",
       ],
     },
     INFP: {
       title: "The Mediator",
       description:
         "Poetic, kind and altruistic people, always eager to help a good cause.",
-      traits: ["Idealistic", "Loyal", "Adaptive", "Curious"],
+      traits: ["Idealistic", "Loyal", "Adaptable", "Curious"],
       strengths: [
         "Idealistic",
         "Loyal and devoted",
-        "Adaptive",
+        "Adaptable",
         "Curious",
-        "Passionate and energetic",
+        "Good at communicating",
+        "Hard-working",
       ],
       weaknesses: [
         "Too idealistic",
         "Too altruistic",
         "Impractical",
         "Dislike dealing with data",
+        "Take things personally",
+        "Difficult to get to know",
       ],
     },
     ENFJ: {
       title: "The Protagonist",
       description:
         "Charismatic and inspiring leaders, able to mesmerize their listeners.",
-      traits: ["Tolerant", "Reliable", "Charismatic", "Altruistic"],
+      traits: ["Charismatic", "Reliable", "Natural leaders", "Altruistic"],
       strengths: [
         "Tolerant",
         "Reliable",
@@ -170,25 +178,28 @@ const TestResult = () => {
         "Too selfless",
         "Too sensitive",
         "Fluctuating self-esteem",
+        "Struggle to make tough decisions",
       ],
     },
     ENFP: {
       title: "The Campaigner",
-      description:
-        "Enthusiastic, creative and sociable free spirits, who can always find a reason to smile.",
-      traits: ["Enthusiastic", "Creative", "Sociable", "Energetic"],
+      description: "Enthusiastic, creative and sociable free spirits.",
+      traits: ["Enthusiastic", "Creative", "Sociable", "Free-spirited"],
       strengths: [
         "Enthusiastic",
         "Creative",
         "Sociable",
-        "Energetic",
-        "Very popular and friendly",
+        "Free-spirited",
+        "Good people skills",
+        "Strong communication skills",
       ],
       weaknesses: [
         "Poor practical skills",
         "Find it difficult to focus",
         "Overthink things",
         "Get stressed easily",
+        "Highly emotional",
+        "Independent to a fault",
       ],
     },
     ISTJ: {
@@ -197,33 +208,40 @@ const TestResult = () => {
       traits: ["Honest", "Direct", "Strong-willed", "Dutiful"],
       strengths: [
         "Honest and direct",
-        "Strong-willed",
+        "Strong-willed and dutiful",
         "Very responsible",
         "Calm and practical",
+        "Create and enforce order",
+        "Jacks-of-all-trades",
       ],
       weaknesses: [
         "Stubborn",
         "Insensitive",
         "Always by the book",
         "Judgmental",
+        "Often unreasonably blame themselves",
       ],
     },
     ISFJ: {
       title: "The Protector",
       description:
-        "Very dedicated and warm protectors, always ready to defend their loved ones.",
+        "Warm-hearted and dedicated, always ready to protect their loved ones.",
       traits: ["Supportive", "Reliable", "Patient", "Imaginative"],
       strengths: [
         "Supportive",
         "Reliable and patient",
         "Imaginative and observant",
         "Enthusiastic",
+        "Loyal and hard-working",
+        "Good practical skills",
       ],
       weaknesses: [
         "Humble and shy",
         "Take things too personally",
         "Repress their feelings",
         "Overload themselves",
+        "Reluctant to change",
+        "Too altruistic",
       ],
     },
     ESTJ: {
@@ -235,13 +253,17 @@ const TestResult = () => {
         "Dedicated",
         "Strong-willed",
         "Direct and honest",
-        "Loyal and hard-working",
+        "Loyal, patient and reliable",
+        "Enjoy creating order",
+        "Excellent organizers",
       ],
       weaknesses: [
-        "Inflexible",
+        "Inflexible and stubborn",
         "Uncomfortable with unconventional situations",
         "Judgmental",
         "Too focused on social status",
+        "Difficult to relax",
+        "Difficulty expressing emotion",
       ],
     },
     ESFJ: {
@@ -250,129 +272,132 @@ const TestResult = () => {
         "Extraordinarily caring, social and popular people, always eager to help.",
       traits: [
         "Strong practical skills",
-        "Strong sense of duty",
-        "Very loyal",
-        "Sensitive and warm",
+        "Warm-hearted",
+        "Duty-bound",
+        "Good at connecting with others",
       ],
       strengths: [
         "Strong practical skills",
         "Strong sense of duty",
         "Very loyal",
         "Sensitive and warm",
+        "Good at connecting with others",
       ],
       weaknesses: [
         "Worried about their social status",
         "Inflexible",
-        "Reluctant to innovate",
+        "Reluctant to innovate or improvise",
         "Vulnerable to criticism",
+        "Often too needy",
+        "Too selfless",
       ],
     },
     ISTP: {
       title: "The Virtuoso",
       description:
         "Bold and practical experimenters, masters of all kinds of tools.",
-      traits: ["Tolerant", "Flexible", "Charming", "Unpredictable"],
+      traits: ["Tolerant", "Flexible", "Efficient", "Optimistic"],
       strengths: [
         "Tolerant and flexible",
-        "Charming",
-        "Unpredictable",
-        "Practical and realistic",
+        "Efficient and resourceful",
+        "Optimistic and energetic",
+        "Great in a crisis",
+        "Relaxed",
       ],
       weaknesses: [
         "Stubborn",
         "Insensitive",
         "Private and reserved",
         "Easily bored",
+        "Dislike commitment",
+        "Risky behavior",
       ],
     },
     ISFP: {
       title: "The Adventurer",
       description:
         "Flexible and charming artists, always ready to explore new possibilities.",
-      traits: ["Charming", "Sensitive", "Imaginative", "Passionate"],
+      traits: ["Charming", "Sensitive to others", "Imaginative", "Passionate"],
       strengths: [
         "Charming",
         "Sensitive to others",
         "Imaginative",
-        "Passionate and energetic",
+        "Passionate",
+        "Curious",
+        "Artistic",
       ],
       weaknesses: [
         "Fiercely independent",
         "Unpredictable",
         "Easily stressed",
         "Overly competitive",
+        "Fluctuating self-esteem",
       ],
     },
     ESTP: {
       title: "The Entrepreneur",
       description:
         "Smart, energetic and very perceptive people, who truly enjoy living on the edge.",
-      traits: [
-        "Tolerant",
-        "Energetic",
-        "Very perceptive",
-        "Excellent people skills",
-      ],
+      traits: ["Bold", "Rational", "Practical", "Original"],
       strengths: [
-        "Tolerant",
-        "Energetic",
-        "Very perceptive",
-        "Excellent people skills",
+        "Bold",
+        "Rational and practical",
+        "Original",
+        "Perceptive",
+        "Direct",
+        "Sociable",
       ],
       weaknesses: [
-        "Sensitive",
-        "Conflict-averse",
-        "Easily bored",
-        "Poor long-term planners",
+        "Insensitive",
+        "Impatient",
+        "Risk-prone",
+        "Unstructured",
+        "May miss the bigger picture",
+        "Defiant",
       ],
     },
     ESFP: {
       title: "The Entertainer",
       description:
         "Spontaneous, energetic and enthusiastic people – life is never boring around them.",
-      traits: ["Bold", "Practical", "Original", "Perceptive"],
-      strengths: ["Bold", "Practical", "Original", "Perceptive", "Direct"],
+      traits: ["Bold", "Original", "Aesthetics", "Showmanship"],
+      strengths: [
+        "Bold",
+        "Original",
+        "Aesthetics and showmanship",
+        "Practical",
+        "Observant",
+        "Excellent people skills",
+      ],
       weaknesses: [
         "Sensitive",
         "Conflict-averse",
         "Easily bored",
         "Poor long-term planners",
+        "Unfocused",
       ],
     },
   };
 
-  const typeInfo = typeDescriptions[resultData.mbtiType] || {
-    title: "Unknown Type",
-    description: "Description not available",
+  const typeInfo = typeDescriptions[result.mbtiType] || {
+    title: "Your Personality Type",
+    description:
+      "A unique personality type with its own strengths and characteristics.",
     traits: [],
     strengths: [],
     weaknesses: [],
   };
 
-  const getDimensionName = (dimension) => {
-    const dimensionNames = {
-      E: "Extraversion",
-      I: "Introversion",
-      S: "Sensing",
-      N: "Intuition",
-      T: "Thinking",
-      F: "Feeling",
-      J: "Judging",
-      P: "Perceiving",
-    };
-    return dimensionNames[dimension] || dimension;
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-purple-900 mb-4">
-            Your MBTI Results
+            Your MBTI Result
           </h1>
-          <p className="text-purple-700 text-lg">
-            Discover your unique personality type and unlock your potential
+          <p className="text-lg text-purple-700">
+            Congratulations on completing the personality test!
           </p>
         </div>
 
@@ -381,71 +406,87 @@ const TestResult = () => {
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-24 h-24 bg-purple-100 rounded-full mb-4">
               <span className="text-3xl font-bold text-purple-600">
-                {resultData.mbtiType}
+                {result.mbtiType}
               </span>
             </div>
             <h2 className="text-3xl font-bold text-purple-900 mb-2">
               {typeInfo.title}
             </h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              {typeInfo.description || resultData.description}
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              {typeInfo.description}
             </p>
           </div>
 
           {/* Dimension Scores */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            {resultData.scores &&
-              Object.entries(resultData.scores).map(([dimension, score]) => (
-                <div
-                  key={dimension}
-                  className="text-center p-4 bg-purple-50 rounded-lg"
-                >
-                  <div className="text-2xl font-bold text-purple-600 mb-1">
-                    {dimension}
-                  </div>
-                  <div className="text-sm text-gray-600 mb-2">
-                    {getDimensionName(dimension)}
-                  </div>
-                  <div className="text-lg font-semibold text-purple-800">
-                    {score}
-                  </div>
-                </div>
-              ))}
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            {result.dimensionScores &&
+              Object.entries(result.dimensionScores).map(
+                ([dimension, score]) => {
+                  const isPositive = score > 0;
+                  const percentage = Math.abs(score);
+                  const dimensionPairs = {
+                    "Extraversion-Introversion": isPositive
+                      ? "Extraversion (E)"
+                      : "Introversion (I)",
+                    "Sensing-Intuition": isPositive
+                      ? "Sensing (S)"
+                      : "Intuition (N)",
+                    "Thinking-Feeling": isPositive
+                      ? "Thinking (T)"
+                      : "Feeling (F)",
+                    "Judging-Perceiving": isPositive
+                      ? "Judging (J)"
+                      : "Perceiving (P)",
+                  };
+
+                  return (
+                    <div
+                      key={dimension}
+                      className="bg-purple-50 rounded-lg p-4"
+                    >
+                      <h3 className="font-semibold text-purple-900 mb-2">
+                        {dimensionPairs[dimension] || dimension}
+                      </h3>
+                      <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div
+                          className="bg-purple-600 h-2 rounded-full"
+                          style={{ width: `${percentage}%` }}
+                        ></div>
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        {percentage}% preference
+                      </p>
+                    </div>
+                  );
+                }
+              )}
           </div>
         </div>
 
-        {/* Strengths and Weaknesses */}
+        {/* Strengths and Traits */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           {/* Strengths */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-bold text-green-800 mb-4 flex items-center">
-              <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                ✓
-              </span>
-              Strengths
-            </h3>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-xl font-bold text-green-700 mb-4">Strengths</h3>
             <ul className="space-y-2">
               {typeInfo.strengths.map((strength, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
                   <span className="text-gray-700">{strength}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Areas for Growth */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-bold text-orange-800 mb-4 flex items-center">
-              <span className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center mr-3">
-                ⚡
-              </span>
-              Areas for Growth
+          {/* Areas for Development */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-xl font-bold text-orange-700 mb-4">
+              Areas for Development
             </h3>
             <ul className="space-y-2">
               {typeInfo.weaknesses.map((weakness, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
                   <span className="text-gray-700">{weakness}</span>
                 </li>
               ))}
@@ -453,44 +494,29 @@ const TestResult = () => {
           </div>
         </div>
 
-        {/* Key Traits */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h3 className="text-xl font-bold text-purple-800 mb-4">Key Traits</h3>
-          <div className="flex flex-wrap gap-3">
-            {typeInfo.traits.map((trait, index) => (
-              <span
-                key={index}
-                className="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm font-medium"
-              >
-                {trait}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Test Summary */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h3 className="text-xl font-bold text-purple-800 mb-4">
+        {/* Test Details */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h3 className="text-xl font-bold text-purple-900 mb-4">
             Test Summary
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600 mb-1">
-                {Object.keys(resultData.scores || {}).length * 5 || "N/A"}
-              </div>
-              <div className="text-sm text-gray-600">Questions Answered</div>
+          <div className="grid md:grid-cols-3 gap-4 text-center">
+            <div>
+              <p className="text-2xl font-bold text-purple-600">
+                {result.totalQuestions || "N/A"}
+              </p>
+              <p className="text-gray-600">Questions Answered</p>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600 mb-1">
-                {new Date().toLocaleDateString()}
-              </div>
-              <div className="text-sm text-gray-600">Completion Date</div>
+            <div>
+              <p className="text-2xl font-bold text-purple-600">
+                {new Date(result.completedAt).toLocaleDateString()}
+              </p>
+              <p className="text-gray-600">Completed On</p>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600 mb-1">
-                {resultData.mbtiType}
-              </div>
-              <div className="text-sm text-gray-600">Your Type</div>
+            <div>
+              <p className="text-2xl font-bold text-purple-600">
+                {result.mbtiType}
+              </p>
+              <p className="text-gray-600">Your Type</p>
             </div>
           </div>
         </div>
@@ -499,16 +525,22 @@ const TestResult = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/test"
-            className="inline-flex items-center justify-center px-6 py-3 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors"
+            className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-center"
           >
             Take Test Again
           </Link>
           <Link
             to="/"
-            className="inline-flex items-center justify-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-center"
           >
             Back to Home
           </Link>
+          <button
+            onClick={() => window.print()}
+            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
+            Print Results
+          </button>
         </div>
       </div>
     </div>

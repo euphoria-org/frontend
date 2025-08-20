@@ -256,15 +256,15 @@ export const AuthProvider = ({ children }) => {
         const userData = await response.json();
 
         // Store user data
-        localStorage.setItem("user", JSON.stringify(userData.data));
+        localStorage.setItem("user", JSON.stringify(userData.user));
 
         // Update context state
         dispatch({
           type: AuthActionTypes.SET_USER,
-          payload: { user: userData.data, token },
+          payload: { user: userData.user, token },
         });
 
-        return { success: true, user: userData.data };
+        return { success: true, user: userData.user };
       } else {
         throw new Error("Failed to fetch user profile");
       }

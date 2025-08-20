@@ -86,13 +86,8 @@ const MBTITest = () => {
     }
 
     const result = await submitTest();
-
     if (result.success) {
-      navigate("/result", {
-        state: { result: result.result },
-        replace: true,
-      });
-    } else {
+      navigate("/result", { state: { result: result.result } });
     }
   };
 
@@ -202,8 +197,8 @@ const MBTITest = () => {
                 <input
                   type="radio"
                   name="answer"
-                  value="1"
-                  checked={selectedAnswer === "1"}
+                  value="-2"
+                  checked={selectedAnswer === "-2"}
                   onChange={(e) => handleAnswerSelect(e.target.value)}
                   className="mr-3 text-purple-600 focus:ring-purple-500"
                 />
@@ -215,8 +210,8 @@ const MBTITest = () => {
                 <input
                   type="radio"
                   name="answer"
-                  value="2"
-                  checked={selectedAnswer === "2"}
+                  value="-1"
+                  checked={selectedAnswer === "-1"}
                   onChange={(e) => handleAnswerSelect(e.target.value)}
                   className="mr-3 text-purple-600 focus:ring-purple-500"
                 />
@@ -228,8 +223,8 @@ const MBTITest = () => {
                 <input
                   type="radio"
                   name="answer"
-                  value="3"
-                  checked={selectedAnswer === "3"}
+                  value="0"
+                  checked={selectedAnswer === "0"}
                   onChange={(e) => handleAnswerSelect(e.target.value)}
                   className="mr-3 text-purple-600 focus:ring-purple-500"
                 />
@@ -241,8 +236,8 @@ const MBTITest = () => {
                 <input
                   type="radio"
                   name="answer"
-                  value="4"
-                  checked={selectedAnswer === "4"}
+                  value="1"
+                  checked={selectedAnswer === "1"}
                   onChange={(e) => handleAnswerSelect(e.target.value)}
                   className="mr-3 text-purple-600 focus:ring-purple-500"
                 />
@@ -254,8 +249,8 @@ const MBTITest = () => {
                 <input
                   type="radio"
                   name="answer"
-                  value="5"
-                  checked={selectedAnswer === "5"}
+                  value="2"
+                  checked={selectedAnswer === "2"}
                   onChange={(e) => handleAnswerSelect(e.target.value)}
                   className="mr-3 text-purple-600 focus:ring-purple-500"
                 />
