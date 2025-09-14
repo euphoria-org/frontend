@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  /* MBTI Platform Color Palette */
+  --color-navbar-link: #848897;
+  --color-header: #282828;
+
+  /* Euphoria Color Palette */
   --color-primary: #35063e;
   --color-primary-light: #4e2460;
   --color-primary-dark: #230229;
@@ -48,4 +51,20 @@
   --color-amber-700: #b45309;
   --color-amber-800: #92400e;
   --color-amber-900: #78350f;
+
+  /* Gradient Colors */
+  --color-light-blue: #c6ecff;
+  --color-light-lavender: #e0d5ff;
+
+  /* Custom Color Palette */
+  --color-custom-1: #ced4f1;
+  --color-custom-2: #446f7c;
+  --color-custom-3: #ececfb;
+  --color-custom-4: #759fbd;
+  --color-custom-5: #656b81;
+  --color-custom-6: #9494cd;
+  --color-custom-7: #6a7582;
+  --color-custom-8: #aeb3db;
+  --color-custom-9: #9eb9d0;
+  --color-custom-10: #9ca5b2;
 }

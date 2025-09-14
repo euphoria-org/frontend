@@ -1,254 +1,138 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { TestIcon, UserIcon, LogoutIcon } from "../icons";
+import { TestIcon, UserIcon } from "../icons";
+import Footer from "./layout/Footer";
 
 const Home = () => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
-  const handleLogout = () => {
-    logout();
-  };
+  const testCards = [
+    {
+      id: 1,
+      icon: TestIcon,
+      title: "MBTI Personality Test",
+      description:
+        "Discover your Myers-Briggs personality type through comprehensive questions that reveal your preferences in how you perceive the world and make decisions.",
+      buttonText: "Take MBTI Test",
+      route: "/test",
+      available: true,
+    },
+    {
+      id: 2,
+      icon: UserIcon,
+      title: "PERMA Assessment",
+      description:
+        "Measure your wellbeing across five key dimensions: Positive Emotions, Engagement, Relationships, Meaning, and Achievement for a fulfilling life.",
+      buttonText: "Take PERMA Test",
+      route: "/perma-test",
+      available: false,
+    },
+    {
+      id: 3,
+      icon: TestIcon,
+      title: "IQ Assessment",
+      description:
+        "Evaluate your cognitive abilities through standardized intelligence testing that measures logical reasoning, pattern recognition, and problem-solving skills.",
+      buttonText: "Take IQ Test",
+      route: "/iq-test",
+      available: false,
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1
-                className="text-2xl font-bold"
-                style={{ color: "var(--color-purple-900)" }}
-              >
-                MBTI Platform
-              </h1>
-            </div>
-
-            <nav className="flex items-center space-x-4">
-              {isAuthenticated ? (
-                <>
-                  <span className="text-gray-700">
-                    Welcome, {user?.name || user?.email}
-                  </span>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center space-x-1 px-4 py-2 text-red-600 hover:text-red-700 transition-colors"
-                  >
-                    <LogoutIcon className="w-4 h-4" />
-                    <span>Logout</span>
-                  </button>
-                </>
-              ) : (
-                <div className="flex space-x-2">
-                  <Link
-                    to="/login"
-                    className="px-4 py-2 hover:text-purple-700 transition-colors"
-                    style={{ color: "var(--color-purple-600)" }}
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/signup"
-                    className="px-4 py-2 text-white rounded-lg hover:opacity-90 transition-colors"
-                    style={{ backgroundColor: "var(--color-purple-600)" }}
-                  >
-                    Sign Up
-                  </Link>
-                </div>
-              )}
-            </nav>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h2
             className="text-4xl font-bold mb-4"
-            style={{ color: "var(--color-purple-900)" }}
+            style={{ color: "var(--color-header)" }}
           >
             Discover Your Personality Type
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Take our comprehensive MBTI personality test and gain insights into
-            your unique traits, preferences, and behavioral patterns.
-            Understanding your personality type can help you in personal growth,
-            career decisions, and relationships.
+            Take our comprehensive assessments and gain insights into your
+            unique traits, preferences, and behavioral patterns. Understanding
+            yourself better can help you in personal growth, career decisions,
+            and relationships.
           </p>
-
-          {isAuthenticated ? (
-            <Link
-              to="/test"
-              className="inline-flex items-center space-x-2 px-8 py-4 text-white text-lg font-semibold rounded-lg hover:opacity-90 transition-colors shadow-lg"
-              style={{ backgroundColor: "var(--color-purple-600)" }}
-            >
-              <TestIcon className="w-6 h-6" />
-              <span>Take MBTI Test</span>
-            </Link>
-          ) : (
-            <div className="space-y-4">
-              <p
-                className="font-medium"
-                style={{ color: "var(--color-purple-700)" }}
-              >
-                Please log in to take the personality test
-              </p>
-              <Link
-                to="/login"
-                className="inline-flex items-center space-x-2 px-8 py-4 text-white text-lg font-semibold rounded-lg hover:opacity-90 transition-colors shadow-lg"
-                style={{ backgroundColor: "var(--color-purple-600)" }}
-              >
-                <UserIcon className="w-6 h-6" />
-                <span>Login to Start</span>
-              </Link>
-            </div>
-          )}
         </div>
 
-        {/* Features Section */}
+        {/* Test Cards Section */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div
-              className="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
-              style={{ backgroundColor: "var(--color-purple-100)" }}
-            >
-              <TestIcon
-                className="w-6 h-6"
-                style={{ color: "var(--color-purple-600)" }}
-              />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Comprehensive Test
-            </h3>
-            <p className="text-gray-600">
-              Take a detailed personality assessment based on the Myers-Briggs
-              Type Indicator methodology.
-            </p>
-          </div>
+          {testCards.map((testCard) => {
+            const IconComponent = testCard.icon;
+            return (
+              <div
+                key={testCard.id}
+                className="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow"
+              >
+                <div
+                  className="w-16 h-16 rounded-lg flex items-center justify-center mb-4"
+                  style={{ backgroundColor: "var(--color-custom-3)" }}
+                >
+                  <IconComponent
+                    className="w-8 h-8"
+                    style={{ color: "var(--color-custom-2)" }}
+                  />
+                </div>
+                <h3
+                  className="text-xl font-bold mb-3"
+                  style={{ color: "var(--color-header)" }}
+                >
+                  {testCard.title}
+                </h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  {testCard.description}
+                </p>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div
-              className="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
-              style={{ backgroundColor: "var(--color-purple-100)" }}
-            >
-              <UserIcon
-                className="w-6 h-6"
-                style={{ color: "var(--color-purple-600)" }}
-              />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Personal Insights
-            </h3>
-            <p className="text-gray-600">
-              Get detailed insights about your personality type, strengths, and
-              areas for development.
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div
-              className="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
-              style={{ backgroundColor: "var(--color-purple-100)" }}
-            >
-              <TestIcon
-                className="w-6 h-6"
-                style={{ color: "var(--color-purple-600)" }}
-              />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Track Progress
-            </h3>
-            <p className="text-gray-600">
-              Save your results and track your personality insights over time
-              with your personal account.
-            </p>
-          </div>
+                {testCard.available ? (
+                  isAuthenticated ? (
+                    <Link
+                      to={testCard.route}
+                      className="inline-flex items-center justify-center w-full space-x-2 px-6 py-3 text-white font-semibold rounded-lg hover:opacity-90 transition-colors shadow-md"
+                      style={{ backgroundColor: "var(--color-custom-2)" }}
+                    >
+                      <TestIcon className="w-5 h-5" />
+                      <span>{testCard.buttonText}</span>
+                    </Link>
+                  ) : (
+                    <div className="text-center">
+                      <p
+                        className="text-sm font-medium mb-3"
+                        style={{ color: "var(--color-custom-5)" }}
+                      >
+                        Please log in to take this test
+                      </p>
+                      <Link
+                        to="/login"
+                        className="inline-flex items-center justify-center w-full space-x-2 px-6 py-3 text-white font-semibold rounded-lg hover:opacity-90 transition-colors shadow-md"
+                        style={{ backgroundColor: "var(--color-custom-2)" }}
+                      >
+                        <UserIcon className="w-5 h-5" />
+                        <span>Login to Start</span>
+                      </Link>
+                    </div>
+                  )
+                ) : (
+                  <div className="text-center">
+                    <button
+                      disabled
+                      className="inline-flex items-center justify-center w-full space-x-2 px-6 py-3 text-gray-500 font-semibold rounded-lg bg-gray-100 cursor-not-allowed"
+                    >
+                      <TestIcon className="w-5 h-5" />
+                      <span>Coming Soon</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
-
-        {/* MBTI Types Overview */}
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h3 className="text-2xl font-bold text-purple-900 mb-6 text-center">
-            About MBTI Personality Types
-          </h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center">
-              <h4 className="font-semibold text-purple-700 mb-2">
-                Extraversion (E)
-              </h4>
-              <p className="text-sm text-gray-600">
-                Focus on outer world, energized by interaction
-              </p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold text-purple-700 mb-2">
-                Introversion (I)
-              </h4>
-              <p className="text-sm text-gray-600">
-                Focus on inner world, energized by reflection
-              </p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold text-purple-700 mb-2">
-                Sensing (S)
-              </h4>
-              <p className="text-sm text-gray-600">
-                Focus on present, concrete information
-              </p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold text-purple-700 mb-2">
-                Intuition (N)
-              </h4>
-              <p className="text-sm text-gray-600">
-                Focus on future possibilities and patterns
-              </p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold text-purple-700 mb-2">
-                Thinking (T)
-              </h4>
-              <p className="text-sm text-gray-600">
-                Decisions based on logic and analysis
-              </p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold text-purple-700 mb-2">
-                Feeling (F)
-              </h4>
-              <p className="text-sm text-gray-600">
-                Decisions based on values and people
-              </p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold text-purple-700 mb-2">
-                Judging (J)
-              </h4>
-              <p className="text-sm text-gray-600">
-                Prefer structure and closure
-              </p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold text-purple-700 mb-2">
-                Perceiving (P)
-              </h4>
-              <p className="text-sm text-gray-600">
-                Prefer flexibility and openness
-              </p>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-purple-900 text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p>&copy; 2025 MBTI Platform. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 };
 

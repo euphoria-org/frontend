@@ -1,5 +1,7 @@
 // Export all icons from this file for easy imports
 export { default as UserIcon } from "./UserIcon";
+export { default as ProfileIcon } from "./ProfileIcon";
+export { default as AboutIcon } from "./AboutIcon";
 export { default as LockIcon } from "./LockIcon";
 export { default as EmailIcon } from "./EmailIcon";
 export { default as EyeIcon } from "./EyeIcon";
