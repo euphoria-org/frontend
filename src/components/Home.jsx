@@ -48,7 +48,16 @@ const Home = () => {
   const testCards = [
     {
       id: 1,
-      icon: TestIcon,
+      image: "/PERMA.png",
+      title: "PERMA Assessment",
+      description:
+        "Measure your wellbeing across five key dimensions: Positive Emotions, Engagement, Relationships, Meaning, and Achievement for a fulfilling life.",
+      buttonText: "Take PERMA Test",
+      route: "/perma-test",
+      available: false,
+    },{
+      id: 2,
+      image: "/MBTI.png",
       title: "MBTI Personality Test",
       description:
         "Discover your Myers-Briggs personality type through comprehensive questions that reveal your preferences in how you perceive the world and make decisions.",
@@ -57,18 +66,8 @@ const Home = () => {
       available: true,
     },
     {
-      id: 2,
-      icon: UserIcon,
-      title: "PERMA Assessment",
-      description:
-        "Measure your wellbeing across five key dimensions: Positive Emotions, Engagement, Relationships, Meaning, and Achievement for a fulfilling life.",
-      buttonText: "Take PERMA Test",
-      route: "/perma-test",
-      available: false,
-    },
-    {
       id: 3,
-      icon: TestIcon,
+      image: "/IQ.png",
       title: "IQ Assessment",
       description:
         "Evaluate your cognitive abilities through standardized intelligence testing that measures logical reasoning, pattern recognition, and problem-solving skills.",
@@ -82,7 +81,6 @@ const Home = () => {
     <>
       <div className="min-h-screen bg-gradient-to-br">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          
           <div className="text-center mb-20">
             <h2
               className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
@@ -99,19 +97,16 @@ const Home = () => {
           </div>
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             {testCards.map((testCard) => {
-              const IconComponent = testCard.icon;
               return (
                 <div
                   key={testCard.id}
                   className="p-8 rounded-2xl border border-gray-200 hover:border-gray-300  hover:scale-105 transition-all duration-300 group backdrop-blur-sm bg-white"
                 >
-                  <div
-                    className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
-                    style={{ backgroundColor: "var(--color-custom-3)" }}
-                  >
-                    <IconComponent
-                      className="w-10 h-10"
-                      style={{ color: "var(--color-custom-2)" }}
+                  <div className="flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <img
+                      src={testCard.image}
+                      alt={testCard.title}
+                      className="w-20 h-20 object-contain"
                     />
                   </div>
                   <h3

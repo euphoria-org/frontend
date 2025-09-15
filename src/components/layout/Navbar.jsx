@@ -32,18 +32,16 @@ const Navbar = () => {
     return location.pathname === path;
   };
 
-  // Helper function to get user display name
   const getUserDisplayName = () => {
     if (!user) return "User";
 
-    // Try different possible name fields from OAuth providers
-    return (
+    const fullName =
       user.name ||
       user.displayName ||
       user.given_name ||
       user.firstName ||
-      (user.email ? user.email.split("@")[0] : "User")
-    );
+      (user.email ? user.email.split("@")[0] : "User");
+    return fullName.length > 5 ? fullName.substring(0, 5) : fullName;
   };
 
   const navLinks = [
@@ -60,10 +58,11 @@ const Navbar = () => {
           <div className="flex items-center space-x-8">
             <Link
               to="/"
-              className="text-xl font-bold hover:text-purple-600 transition-colors"
+              className="flex items-center space-x-3 text-xl font-bold hover:text-purple-600 transition-colors"
               style={{ color: "var(--color-navbar-link)" }}
             >
-              Euphoria
+              <img src="/Logo.png" alt="Euphoria Logo" className="w-12 h-12" />
+              <span>Euphoria</span>
             </Link>
 
             <div className="flex items-center space-x-6">
@@ -161,11 +160,12 @@ const Navbar = () => {
           <div className="flex items-center justify-between">
             <Link
               to="/"
-              className="text-xl font-bold"
+              className="flex items-center space-x-3 text-xl font-bold"
               onClick={() => setIsMobileMenuOpen(false)}
               style={{ color: "var(--color-navbar-link)" }}
             >
-              Euphoria
+              <img src="/Logo.png" alt="Euphoria Logo" className="w-10 h-10" />
+              <span>Euphoria</span>
             </Link>
 
             <div className="flex items-center space-x-3">
