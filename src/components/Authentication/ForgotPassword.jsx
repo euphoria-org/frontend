@@ -38,12 +38,16 @@ const ForgotPassword = () => {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div className="bg-white rounded-lg shadow-md p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white py-6 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-6">
+          <div className="bg-white/60 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-6 text-center">
+            <div
+              className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6"
+              style={{ backgroundColor: "var(--color-custom-3)" }}
+            >
               <svg
-                className="w-8 h-8 text-green-500"
+                className="w-10 h-10"
+                style={{ color: "var(--color-custom-2)" }}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -56,13 +60,16 @@ const ForgotPassword = () => {
                 />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-purple-900 mb-4">
-              Check Your Email
+            <h2
+              className="text-3xl font-bold mb-4"
+              style={{ color: "var(--color-header)" }}
+            >
+              Check Your Inbox
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-6 leading-relaxed">
               We've sent password reset instructions to <strong>{email}</strong>
             </p>
-            <p className="text-sm text-gray-500 mb-6">
+            <p className="text-sm text-gray-500 mb-8">
               Didn't receive the email? Check your spam folder or try again.
             </p>
             <div className="space-y-3">
@@ -72,13 +79,18 @@ const ForgotPassword = () => {
                   setEmail("");
                   setMessage("");
                 }}
-                className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="w-full px-6 py-3 text-white font-semibold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-offset-2"
+                style={{
+                  backgroundColor: "var(--color-custom-2)",
+                  "--tw-ring-color": "var(--color-custom-2)",
+                  "--tw-ring-opacity": "0.3",
+                }}
               >
                 Try Different Email
               </button>
               <Link
                 to="/login"
-                className="block w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-center"
+                className="block w-full px-6 py-3 bg-white/70 backdrop-blur-sm border border-gray-200/50 rounded-2xl text-gray-700 font-semibold text-center hover:bg-white/90 hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-200/50"
               >
                 Back to Login
               </Link>
@@ -90,42 +102,50 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-purple-900">
-            Forgot your password?
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-6">
+        <div className="text-center">
+          <h2
+            className="text-3xl font-bold mb-3"
+            style={{ color: "var(--color-header)" }}
+          >
+            Reset Your Access
           </h2>
-          <p className="mt-2 text-center text-sm text-purple-600">
-            Enter your email address and we'll send you instructions to reset
-            your password.
+          <p className="text-base text-gray-600 mb-6 leading-relaxed">
+            Enter your email and we'll help you get back on track
           </p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="bg-white/60 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-6">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             {(error || message) && (
               <div
-                className={`border px-4 py-3 rounded relative ${
+                className={`border px-4 py-3 rounded-2xl backdrop-blur-sm ${
                   error
-                    ? "bg-red-50 border-red-200 text-red-700"
-                    : "bg-blue-50 border-blue-200 text-blue-700"
+                    ? "bg-red-50/80 border-red-200/50 text-red-700"
+                    : "bg-blue-50/80 border-blue-200/50 text-blue-700"
                 }`}
               >
-                <span className="block sm:inline">{error || message}</span>
+                <span className="block sm:inline text-sm">
+                  {error || message}
+                </span>
               </div>
             )}
 
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-semibold mb-2"
+                style={{ color: "var(--color-header)" }}
               >
-                Email address
+                Email Address
               </label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <EmailIcon className="h-5 w-5 text-gray-400" />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <EmailIcon
+                    className="h-5 w-5"
+                    style={{ color: "var(--color-custom-2)" }}
+                  />
                 </div>
                 <input
                   id="email"
@@ -133,7 +153,11 @@ const ForgotPassword = () => {
                   type="email"
                   autoComplete="email"
                   required
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-purple-500 focus:border-purple-500"
+                  className="block w-full pl-12 pr-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/50 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300"
+                  style={{
+                    "--tw-ring-color": "var(--color-custom-2)",
+                    "--tw-ring-opacity": "0.3",
+                  }}
                   placeholder="Enter your email address"
                   value={email}
                   onChange={handleInputChange}
@@ -145,20 +169,29 @@ const ForgotPassword = () => {
               <button
                 type="submit"
                 disabled={isLoading || !email}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group relative w-full flex justify-center py-3 px-6 text-sm font-semibold rounded-2xl text-white transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                style={{
+                  backgroundColor: "var(--color-custom-2)",
+                  "--tw-ring-color": "var(--color-custom-2)",
+                  "--tw-ring-opacity": "0.3",
+                }}
               >
-                {isLoading && <LoadingIcon className="w-4 h-4 mr-2" />}
+                {isLoading && <LoadingIcon className="w-5 h-5 mr-2" />}
                 {isLoading ? "Sending..." : "Send Reset Instructions"}
               </button>
             </div>
 
-            <div className="text-center">
-              <Link
-                to="/login"
-                className="font-medium text-purple-600 hover:text-purple-500"
-              >
-                Back to Login
-              </Link>
+            <div className="text-center mt-8">
+              <p className="text-gray-600">
+                Remember your password?{" "}
+                <Link
+                  to="/login"
+                  className="font-semibold hover:opacity-80 transition-opacity"
+                  style={{ color: "var(--color-custom-2)" }}
+                >
+                  Back to Login
+                </Link>
+              </p>
             </div>
           </form>
         </div>

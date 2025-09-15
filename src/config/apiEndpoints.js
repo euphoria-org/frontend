@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
     VERIFY_EMAIL: `${BASE_URL}/api/user/verify-email`,
     FORGOT_PASSWORD: `${BASE_URL}/api/user/forgot-password`,
     RESET_PASSWORD: `${BASE_URL}/api/user/reset-password`,
+    UPDATE_PASSWORD: `${BASE_URL}/api/user/update-password`,
     GOOGLE_AUTH: `${BASE_URL}/auth/google`,
     PROFILE: `${BASE_URL}/api/user/profile`,
   },

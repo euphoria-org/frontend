@@ -55,11 +55,9 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Desktop Navbar - Dynamic Island Style */}
       <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block">
-        <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-6 py-3 shadow-lg shadow-black/10">
+        <div className="bg-white/60 backdrop-blur-xl border border-white/20 rounded-full px-6 py-3 shadow-lg shadow-black/25">
           <div className="flex items-center space-x-8">
-            {/* Logo */}
             <Link
               to="/"
               className="text-xl font-bold hover:text-purple-600 transition-colors"
@@ -68,22 +66,19 @@ const Navbar = () => {
               Euphoria
             </Link>
 
-            {/* Navigation Links */}
             <div className="flex items-center space-x-6">
               {navLinks.map(({ path, label, icon: Icon }) => (
                 <Link
                   key={path}
                   to={path}
                   className={`flex items-center space-x-1 px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                    isActivePage(path)
-                      ? "text-white shadow-md"
-                      : "hover:bg-white/30"
+                    isActivePage(path) ? "shadow-md" : "hover:bg-white/50"
                   }`}
                   style={
                     isActivePage(path)
                       ? {
                           backgroundColor: "var(--color-custom-2)",
-                          color: "white",
+                          color: "#ffffff",
                         }
                       : {
                           color: "var(--color-navbar-link)",
@@ -106,12 +101,10 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Auth Controls */}
             <div className="flex items-center space-x-4">
               {isAuthenticated ? (
                 <div className="flex items-center space-x-3">
-                  {/* Profile */}
-                  <div className="flex items-center space-x-2 px-3 py-2 rounded-full bg-white/30">
+                  <div className="flex items-center space-x-2 px-3 py-2 rounded-full bg-white/50">
                     <ProfileIcon
                       className="w-4 h-4"
                       style={{ color: "var(--color-navbar-link)" }}
@@ -124,7 +117,6 @@ const Navbar = () => {
                     </span>
                   </div>
 
-                  {/* Logout */}
                   <button
                     onClick={handleLogout}
                     className="flex items-center space-x-1 px-3 py-2 rounded-full text-red-600 hover:bg-red-50/50 hover:text-red-700 transition-all duration-200"
@@ -164,11 +156,9 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 md:hidden">
-        <div className="bg-white/20 backdrop-blur-md border-b border-white/30 px-4 py-3">
+        <div className="bg-white/60 backdrop-blur-xl border-b border-white/20 px-4 py-3 shadow-lg">
           <div className="flex items-center justify-between">
-            {/* Logo */}
             <Link
               to="/"
               className="text-xl font-bold"
@@ -178,10 +168,9 @@ const Navbar = () => {
               Euphoria
             </Link>
 
-            {/* Auth Controls & Menu Button */}
             <div className="flex items-center space-x-3">
               {isAuthenticated && (
-                <div className="flex items-center space-x-2 px-2 py-1 rounded-full bg-white/30">
+                <div className="flex items-center space-x-2 px-2 py-1 rounded-full bg-white/50">
                   <ProfileIcon
                     className="w-4 h-4"
                     style={{ color: "var(--color-navbar-link)" }}
@@ -208,8 +197,6 @@ const Navbar = () => {
               </button>
             </div>
           </div>
-
-          {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="mt-4 pb-4 border-t border-white/20">
               <div className="flex flex-col space-y-2 pt-4">
@@ -219,15 +206,13 @@ const Navbar = () => {
                     to={path}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActivePage(path)
-                        ? "text-white shadow-md"
-                        : "hover:bg-white/30"
+                      isActivePage(path) ? "shadow-md" : "hover:bg-white/50"
                     }`}
                     style={
                       isActivePage(path)
                         ? {
                             backgroundColor: "var(--color-custom-2)",
-                            color: "white",
+                            color: "#ffffff",
                           }
                         : {
                             color: "var(--color-navbar-link)",
@@ -238,8 +223,6 @@ const Navbar = () => {
                     <span>{label}</span>
                   </Link>
                 ))}
-
-                {/* Mobile Auth Controls */}
                 <div className="pt-4 border-t border-white/20">
                   {isAuthenticated ? (
                     <button
@@ -254,7 +237,7 @@ const Navbar = () => {
                       <Link
                         to="/login"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center justify-center w-full px-4 py-3 rounded-lg text-sm font-medium hover:bg-white/30 transition-colors"
+                        className="flex items-center justify-center w-full px-4 py-3 rounded-lg text-sm font-medium hover:bg-white/50 transition-colors"
                         style={{ color: "var(--color-navbar-link)" }}
                       >
                         Login
@@ -285,8 +268,6 @@ const Navbar = () => {
           )}
         </div>
       </nav>
-
-      {/* Spacer for fixed navbar */}
       <div className="h-20 md:h-24"></div>
     </>
   );

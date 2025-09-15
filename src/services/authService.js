@@ -101,10 +101,10 @@ export const authService = {
     try {
       const response = await apiConnector(
         "POST",
-        API_ENDPOINTS.AUTH.RESET_PASSWORD,
+        `${API_ENDPOINTS.AUTH.RESET_PASSWORD}/${token}`,
         {
-          token,
           newPassword,
+          confirmNewPassword: newPassword, // Backend expects both fields
         }
       );
       return response;
@@ -112,6 +112,27 @@ export const authService = {
       return {
         success: false,
         message: error.message || "Password reset failed",
+      };
+    }
+  },
+
+  // Update password (for logged-in users)
+  updatePassword: async (currentPassword, newPassword, confirmNewPassword) => {
+    try {
+      const response = await apiConnector(
+        "PUT",
+        API_ENDPOINTS.AUTH.UPDATE_PASSWORD,
+        {
+          currentPassword,
+          newPassword,
+          confirmNewPassword,
+        }
+      );
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message || "Password update failed",
       };
     }
   },

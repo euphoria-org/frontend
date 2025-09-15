@@ -46,6 +46,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/update-password" element={<UpdatePassword />} />
+            <Route path="/reset-password" element={<UpdatePassword />} />
             <Route path="/auth/success" element={<OAuthCallback />} />
           </Routes>
         </BrowserRouter>

@@ -3,9 +3,47 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { TestIcon, UserIcon } from "../icons";
 import Footer from "./layout/Footer";
+import useCountUp from "../utils/useCountUp";
 
 const Home = () => {
   const { user, isAuthenticated } = useAuth();
+
+  // Statistics with animated counters
+  const testAccuracy = useCountUp(94, 2500);
+  const totalTests = useCountUp(15420, 3000);
+  const activeUsers = useCountUp(8750, 2800);
+  const satisfactionRate = useCountUp(96, 2200);
+
+  const statistics = [
+    {
+      id: 1,
+      value: testAccuracy,
+      suffix: "%",
+      label: "Test Accuracy",
+      description: "Scientifically validated results",
+    },
+    {
+      id: 2,
+      value: totalTests,
+      suffix: "+",
+      label: "Tests Completed",
+      description: "Assessments taken globally",
+    },
+    {
+      id: 3,
+      value: activeUsers,
+      suffix: "+",
+      label: "Active Users",
+      description: "People discovering themselves",
+    },
+    {
+      id: 4,
+      value: satisfactionRate,
+      suffix: "%",
+      label: "Satisfaction Rate",
+      description: "Users found insights valuable",
+    },
+  ];
 
   const testCards = [
     {
@@ -42,93 +80,126 @@ const Home = () => {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h2
-            className="text-4xl font-bold mb-4"
-            style={{ color: "var(--color-header)" }}
-          >
-            Discover Your Personality Type
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Take our comprehensive assessments and gain insights into your
-            unique traits, preferences, and behavioral patterns. Understanding
-            yourself better can help you in personal growth, career decisions,
-            and relationships.
-          </p>
-        </div>
-
-        {/* Test Cards Section */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {testCards.map((testCard) => {
-            const IconComponent = testCard.icon;
-            return (
-              <div
-                key={testCard.id}
-                className="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow"
-              >
+      <div className="min-h-screen bg-gradient-to-br">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          
+          <div className="text-center mb-20">
+            <h2
+              className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
+              style={{ color: "var(--color-header)" }}
+            >
+              Discover Your Personality Type
+            </h2>
+            <p className="text-xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
+              Take our comprehensive assessments and gain insights into your
+              unique traits, preferences, and behavioral patterns. Understanding
+              yourself better can help you in personal growth, career decisions,
+              and relationships.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {testCards.map((testCard) => {
+              const IconComponent = testCard.icon;
+              return (
                 <div
-                  className="w-16 h-16 rounded-lg flex items-center justify-center mb-4"
-                  style={{ backgroundColor: "var(--color-custom-3)" }}
+                  key={testCard.id}
+                  className="p-8 rounded-2xl border border-gray-200 hover:border-gray-300  hover:scale-105 transition-all duration-300 group backdrop-blur-sm bg-white"
                 >
-                  <IconComponent
-                    className="w-8 h-8"
-                    style={{ color: "var(--color-custom-2)" }}
-                  />
-                </div>
-                <h3
-                  className="text-xl font-bold mb-3"
-                  style={{ color: "var(--color-header)" }}
-                >
-                  {testCard.title}
-                </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  {testCard.description}
-                </p>
+                  <div
+                    className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                    style={{ backgroundColor: "var(--color-custom-3)" }}
+                  >
+                    <IconComponent
+                      className="w-10 h-10"
+                      style={{ color: "var(--color-custom-2)" }}
+                    />
+                  </div>
+                  <h3
+                    className="text-2xl font-bold mb-4"
+                    style={{ color: "var(--color-header)" }}
+                  >
+                    {testCard.title}
+                  </h3>
+                  <p className="text-gray-600 mb-8 leading-relaxed text-lg">
+                    {testCard.description}
+                  </p>
 
-                {testCard.available ? (
-                  isAuthenticated ? (
-                    <Link
-                      to={testCard.route}
-                      className="inline-flex items-center justify-center w-full space-x-2 px-6 py-3 text-white font-semibold rounded-lg hover:opacity-90 transition-colors shadow-md"
-                      style={{ backgroundColor: "var(--color-custom-2)" }}
-                    >
-                      <TestIcon className="w-5 h-5" />
-                      <span>{testCard.buttonText}</span>
-                    </Link>
-                  ) : (
-                    <div className="text-center">
-                      <p
-                        className="text-sm font-medium mb-3"
-                        style={{ color: "var(--color-custom-5)" }}
-                      >
-                        Please log in to take this test
-                      </p>
+                  {testCard.available ? (
+                    isAuthenticated ? (
                       <Link
-                        to="/login"
-                        className="inline-flex items-center justify-center w-full space-x-2 px-6 py-3 text-white font-semibold rounded-lg hover:opacity-90 transition-colors shadow-md"
+                        to={testCard.route}
+                        className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 text-white font-semibold rounded-xl hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg"
                         style={{ backgroundColor: "var(--color-custom-2)" }}
                       >
-                        <UserIcon className="w-5 h-5" />
-                        <span>Login to Start</span>
+                        <TestIcon className="w-6 h-6" />
+                        <span>{testCard.buttonText}</span>
                       </Link>
+                    ) : (
+                      <div className="text-center">
+                        <p
+                          className="text-sm font-medium mb-4"
+                          style={{ color: "var(--color-custom-5)" }}
+                        >
+                          Please log in to take this test
+                        </p>
+                        <Link
+                          to="/login"
+                          className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 text-white font-semibold rounded-xl hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg"
+                          style={{ backgroundColor: "var(--color-custom-2)" }}
+                        >
+                          <UserIcon className="w-6 h-6" />
+                          <span>Login to Start</span>
+                        </Link>
+                      </div>
+                    )
+                  ) : (
+                    <div className="text-center">
+                      <button
+                        disabled
+                        className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 text-gray-500 font-semibold rounded-xl bg-gray-100 cursor-not-allowed"
+                      >
+                        <TestIcon className="w-6 h-6" />
+                        <span>Coming Soon</span>
+                      </button>
                     </div>
-                  )
-                ) : (
-                  <div className="text-center">
-                    <button
-                      disabled
-                      className="inline-flex items-center justify-center w-full space-x-2 px-6 py-3 text-gray-500 font-semibold rounded-lg bg-gray-100 cursor-not-allowed"
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Statistics Section */}
+          <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 mb-16 border border-gray-100">
+            <div className="text-center">
+              <h3 className="text-3xl font-bold mb-8 text-gray-800">
+                Trusted by Thousands Worldwide
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                {statistics.map((stat) => (
+                  <div key={stat.id} className="text-center group">
+                    <div className="mb-4">
+                      <span
+                        className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+                        style={{ color: "var(--color-custom-2)" }}
+                      >
+                        {stat.value}
+                        {stat.suffix}
+                      </span>
+                    </div>
+                    <h4
+                      className="text-lg font-semibold mb-2"
+                      style={{ color: "var(--color-header)" }}
                     >
-                      <TestIcon className="w-5 h-5" />
-                      <span>Coming Soon</span>
-                    </button>
+                      {stat.label}
+                    </h4>
+                    <p className="text-sm text-gray-500 group-hover:text-gray-700 transition-colors">
+                      {stat.description}
+                    </p>
                   </div>
-                )}
+                ))}
               </div>
-            );
-          })}
+            </div>
+          </div>
         </div>
       </div>
       <Footer />

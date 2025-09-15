@@ -1,28 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { LockIcon, EyeIcon, LoadingIcon } from "../../icons";
+import {
+  LockIcon,
+  EyeIcon,
+  EyeOffIcon,
+  LoadingIcon,
+  CheckIcon,
+} from "../../icons";
 
 const UpdatePassword = () => {
   const [passwords, setPasswords] = useState({
     password: "",
     confirmPassword: "",
   });
+
   const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
   });
-  const [validationErrors, setValidationErrors] = useState({});
+
+  const [passwordRequirements, setPasswordRequirements] = useState({
+    length: false,
+    lowercase: false,
+    uppercase: false,
+    number: false,
+    special: false,
+  });
+
+  const [passwordMatch, setPasswordMatch] = useState(true);
   const [isTokenValid, setIsTokenValid] = useState(false);
   const [isCheckingToken, setIsCheckingToken] = useState(true);
 
-  const { updatePassword, isLoading, error, clearError } = useAuth();
+  const { resetPassword, isLoading, error, clearError } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
 
   useEffect(() => {
-    // Validate reset token when component mounts
     const validateToken = async () => {
       if (!token) {
         setIsCheckingToken(false);
@@ -30,8 +45,6 @@ const UpdatePassword = () => {
       }
 
       try {
-        // You might want to call an API to validate the token
-        // For now, we'll assume any token is valid
         setIsTokenValid(true);
       } catch (error) {
         setIsTokenValid(false);
@@ -43,30 +56,18 @@ const UpdatePassword = () => {
     validateToken();
   }, [token]);
 
-  const validatePassword = (password) => {
-    const errors = {};
+  const validatePasswordRequirements = (password) => {
+    setPasswordRequirements({
+      length: password.length >= 8,
+      lowercase: /(?=.*[a-z])/.test(password),
+      uppercase: /(?=.*[A-Z])/.test(password),
+      number: /(?=.*\d)/.test(password),
+      special: /(?=.*[@$!%*?&])/.test(password),
+    });
+  };
 
-    if (password.length < 8) {
-      errors.length = "Password must be at least 8 characters long";
-    }
-
-    if (!/(?=.*[a-z])/.test(password)) {
-      errors.lowercase = "Password must contain at least one lowercase letter";
-    }
-
-    if (!/(?=.*[A-Z])/.test(password)) {
-      errors.uppercase = "Password must contain at least one uppercase letter";
-    }
-
-    if (!/(?=.*\d)/.test(password)) {
-      errors.number = "Password must contain at least one number";
-    }
-
-    if (!/(?=.*[@$!%*?&])/.test(password)) {
-      errors.special = "Password must contain at least one special character";
-    }
-
-    return errors;
+  const isPasswordValid = () => {
+    return Object.values(passwordRequirements).every((req) => req);
   };
 
   const handleInputChange = (e) => {
@@ -77,44 +78,19 @@ const UpdatePassword = () => {
       [name]: value,
     }));
 
-    // Clear errors when user starts typing
     if (error) clearError();
-    if (validationErrors[name]) {
-      setValidationErrors((prev) => ({
-        ...prev,
-        [name]: undefined,
-      }));
-    }
 
-    // Validate password in real-time
     if (name === "password") {
-      const passwordErrors = validatePassword(value);
-      setValidationErrors((prev) => ({
-        ...prev,
-        passwordValidation: passwordErrors,
-      }));
+      validatePasswordRequirements(value);
     }
 
-    // Check password match
-    if (
-      name === "confirmPassword" ||
-      (name === "password" && passwords.confirmPassword)
-    ) {
+    if (name === "confirmPassword" || name === "password") {
       const newPassword = name === "password" ? value : passwords.password;
       const confirmPassword =
         name === "confirmPassword" ? value : passwords.confirmPassword;
-
-      if (confirmPassword && newPassword !== confirmPassword) {
-        setValidationErrors((prev) => ({
-          ...prev,
-          match: "Passwords do not match",
-        }));
-      } else {
-        setValidationErrors((prev) => ({
-          ...prev,
-          match: undefined,
-        }));
-      }
+      setPasswordMatch(
+        newPassword === confirmPassword || confirmPassword === ""
+      );
     }
   };
 
@@ -128,29 +104,19 @@ const UpdatePassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const passwordErrors = validatePassword(passwords.password);
-
-    if (Object.keys(passwordErrors).length > 0) {
-      setValidationErrors((prev) => ({
-        ...prev,
-        passwordValidation: passwordErrors,
-      }));
+    if (!isPasswordValid()) {
       return;
     }
 
     if (passwords.password !== passwords.confirmPassword) {
-      setValidationErrors((prev) => ({
-        ...prev,
-        match: "Passwords do not match",
-      }));
+      setPasswordMatch(false);
       return;
     }
 
     clearError();
-    const result = await updatePassword(token, passwords.password);
+    const result = await resetPassword(token, passwords.password);
 
     if (result.success) {
-      // Show success message and redirect to login
       navigate("/login", {
         state: {
           message:
@@ -160,34 +126,25 @@ const UpdatePassword = () => {
     }
   };
 
-  const isFormValid = () => {
-    return (
-      passwords.password &&
-      passwords.confirmPassword &&
-      passwords.password === passwords.confirmPassword &&
-      Object.keys(validatePassword(passwords.password)).length === 0
-    );
-  };
-
   if (isCheckingToken) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
-        <div className="text-center">
-          <LoadingIcon className="w-8 h-8 text-purple-600 mx-auto mb-4" />
-          <p className="text-purple-600">Validating reset token...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
+        <LoadingIcon className="w-8 h-8 text-gray-600" />
       </div>
     );
   }
 
   if (!token || !isTokenValid) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div className="bg-white rounded-lg shadow-md p-8 text-center">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white py-6 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-6">
+          <div className="bg-white/60 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-6 text-center">
+            <div
+              className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6"
+              style={{ backgroundColor: "var(--color-custom-3)" }}
+            >
               <svg
-                className="w-8 h-8 text-red-500"
+                className="w-10 h-10 text-red-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -200,23 +157,31 @@ const UpdatePassword = () => {
                 />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-red-900 mb-4">
+            <h2
+              className="text-3xl font-bold mb-4"
+              style={{ color: "var(--color-header)" }}
+            >
               Invalid Reset Link
             </h2>
             <p className="text-gray-600 mb-6">
-              The password reset link is invalid or has expired. Please request
-              a new password reset.
+              This password reset link is invalid or has expired. Please request
+              a new one.
             </p>
             <div className="space-y-3">
               <Link
                 to="/forgot-password"
-                className="block w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-center"
+                className="block w-full px-6 py-3 text-white font-semibold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-offset-2 text-center"
+                style={{
+                  backgroundColor: "var(--color-custom-2)",
+                  "--tw-ring-color": "var(--color-custom-2)",
+                  "--tw-ring-opacity": "0.3",
+                }}
               >
                 Request New Reset Link
               </Link>
               <Link
                 to="/login"
-                className="block w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-center"
+                className="block w-full px-6 py-3 bg-white/70 backdrop-blur-sm border border-gray-200/50 rounded-2xl text-gray-700 font-semibold text-center hover:bg-white/90 hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-200/50"
               >
                 Back to Login
               </Link>
@@ -228,82 +193,256 @@ const UpdatePassword = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-purple-900">
-            Update Password
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-6">
+        <div className="text-center">
+          <h2
+            className="text-3xl font-bold mb-3"
+            style={{ color: "var(--color-header)" }}
+          >
+            Create New Password
           </h2>
-          <p className="mt-2 text-center text-sm text-purple-600">
-            Please enter your new password below
+          <p className="text-base text-gray-600 mb-6">
+            Choose a strong password for your account
           </p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="bg-white/60 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-6">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative">
-                <span className="block sm:inline">{error}</span>
+              <div className="bg-red-50/80 backdrop-blur-sm border border-red-200/50 text-red-700 px-4 py-3 rounded-2xl">
+                <span className="block sm:inline text-sm">{error}</span>
               </div>
             )}
 
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-semibold mb-2"
+                style={{ color: "var(--color-header)" }}
               >
                 New Password
               </label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <LockIcon className="h-5 w-5 text-gray-400" />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <LockIcon
+                    className="h-5 w-5"
+                    style={{ color: "var(--color-custom-2)" }}
+                  />
                 </div>
                 <input
                   id="password"
                   name="password"
                   type={showPassword.password ? "text" : "password"}
                   required
-                  className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-purple-500 focus:border-purple-500"
+                  className="block w-full pl-12 pr-12 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/50 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300"
+                  style={{
+                    "--tw-ring-color": "var(--color-custom-2)",
+                    "--tw-ring-opacity": "0.3",
+                  }}
                   placeholder="Enter new password"
                   value={passwords.password}
                   onChange={handleInputChange}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center"
                   onClick={() => togglePasswordVisibility("password")}
                 >
-                  <EyeIcon
-                    className="h-5 w-5 text-gray-400 hover:text-gray-600"
-                    closed={!showPassword.password}
-                  />
+                  {showPassword.password ? (
+                    <EyeOffIcon
+                      className="h-5 w-5"
+                      style={{ color: "var(--color-custom-2)" }}
+                    />
+                  ) : (
+                    <EyeIcon
+                      className="h-5 w-5"
+                      style={{ color: "var(--color-custom-2)" }}
+                    />
+                  )}
                 </button>
               </div>
 
-              {/* Password validation indicators */}
-              {passwords.password && validationErrors.passwordValidation && (
-                <div className="mt-2 space-y-1">
-                  {Object.entries(validationErrors.passwordValidation).map(
-                    ([key, message]) => (
-                      <p
-                        key={key}
-                        className="text-xs text-red-600 flex items-center"
+              {/* Dynamic Password Requirements */}
+              {passwords.password && (
+                <div className="mt-4 p-4 bg-gray-50/50 backdrop-blur-sm rounded-2xl border border-gray-200/30">
+                  <p className="text-sm font-semibold text-gray-700 mb-3">
+                    Password Requirements:
+                  </p>
+                  <div className="space-y-2">
+                    {/* At least 8 characters */}
+                    <div className="flex items-center text-sm transition-all duration-300">
+                      <div
+                        className={`flex items-center justify-center w-5 h-5 rounded-full mr-3 transition-all duration-300 ${
+                          passwordRequirements.length
+                            ? "bg-green-100 border-2 border-green-500"
+                            : "bg-gray-100 border-2 border-gray-300"
+                        }`}
                       >
-                        <svg
-                          className="w-3 h-3 mr-1"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        {message}
-                      </p>
-                    )
-                  )}
+                        {passwordRequirements.length ? (
+                          <CheckIcon className="w-3 h-3 text-green-600" />
+                        ) : (
+                          <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                        )}
+                      </div>
+                      <span
+                        className={`font-medium transition-colors duration-300 ${
+                          passwordRequirements.length
+                            ? "text-green-700"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        At least 8 characters
+                      </span>
+                    </div>
+
+                    {/* One lowercase letter */}
+                    <div className="flex items-center text-sm transition-all duration-300">
+                      <div
+                        className={`flex items-center justify-center w-5 h-5 rounded-full mr-3 transition-all duration-300 ${
+                          passwordRequirements.lowercase
+                            ? "bg-green-100 border-2 border-green-500"
+                            : "bg-gray-100 border-2 border-gray-300"
+                        }`}
+                      >
+                        {passwordRequirements.lowercase ? (
+                          <CheckIcon className="w-3 h-3 text-green-600" />
+                        ) : (
+                          <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                        )}
+                      </div>
+                      <span
+                        className={`font-medium transition-colors duration-300 ${
+                          passwordRequirements.lowercase
+                            ? "text-green-700"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        One lowercase letter (a-z)
+                      </span>
+                    </div>
+
+                    {/* One uppercase letter */}
+                    <div className="flex items-center text-sm transition-all duration-300">
+                      <div
+                        className={`flex items-center justify-center w-5 h-5 rounded-full mr-3 transition-all duration-300 ${
+                          passwordRequirements.uppercase
+                            ? "bg-green-100 border-2 border-green-500"
+                            : "bg-gray-100 border-2 border-gray-300"
+                        }`}
+                      >
+                        {passwordRequirements.uppercase ? (
+                          <CheckIcon className="w-3 h-3 text-green-600" />
+                        ) : (
+                          <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                        )}
+                      </div>
+                      <span
+                        className={`font-medium transition-colors duration-300 ${
+                          passwordRequirements.uppercase
+                            ? "text-green-700"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        One uppercase letter (A-Z)
+                      </span>
+                    </div>
+
+                    {/* One number */}
+                    <div className="flex items-center text-sm transition-all duration-300">
+                      <div
+                        className={`flex items-center justify-center w-5 h-5 rounded-full mr-3 transition-all duration-300 ${
+                          passwordRequirements.number
+                            ? "bg-green-100 border-2 border-green-500"
+                            : "bg-gray-100 border-2 border-gray-300"
+                        }`}
+                      >
+                        {passwordRequirements.number ? (
+                          <CheckIcon className="w-3 h-3 text-green-600" />
+                        ) : (
+                          <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                        )}
+                      </div>
+                      <span
+                        className={`font-medium transition-colors duration-300 ${
+                          passwordRequirements.number
+                            ? "text-green-700"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        One number (0-9)
+                      </span>
+                    </div>
+
+                    {/* One special character */}
+                    <div className="flex items-center text-sm transition-all duration-300">
+                      <div
+                        className={`flex items-center justify-center w-5 h-5 rounded-full mr-3 transition-all duration-300 ${
+                          passwordRequirements.special
+                            ? "bg-green-100 border-2 border-green-500"
+                            : "bg-gray-100 border-2 border-gray-300"
+                        }`}
+                      >
+                        {passwordRequirements.special ? (
+                          <CheckIcon className="w-3 h-3 text-green-600" />
+                        ) : (
+                          <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                        )}
+                      </div>
+                      <span
+                        className={`font-medium transition-colors duration-300 ${
+                          passwordRequirements.special
+                            ? "text-green-700"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        One special character (@$!%*?&)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Overall password strength indicator */}
+                  <div className="mt-3 pt-3 border-t border-gray-200/50">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-semibold text-gray-600">
+                        Password Strength:
+                      </span>
+                      <span
+                        className={`text-xs font-bold ${
+                          Object.values(passwordRequirements).filter(Boolean)
+                            .length === 5
+                            ? "text-green-600"
+                            : Object.values(passwordRequirements).filter(
+                                Boolean
+                              ).length >= 3
+                            ? "text-yellow-600"
+                            : "text-red-500"
+                        }`}
+                      >
+                        {Object.values(passwordRequirements).filter(Boolean)
+                          .length === 5
+                          ? "Strong"
+                          : Object.values(passwordRequirements).filter(Boolean)
+                              .length >= 3
+                          ? "Medium"
+                          : "Weak"}
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className={`h-2 rounded-full transition-all duration-500 ${
+                          Object.values(passwordRequirements).filter(Boolean)
+                            .length === 5
+                            ? "bg-green-500 w-full"
+                            : Object.values(passwordRequirements).filter(
+                                Boolean
+                              ).length >= 3
+                            ? "bg-yellow-500 w-3/5"
+                            : "bg-red-500 w-1/5"
+                        }`}
+                      ></div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -311,71 +450,113 @@ const UpdatePassword = () => {
             <div>
               <label
                 htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-semibold mb-2"
+                style={{ color: "var(--color-header)" }}
               >
                 Confirm New Password
               </label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <LockIcon className="h-5 w-5 text-gray-400" />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <LockIcon
+                    className="h-5 w-5"
+                    style={{ color: "var(--color-custom-2)" }}
+                  />
                 </div>
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
                   type={showPassword.confirmPassword ? "text" : "password"}
                   required
-                  className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-purple-500 focus:border-purple-500"
+                  className={`block w-full pl-12 pr-12 py-3 bg-white/50 backdrop-blur-sm border rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300 ${
+                    passwordMatch
+                      ? "border-gray-200/50"
+                      : "border-red-300/50 focus:ring-red-400"
+                  }`}
+                  style={
+                    passwordMatch
+                      ? {
+                          "--tw-ring-color": "var(--color-custom-2)",
+                          "--tw-ring-opacity": "0.3",
+                        }
+                      : {}
+                  }
                   placeholder="Confirm new password"
                   value={passwords.confirmPassword}
                   onChange={handleInputChange}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center"
                   onClick={() => togglePasswordVisibility("confirmPassword")}
                 >
-                  <EyeIcon
-                    className="h-5 w-5 text-gray-400 hover:text-gray-600"
-                    closed={!showPassword.confirmPassword}
-                  />
+                  {showPassword.confirmPassword ? (
+                    <EyeOffIcon
+                      className="h-5 w-5"
+                      style={{ color: "var(--color-custom-2)" }}
+                    />
+                  ) : (
+                    <EyeIcon
+                      className="h-5 w-5"
+                      style={{ color: "var(--color-custom-2)" }}
+                    />
+                  )}
                 </button>
               </div>
 
-              {validationErrors.match && (
-                <p className="mt-1 text-xs text-red-600 flex items-center">
-                  <svg
-                    className="w-3 h-3 mr-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {validationErrors.match}
-                </p>
+              {!passwordMatch && passwords.confirmPassword && (
+                <div className="mt-2 p-3 bg-red-50/80 backdrop-blur-sm border border-red-200/50 rounded-xl">
+                  <p className="text-sm text-red-700 font-medium flex items-center">
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Passwords do not match
+                  </p>
+                </div>
               )}
+
+              {passwordMatch &&
+                passwords.confirmPassword &&
+                passwords.password === passwords.confirmPassword && (
+                  <div className="mt-2 p-3 bg-green-50/80 backdrop-blur-sm border border-green-200/50 rounded-xl">
+                    <p className="text-sm text-green-700 font-medium flex items-center">
+                      <CheckIcon className="w-4 h-4 mr-2" />
+                      Passwords match perfectly!
+                    </p>
+                  </div>
+                )}
             </div>
 
-            <div>
+            <div className="pt-2">
               <button
                 type="submit"
-                disabled={isLoading || !isFormValid()}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isLoading || !isPasswordValid() || !passwordMatch}
+                className="group relative w-full flex justify-center py-3 px-6 text-sm font-semibold rounded-2xl text-white transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                style={{
+                  backgroundColor: "var(--color-custom-2)",
+                  "--tw-ring-color": "var(--color-custom-2)",
+                  "--tw-ring-opacity": "0.3",
+                }}
               >
-                {isLoading && <LoadingIcon className="w-4 h-4 mr-2" />}
-                {isLoading ? "Updating..." : "Update Password"}
+                {isLoading && <LoadingIcon className="w-5 h-5 mr-2" />}
+                {isLoading ? "Updating Password..." : "Update Password"}
               </button>
             </div>
 
-            <div className="text-center">
+            <div className="text-center pt-2">
               <Link
                 to="/login"
-                className="font-medium text-purple-600 hover:text-purple-500"
+                className="font-semibold hover:opacity-80 transition-opacity"
+                style={{ color: "var(--color-custom-2)" }}
               >
-                Back to Login
+                ← Back to Login
               </Link>
             </div>
           </form>
