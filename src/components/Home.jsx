@@ -120,38 +120,25 @@ const Home = () => {
                   </p>
 
                   {testCard.available ? (
-                    isAuthenticated ? (
-                      <Link
-                        to={testCard.route}
-                        className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 text-white font-semibold rounded-xl hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg"
-                        style={{ backgroundColor: "var(--color-custom-2)" }}
-                      >
-                        <TestIcon className="w-6 h-6" />
-                        <span>{testCard.buttonText}</span>
-                      </Link>
-                    ) : (
-                      <div className="text-center">
-                        <p
-                          className="text-sm font-medium mb-4"
-                          style={{ color: "var(--color-custom-5)" }}
-                        >
-                          Please log in to take this test
-                        </p>
-                        <Link
-                          to="/login"
-                          className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 text-white font-semibold rounded-xl hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg"
-                          style={{ backgroundColor: "var(--color-custom-2)" }}
-                        >
-                          <UserIcon className="w-6 h-6" />
-                          <span>Login to Start</span>
-                        </Link>
-                      </div>
-                    )
+                    <Link
+                      to={testCard.route}
+                      className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 text-white font-semibold rounded-xl hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg"
+                      style={{ backgroundColor: "var(--color-custom-2)" }}
+                    >
+                      <TestIcon className="w-6 h-6" />
+                      <span>{testCard.buttonText}</span>
+                    </Link>
                   ) : (
                     <div className="text-center">
+                      <p
+                        className="text-sm font-medium mb-4"
+                        style={{ color: "var(--color-custom-5)" }}
+                      >
+                        Coming Soon
+                      </p>
                       <button
                         disabled
-                        className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 text-gray-500 font-semibold rounded-xl bg-gray-100 cursor-not-allowed"
+                        className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 bg-gray-400 text-white font-semibold rounded-xl cursor-not-allowed opacity-60"
                       >
                         <TestIcon className="w-6 h-6" />
                         <span>Coming Soon</span>

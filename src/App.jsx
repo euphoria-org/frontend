@@ -23,22 +23,9 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="about" element={<About />} />
-              <Route
-                path="test"
-                element={
-                  <ProtectedRoute>
-                    <MBTITest />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="result"
-                element={
-                  <ProtectedRoute>
-                    <TestResult />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="test" element={<MBTITest />} />
+              <Route path="result" element={<TestResult />} />
+              <Route path="result/:resultId" element={<TestResult />} />
             </Route>
 
             {/* Auth routes without navbar */}

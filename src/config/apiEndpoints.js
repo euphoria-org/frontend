@@ -18,7 +18,8 @@ export const API_ENDPOINTS = {
   MBTI: {
     GET_QUESTIONS: `${BASE_URL}/api/mbti/questions`,
     SUBMIT_TEST: `${BASE_URL}/api/mbti/submit-test`,
-    GET_RESULT: (resultId) => `${BASE_URL}/api/mbti/result/${resultId}`,
+    SUBMIT_TEST_GUEST: `${BASE_URL}/api/mbti/submit-test-guest`,
+    GET_RESULT: `${BASE_URL}/api/mbti/result`,
     GET_USER_RESULTS: `${BASE_URL}/api/mbti/my-results`,
   },
 

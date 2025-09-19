@@ -18,12 +18,29 @@ export const mbtiService = {
     }
   },
 
-  // Submit MBTI test answers
+  // Submit MBTI test answers (for authenticated users)
   submitTest: async (answers) => {
     try {
       const response = await apiConnector(
         "POST",
         API_ENDPOINTS.MBTI.SUBMIT_TEST,
+        { responses: answers }
+      );
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message || "Failed to submit test",
+      };
+    }
+  },
+
+  // Submit MBTI test answers (for guests)
+  submitTestGuest: async (answers) => {
+    try {
+      const response = await apiConnector(
+        "POST",
+        API_ENDPOINTS.MBTI.SUBMIT_TEST_GUEST,
         { responses: answers }
       );
       return response;

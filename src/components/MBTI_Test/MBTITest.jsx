@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMBTI } from "../../context/MBTIContext";
 import { useAuth } from "../../context/AuthContext";
+import { mbtiService } from "../../services/mbtiService";
 import Loading from "../common/Loading";
 
 const MBTITest = () => {
@@ -29,20 +30,12 @@ const MBTITest = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const questionsPerPage = 5;
 
-  // Redirect if not authenticated
+  // Initialize test (now available for both authenticated users and guests)
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login", { state: { from: { pathname: "/test" } } });
-      return;
-    }
-  }, [isAuthenticated, navigate]);
-
-  // Initialize test
-  useEffect(() => {
-    if (isAuthenticated && !testInProgress && questions.length === 0) {
+    if (!testInProgress && questions.length === 0) {
       handleStartTest();
     }
-  }, [isAuthenticated, testInProgress, questions.length]);
+  }, [testInProgress, questions.length]);
 
   // Set selected answer when question changes
   useEffect(() => {
@@ -81,6 +74,14 @@ const MBTITest = () => {
     }
   };
 
+  const handleClearSelection = (questionIndex) => {
+    const actualQuestionIndex = currentPage * questionsPerPage + questionIndex;
+    if (questions.length > 0 && questions[actualQuestionIndex]) {
+      const questionId = questions[actualQuestionIndex]._id;
+      setAnswer(questionId, "");
+    }
+  };
+
   const handleNextPage = () => {
     if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1);
@@ -99,9 +100,33 @@ const MBTITest = () => {
       return;
     }
 
-    const result = await submitTest();
-    if (result.success) {
-      navigate("/result", { state: { result: result.result } });
+    try {
+      // Convert answers object to array format expected by backend
+      const answersArray = Object.entries(answers).map(
+        ([questionId, answer]) => ({
+          questionId,
+          answer,
+        })
+      );
+
+      let response;
+      if (isAuthenticated) {
+        // Use authenticated submission
+        response = await submitTest();
+      } else {
+        // Use guest submission
+        response = await mbtiService.submitTestGuest(answersArray);
+      }
+
+      if (response.success) {
+        // Redirect to result page with result ID for fetching
+        navigate(`/result/${response.result.id}`);
+      } else {
+        alert(response.message || "Failed to submit test");
+      }
+    } catch (error) {
+      console.error("Error submitting test:", error);
+      alert("Failed to submit test. Please try again.");
     }
   };
 
@@ -266,18 +291,30 @@ const MBTITest = () => {
                 key={questionId}
                 className="backdrop-blur-xl bg-white border border-white/20 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 group"
               >
-                <div className="flex items-start space-x-4 mb-6">
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg text-white font-bold text-lg"
-                    style={{ backgroundColor: "var(--color-custom-2)" }}
-                  >
-                    <span>{actualQuestionIndex + 1}</span>
+                <div className="flex items-start justify-between mb-6">
+                  <div className="flex items-start space-x-4">
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg text-white font-bold text-lg"
+                      style={{ backgroundColor: "var(--color-custom-2)" }}
+                    >
+                      <span>{actualQuestionIndex + 1}</span>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold text-gray-800 leading-relaxed group-hover:text-gray-900 transition-colors duration-200">
+                        {question.question}
+                      </h3>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-gray-800 leading-relaxed group-hover:text-gray-900 transition-colors duration-200">
-                      {question.question}
-                    </h3>
-                  </div>
+                  
+                  {/* Clear Selection Button - Top Right */}
+                  {currentAnswer && (
+                    <button
+                      onClick={() => handleClearSelection(index)}
+                      className="px-3 py-1 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors border border-red-200 hover:border-red-300 flex-shrink-0"
+                    >
+                      Clear Selection
+                    </button>
+                  )}
                 </div>
 
                 <div className="flex justify-center items-center space-x-6 ml-14">
@@ -285,12 +322,33 @@ const MBTITest = () => {
                     {
                       value: "1",
                       label: "Strongly Disagree",
-                      size: "w-12 h-12",
+                      size: "w-20 h-20",
+                      customColor: "var(--color-custom-6)"
                     },
-                    { value: "2", label: "Disagree", size: "w-10 h-10" },
-                    { value: "3", label: "Neutral", size: "w-8 h-8" },
-                    { value: "4", label: "Agree", size: "w-10 h-10" },
-                    { value: "5", label: "Strongly Agree", size: "w-12 h-12" },
+                    { 
+                      value: "2", 
+                      label: "Disagree", 
+                      size: "w-18 h-18",
+                      customColor: "var(--color-custom-8)"
+                    },
+                    { 
+                      value: "3", 
+                      label: "Neutral", 
+                      size: "w-16 h-16",
+                      color: "bg-gray-100 hover:bg-gray-200 border-gray-300"
+                    },
+                    { 
+                      value: "4", 
+                      label: "Agree", 
+                      size: "w-18 h-18",
+                      customColor: "var(--color-custom-9)"
+                    },
+                    { 
+                      value: "5", 
+                      label: "Strongly Agree", 
+                      size: "w-20 h-20",
+                      customColor: "var(--color-custom-4)"
+                    },
                   ].map((option) => (
                     <div
                       key={option.value}
@@ -311,18 +369,35 @@ const MBTITest = () => {
                           className="sr-only"
                         />
                         <div
-                          className={`${option.size} rounded-full border-2 transition-all duration-300 shadow-lg hover:shadow-xl`}
-                          style={{
-                            backgroundColor:
-                              currentAnswer === option.value
-                                ? "var(--color-custom-2)"
-                                : "#e5e7eb",
-                            borderColor:
-                              currentAnswer === option.value
-                                ? "var(--color-custom-2)"
-                                : "#d1d5db",
-                          }}
-                        ></div>
+                          className={`${option.size} ${option.color || ''} rounded-full border-2 transition-all duration-200 flex items-center justify-center ${
+                            currentAnswer === option.value
+                              ? "ring-4 ring-purple-300 border-purple-500 shadow-lg"
+                              : "border-gray-300 hover:shadow-md"
+                          }`}
+                          style={
+                            currentAnswer === option.value
+                              ? { backgroundColor: "var(--color-custom-2)", borderColor: "var(--color-custom-2)" }
+                              : option.customColor
+                              ? { backgroundColor: option.customColor, borderColor: option.customColor, opacity: 0.8 }
+                              : {}
+                          }
+                        >
+                          {currentAnswer === option.value && (
+                            <svg
+                              className="w-6 h-6 text-white"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="3"
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          )}
+                        </div>
                       </label>
                       <span className="text-xs text-gray-600 text-center font-medium max-w-20">
                         {option.label}
@@ -336,7 +411,7 @@ const MBTITest = () => {
         </div>
 
         {/* Navigation */}
-        <div className="backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
+        <div className="bg-white border border-white/20 rounded-3xl p-8 shadow-2xl">
           <div className="flex justify-between items-center">
             <button
               onClick={handlePreviousPage}
@@ -390,7 +465,8 @@ const MBTITest = () => {
               <button
                 onClick={handleSubmit}
                 disabled={!isTestComplete() || isLoading}
-                className="flex items-center space-x-2 px-8 py-4 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                className="flex items-center space-x-2 px-8 py-4 text-white rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                style={{ backgroundColor: "var(--color-custom-2)" }}
               >
                 <span>{isLoading ? "Submitting..." : "Submit Test"}</span>
                 <svg

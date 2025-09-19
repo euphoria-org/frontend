@@ -1,33 +1,81 @@
-import React, { useEffect } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { mbtiService } from "../../services/mbtiService";
+import Loading from "../common/Loading";
 
 const TestResult = () => {
-  const location = useLocation();
+  const { resultId } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const [result, setResult] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const result = location.state?.result;
-
-  // Redirect if not authenticated
+  // Fetch result from backend
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
-    }
+    const fetchResult = async () => {
+      if (!resultId) {
+        setError("No result ID provided");
+        setIsLoading(false);
+        return;
+      }
 
-    // Redirect if no result data
-    if (!result) {
-      navigate("/test");
-      return;
-    }
-  }, [isAuthenticated, result, navigate]);
+      try {
+        setIsLoading(true);
+        const response = await mbtiService.getResult(resultId);
+        
+        if (response.success) {
+          setResult(response.data);
+        } else {
+          setError(response.message || "Failed to fetch result");
+        }
+      } catch (err) {
+        setError("Failed to fetch result");
+        console.error("Error fetching result:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchResult();
+  }, [resultId]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
+        <div className="bg-white/70 backdrop-blur-xl border border-white/20 rounded-3xl p-12 shadow-2xl">
+          <Loading
+            message="Loading your personality test results..."
+            size="large"
+            variant="custom"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
+        <div className="bg-white rounded-lg shadow-md p-8 max-w-md w-full text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
+          <p className="text-gray-700 mb-6">{error}</p>
+          <Link
+            to="/test"
+            className="px-6 py-3 text-white rounded-lg hover:opacity-90 transition-colors"
+            style={{ backgroundColor: "var(--color-custom-2)" }}
+          >
+            Take Test Again
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!result) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
         <div className="text-center">
-          <p className="text-purple-700 text-lg">Loading your results...</p>
+          <p className="text-purple-700 text-lg">No result found</p>
         </div>
       </div>
     );
