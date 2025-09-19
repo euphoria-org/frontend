@@ -67,6 +67,14 @@ const MBTITest = () => {
     }
   };
 
+  const handleClearSelection = () => {
+    if (questions.length > 0 && questions[currentQuestion]) {
+      const questionId = questions[currentQuestion]._id;
+      setSelectedAnswer("");
+      setAnswer(questionId, "");
+    }
+  };
+
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       nextQuestion();
@@ -187,81 +195,87 @@ const MBTITest = () => {
         {/* Question Card */}
         <div className="bg-white rounded-lg shadow-md p-8 mb-6">
           <div className="mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">
               {currentQuestionData?.question}
             </h2>
 
-            <div className="space-y-3">
-              {/* Strongly Disagree */}
-              <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-purple-50 transition-colors">
-                <input
-                  type="radio"
-                  name="answer"
-                  value="-2"
-                  checked={selectedAnswer === "-2"}
-                  onChange={(e) => handleAnswerSelect(e.target.value)}
-                  className="mr-3 text-purple-600 focus:ring-purple-500"
-                />
-                <span className="text-gray-700">Strongly Disagree</span>
-              </label>
+            {/* Clear Selection Button */}
+            {selectedAnswer && (
+              <div className="mb-4 text-center">
+                <button
+                  onClick={handleClearSelection}
+                  className="px-4 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors border border-red-200 hover:border-red-300"
+                >
+                  Clear Selection
+                </button>
+              </div>
+            )}
 
-              {/* Disagree */}
-              <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-purple-50 transition-colors">
-                <input
-                  type="radio"
-                  name="answer"
-                  value="-1"
-                  checked={selectedAnswer === "-1"}
-                  onChange={(e) => handleAnswerSelect(e.target.value)}
-                  className="mr-3 text-purple-600 focus:ring-purple-500"
-                />
-                <span className="text-gray-700">Disagree</span>
-              </label>
-
-              {/* Neutral */}
-              <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-purple-50 transition-colors">
-                <input
-                  type="radio"
-                  name="answer"
-                  value="0"
-                  checked={selectedAnswer === "0"}
-                  onChange={(e) => handleAnswerSelect(e.target.value)}
-                  className="mr-3 text-purple-600 focus:ring-purple-500"
-                />
-                <span className="text-gray-700">Neutral</span>
-              </label>
-
-              {/* Agree */}
-              <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-purple-50 transition-colors">
-                <input
-                  type="radio"
-                  name="answer"
-                  value="1"
-                  checked={selectedAnswer === "1"}
-                  onChange={(e) => handleAnswerSelect(e.target.value)}
-                  className="mr-3 text-purple-600 focus:ring-purple-500"
-                />
-                <span className="text-gray-700">Agree</span>
-              </label>
-
-              {/* Strongly Agree */}
-              <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-purple-50 transition-colors">
-                <input
-                  type="radio"
-                  name="answer"
-                  value="2"
-                  checked={selectedAnswer === "2"}
-                  onChange={(e) => handleAnswerSelect(e.target.value)}
-                  className="mr-3 text-purple-600 focus:ring-purple-500"
-                />
-                <span className="text-gray-700">Strongly Agree</span>
-              </label>
+            {/* Answer Options with Improved Circular Design */}
+            <div className="flex justify-center items-center space-x-8">
+              {[
+                { value: "1", label: "Strongly Disagree", size: "w-16 h-16", color: "bg-red-100 hover:bg-red-200 border-red-300" },
+                { value: "2", label: "Disagree", size: "w-14 h-14", color: "bg-orange-100 hover:bg-orange-200 border-orange-300" },
+                { value: "3", label: "Neutral", size: "w-12 h-12", color: "bg-gray-100 hover:bg-gray-200 border-gray-300" },
+                { value: "4", label: "Agree", size: "w-14 h-14", color: "bg-green-100 hover:bg-green-200 border-green-300" },
+                { value: "5", label: "Strongly Agree", size: "w-16 h-16", color: "bg-green-200 hover:bg-green-300 border-green-400" },
+              ].map((option) => (
+                <div
+                  key={option.value}
+                  className="flex flex-col items-center space-y-3"
+                >
+                  <label
+                    className="cursor-pointer group transition-all duration-200 hover:scale-110"
+                    title={option.label}
+                  >
+                    <input
+                      type="radio"
+                      name="answer"
+                      value={option.value}
+                      checked={selectedAnswer === option.value}
+                      onChange={(e) => handleAnswerSelect(e.target.value)}
+                      className="sr-only"
+                    />
+                    <div
+                      className={`${option.size} ${option.color} rounded-full border-2 transition-all duration-200 flex items-center justify-center ${
+                        selectedAnswer === option.value
+                          ? "ring-4 ring-purple-300 border-purple-500 shadow-lg"
+                          : "border-gray-300 hover:shadow-md"
+                      }`}
+                      style={
+                        selectedAnswer === option.value
+                          ? { backgroundColor: "var(--color-custom-2)", borderColor: "var(--color-custom-2)" }
+                          : {}
+                      }
+                    >
+                      {selectedAnswer === option.value && (
+                        <svg
+                          className="w-6 h-6 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="3"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                  </label>
+                  <span className="text-xs text-gray-600 text-center max-w-20 leading-tight">
+                    {option.label}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
         {/* Navigation */}
-        <div className="flex justify-between items-center">
+        <div className="bg-white rounded-lg shadow-md p-6 flex justify-between items-center">
           <button
             onClick={handlePrevious}
             disabled={currentQuestion === 0}
@@ -286,7 +300,8 @@ const MBTITest = () => {
             <button
               onClick={handleSubmit}
               disabled={!selectedAnswer || isLoading}
-              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 text-white rounded-lg hover:opacity-90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+              style={{ backgroundColor: "var(--color-custom-2)" }}
             >
               {isLoading ? "Submitting..." : "Submit Test"}
             </button>
@@ -294,7 +309,8 @@ const MBTITest = () => {
             <button
               onClick={handleNext}
               disabled={!selectedAnswer}
-              className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 text-white rounded-lg hover:opacity-90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+              style={{ backgroundColor: "var(--color-custom-2)" }}
             >
               Next
             </button>

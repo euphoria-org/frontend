@@ -283,14 +283,14 @@ const MBTITest = () => {
                 <div className="flex justify-center items-center space-x-6 ml-14">
                   {[
                     {
-                      value: "-2",
+                      value: "1",
                       label: "Strongly Disagree",
                       size: "w-12 h-12",
                     },
-                    { value: "-1", label: "Disagree", size: "w-10 h-10" },
-                    { value: "0", label: "Neutral", size: "w-8 h-8" },
-                    { value: "1", label: "Agree", size: "w-10 h-10" },
-                    { value: "2", label: "Strongly Agree", size: "w-12 h-12" },
+                    { value: "2", label: "Disagree", size: "w-10 h-10" },
+                    { value: "3", label: "Neutral", size: "w-8 h-8" },
+                    { value: "4", label: "Agree", size: "w-10 h-10" },
+                    { value: "5", label: "Strongly Agree", size: "w-12 h-12" },
                   ].map((option) => (
                     <div
                       key={option.value}

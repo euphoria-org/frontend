@@ -46,9 +46,9 @@ const Navbar = () => {
 
   const navLinks = [
     { path: "/", label: "Home", icon: HomeIcon },
-    { path: "/test", label: "Test", icon: TestIcon },
+   
     { path: "/about", label: "About", icon: AboutIcon },
-    { path: "/result", label: "Result", icon: ResultIcon },
+    
   ];
 
   return (
