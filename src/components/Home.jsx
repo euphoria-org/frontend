@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { TestIcon, UserIcon } from "../icons";
 import Footer from "./layout/Footer";
 import useCountUp from "../utils/useCountUp";
+import Meteors from "./common/Meteors";
 
 const Home = () => {
   const { user, isAuthenticated } = useAuth();
@@ -55,7 +56,8 @@ const Home = () => {
       buttonText: "Take PERMA Test",
       route: "/perma-test",
       available: false,
-    },{
+    },
+    {
       id: 2,
       image: "/MBTI.png",
       title: "MBTI Personality Test",
@@ -79,16 +81,14 @@ const Home = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="min-h-screen relative overflow-hidden">
+        <Meteors number={25} />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
           <div className="text-center mb-20">
-            <h2
-              className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
-              style={{ color: "var(--color-header)" }}
-            >
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 cantarell-bold text-white drop-shadow-lg">
               Discover Your Personality Type
             </h2>
-            <p className="text-xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-100 mb-12 max-w-4xl mx-auto leading-relaxed cantarell-regular">
               Take our comprehensive assessments and gain insights into your
               unique traits, preferences, and behavioral patterns. Understanding
               yourself better can help you in personal growth, career decisions,
@@ -100,7 +100,7 @@ const Home = () => {
               return (
                 <div
                   key={testCard.id}
-                  className="p-8 rounded-2xl border border-gray-200 hover:border-gray-300  hover:scale-105 transition-all duration-300 group backdrop-blur-sm bg-white"
+                  className="p-8 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg hover:bg-white/20 hover:shadow-xl transition-all duration-300"
                 >
                   <div className="flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                     <img
@@ -109,13 +109,10 @@ const Home = () => {
                       className="w-20 h-20 object-contain"
                     />
                   </div>
-                  <h3
-                    className="text-2xl font-bold mb-4"
-                    style={{ color: "var(--color-header)" }}
-                  >
+                  <h3 className="text-2xl font-bold mb-4 cantarell-bold text-white">
                     {testCard.title}
                   </h3>
-                  <p className="text-gray-600 mb-8 leading-relaxed text-lg">
+                  <p className="mb-8 leading-relaxed text-lg cantarell-regular text-neutral-100">
                     {testCard.description}
                   </p>
 
@@ -130,15 +127,12 @@ const Home = () => {
                     </Link>
                   ) : (
                     <div className="text-center">
-                      <p
-                        className="text-sm font-medium mb-4"
-                        style={{ color: "var(--color-custom-5)" }}
-                      >
+                      <p className="text-sm font-medium mb-4 text-gray-300">
                         Coming Soon
                       </p>
                       <button
                         disabled
-                        className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 bg-gray-400 text-white font-semibold rounded-xl cursor-not-allowed opacity-60"
+                        className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 bg-gray-600 text-gray-300 font-semibold rounded-xl cursor-not-allowed opacity-60"
                       >
                         <TestIcon className="w-6 h-6" />
                         <span>Coming Soon</span>
@@ -151,30 +145,24 @@ const Home = () => {
           </div>
 
           {/* Statistics Section */}
-          <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 mb-16 border border-gray-100">
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-2xl hover:bg-white/20 hover:shadow-xl transition-all duration-300 p-8 md:p-12 mb-16">
             <div className="text-center">
-              <h3 className="text-3xl font-bold mb-8 text-gray-800">
+              <h3 className="text-3xl font-bold mb-8 cantarell-bold text-white">
                 Trusted by Thousands Worldwide
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                 {statistics.map((stat) => (
                   <div key={stat.id} className="text-center group">
                     <div className="mb-4">
-                      <span
-                        className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
-                        style={{ color: "var(--color-custom-2)" }}
-                      >
+                      <span className="text-4xl md:text-5xl font-bold text-white">
                         {stat.value}
                         {stat.suffix}
                       </span>
                     </div>
-                    <h4
-                      className="text-lg font-semibold mb-2"
-                      style={{ color: "var(--color-header)" }}
-                    >
+                    <h4 className="text-lg font-semibold mb-2 text-white">
                       {stat.label}
                     </h4>
-                    <p className="text-sm text-gray-500 group-hover:text-gray-700 transition-colors">
+                    <p className="text-sm group-hover:opacity-90 transition-colors text-neutral-100">
                       {stat.description}
                     </p>
                   </div>

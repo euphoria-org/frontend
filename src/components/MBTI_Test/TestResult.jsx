@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { mbtiService } from "../../services/mbtiService";
 import Loading from "../common/Loading";
+import Meteors from "../common/Meteors";
 
 const TestResult = () => {
   const { resultId } = useParams();
@@ -22,7 +23,7 @@ const TestResult = () => {
       try {
         setIsLoading(true);
         const response = await mbtiService.getResult(resultId);
-        
+
         if (response.success) {
           setResult(response.data);
         } else {
@@ -41,8 +42,9 @@ const TestResult = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
-        <div className="bg-white/70 backdrop-blur-xl border border-white/20 rounded-3xl p-12 shadow-2xl">
+      <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 overflow-hidden">
+        <Meteors number={5} />
+        <div className="backdrop-blur-xl bg-white border border-white/20 rounded-3xl p-12 shadow-2xl relative z-10">
           <Loading
             message="Loading your personality test results..."
             size="large"
@@ -55,13 +57,14 @@ const TestResult = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
-        <div className="bg-white rounded-lg shadow-md p-8 max-w-md w-full text-center">
+      <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 overflow-hidden">
+        <Meteors number={5} />
+        <div className="backdrop-blur-xl bg-white border border-white/20 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl relative z-10">
           <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
           <p className="text-gray-700 mb-6">{error}</p>
           <Link
             to="/test"
-            className="px-6 py-3 text-white rounded-lg hover:opacity-90 transition-colors"
+            className="px-6 py-3 text-white rounded-full hover:opacity-90 transition-all duration-300 shadow-lg inline-block"
             style={{ backgroundColor: "var(--color-custom-2)" }}
           >
             Take Test Again
@@ -73,9 +76,12 @@ const TestResult = () => {
 
   if (!result) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
-        <div className="text-center">
-          <p className="text-purple-700 text-lg">No result found</p>
+      <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
+        <Meteors number={20} />
+        <div className="text-center relative z-10">
+          <p className="text-white text-lg bg-black/20 backdrop-blur-sm rounded-lg px-4 py-2">
+            No result found
+          </p>
         </div>
       </div>
     );
@@ -437,27 +443,47 @@ const TestResult = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 overflow-hidden">
+      {/* Meteor shower background */}
+      <Meteors number={20} />
+
+      {/* Stars background */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="stars-background"></div>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-purple-900 mb-4">
+        <div className="backdrop-blur-xl bg-white border border-white/20 rounded-3xl p-8 mb-8 shadow-2xl text-center">
+          <h1
+            className="text-4xl font-bold mb-4"
+            style={{ color: "var(--color-custom-2)" }}
+          >
             Your MBTI Result
           </h1>
-          <p className="text-lg text-purple-700">
+          <p className="text-lg text-gray-600">
             Congratulations on completing the personality test!
           </p>
         </div>
 
         {/* Main Result Card */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <div className="backdrop-blur-xl bg-white border border-white/20 rounded-3xl p-8 mb-8 shadow-2xl">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-24 h-24 bg-purple-100 rounded-full mb-4">
-              <span className="text-3xl font-bold text-purple-600">
+            <div
+              className="inline-flex items-center justify-center w-24 h-24 rounded-full mb-4 shadow-lg"
+              style={{ backgroundColor: "var(--color-custom-3)" }}
+            >
+              <span
+                className="text-3xl font-bold"
+                style={{ color: "var(--color-custom-2)" }}
+              >
                 {result.mbtiType}
               </span>
             </div>
-            <h2 className="text-3xl font-bold text-purple-900 mb-2">
+            <h2
+              className="text-3xl font-bold mb-2"
+              style={{ color: "var(--color-custom-2)" }}
+            >
               {typeInfo.title}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -497,8 +523,11 @@ const TestResult = () => {
                       </h3>
                       <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                         <div
-                          className="bg-purple-600 h-2 rounded-full"
-                          style={{ width: `${percentage}%` }}
+                          className="h-2 rounded-full"
+                          style={{
+                            backgroundColor: "var(--color-custom-2)",
+                            width: `${percentage}%`,
+                          }}
                         ></div>
                       </div>
                       <p className="text-sm text-gray-600">
@@ -514,12 +543,20 @@ const TestResult = () => {
         {/* Strengths and Traits */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           {/* Strengths */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-bold text-green-700 mb-4">Strengths</h3>
+          <div className="backdrop-blur-xl bg-white border border-white/20 rounded-3xl p-6 shadow-xl">
+            <h3
+              className="text-xl font-bold mb-4"
+              style={{ color: "var(--color-custom-2)" }}
+            >
+              Strengths
+            </h3>
             <ul className="space-y-2">
               {typeInfo.strengths.map((strength, index) => (
                 <li key={index} className="flex items-start">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                  <div
+                    className="w-2 h-2 rounded-full mt-2 mr-3 flex-shrink-0"
+                    style={{ backgroundColor: "var(--color-custom-4)" }}
+                  ></div>
                   <span className="text-gray-700">{strength}</span>
                 </li>
               ))}
@@ -527,14 +564,20 @@ const TestResult = () => {
           </div>
 
           {/* Areas for Development */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-bold text-orange-700 mb-4">
+          <div className="backdrop-blur-xl bg-white border border-white/20 rounded-3xl p-6 shadow-xl">
+            <h3
+              className="text-xl font-bold mb-4"
+              style={{ color: "var(--color-custom-5)" }}
+            >
               Areas for Development
             </h3>
             <ul className="space-y-2">
               {typeInfo.weaknesses.map((weakness, index) => (
                 <li key={index} className="flex items-start">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                  <div
+                    className="w-2 h-2 rounded-full mt-2 mr-3 flex-shrink-0"
+                    style={{ backgroundColor: "var(--color-custom-5)" }}
+                  ></div>
                   <span className="text-gray-700">{weakness}</span>
                 </li>
               ))}
@@ -543,25 +586,37 @@ const TestResult = () => {
         </div>
 
         {/* Test Details */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h3 className="text-xl font-bold text-purple-900 mb-4">
+        <div className="backdrop-blur-xl bg-white border border-white/20 rounded-3xl p-6 mb-8 shadow-xl">
+          <h3
+            className="text-xl font-bold mb-4"
+            style={{ color: "var(--color-custom-2)" }}
+          >
             Test Summary
           </h3>
           <div className="grid md:grid-cols-3 gap-4 text-center">
             <div>
-              <p className="text-2xl font-bold text-purple-600">
+              <p
+                className="text-2xl font-bold"
+                style={{ color: "var(--color-custom-2)" }}
+              >
                 {result.totalQuestions || "N/A"}
               </p>
               <p className="text-gray-600">Questions Answered</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-purple-600">
+              <p
+                className="text-2xl font-bold"
+                style={{ color: "var(--color-custom-2)" }}
+              >
                 {new Date(result.completedAt).toLocaleDateString()}
               </p>
               <p className="text-gray-600">Completed On</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-purple-600">
+              <p
+                className="text-2xl font-bold"
+                style={{ color: "var(--color-custom-2)" }}
+              >
                 {result.mbtiType}
               </p>
               <p className="text-gray-600">Your Type</p>
@@ -573,19 +628,22 @@ const TestResult = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/test"
-            className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-center"
+            className="px-8 py-3 text-white rounded-full hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl text-center font-semibold"
+            style={{ backgroundColor: "var(--color-custom-2)" }}
           >
             Take Test Again
           </Link>
           <Link
             to="/"
-            className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-center"
+            className="px-8 py-3 text-white rounded-full hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl text-center font-semibold"
+            style={{ backgroundColor: "var(--color-custom-5)" }}
           >
             Back to Home
           </Link>
           <button
             onClick={() => window.print()}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            className="px-8 py-3 text-white rounded-full hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold"
+            style={{ backgroundColor: "var(--color-custom-4)" }}
           >
             Print Results
           </button>

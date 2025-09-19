@@ -41,37 +41,42 @@ const Navbar = () => {
       user.given_name ||
       user.firstName ||
       (user.email ? user.email.split("@")[0] : "User");
-    return fullName.length > 5 ? fullName.substring(0, 5) : fullName;
+
+    // Get name till first space or 12 characters, whichever is shorter
+    const firstSpaceIndex = fullName.indexOf(" ");
+    if (firstSpaceIndex > 0 && firstSpaceIndex <= 12) {
+      return fullName.substring(0, firstSpaceIndex);
+    }
+
+    return fullName.length > 12 ? fullName.substring(0, 12) : fullName;
   };
 
   const navLinks = [
     { path: "/", label: "Home", icon: HomeIcon },
-   
+
     { path: "/about", label: "About", icon: AboutIcon },
-    
   ];
 
   return (
     <>
       <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block">
-        <div className="bg-white/60 backdrop-blur-xl border border-white/20 rounded-full px-6 py-3 shadow-lg shadow-black/25">
-          <div className="flex items-center space-x-8">
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-full px-8 py-3">
+          <div className="flex items-center space-x-10">
             <Link
               to="/"
-              className="flex items-center space-x-3 text-xl font-bold hover:text-purple-600 transition-colors"
-              style={{ color: "var(--color-navbar-link)" }}
+              className="flex items-center space-x-3 text-xl font-bold transition-colors text-white drop-shadow-sm"
             >
               <img src="/Logo.png" alt="Euphoria Logo" className="w-12 h-12" />
               <span>Euphoria</span>
             </Link>
 
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-8">
               {navLinks.map(({ path, label, icon: Icon }) => (
                 <Link
                   key={path}
                   to={path}
                   className={`flex items-center space-x-1 px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                    isActivePage(path) ? "shadow-md" : "hover:bg-white/50"
+                    isActivePage(path) ? "shadow-md" : "hover:bg-white/20"
                   }`}
                   style={
                     isActivePage(path)
@@ -80,17 +85,17 @@ const Navbar = () => {
                           color: "#ffffff",
                         }
                       : {
-                          color: "var(--color-navbar-link)",
+                          color: "#ffffff",
                         }
                   }
                   onMouseEnter={(e) => {
                     if (!isActivePage(path)) {
-                      e.target.style.color = "var(--color-custom-2)";
+                      e.target.style.color = "var(--color-custom-4)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!isActivePage(path)) {
-                      e.target.style.color = "var(--color-navbar-link)";
+                      e.target.style.color = "#ffffff";
                     }
                   }}
                 >
@@ -100,25 +105,19 @@ const Navbar = () => {
               ))}
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-5">
               {isAuthenticated ? (
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center space-x-2 px-3 py-2 rounded-full bg-white/50">
-                    <ProfileIcon
-                      className="w-4 h-4"
-                      style={{ color: "var(--color-navbar-link)" }}
-                    />
-                    <span
-                      className="text-sm font-medium"
-                      style={{ color: "var(--color-navbar-link)" }}
-                    >
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2 px-4 py-2 rounded-full bg-white/20 min-w-max">
+                    <ProfileIcon className="w-4 h-4 text-white" />
+                    <span className="text-sm font-medium text-white">
                       {getUserDisplayName()}
                     </span>
                   </div>
 
                   <button
                     onClick={handleLogout}
-                    className="flex items-center space-x-1 px-3 py-2 rounded-full text-red-600 hover:bg-red-50/50 hover:text-red-700 transition-all duration-200"
+                    className="flex items-center space-x-1 px-3 py-2 rounded-full text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200"
                     title="Logout"
                   >
                     <LogoutIcon className="w-4 h-4" />
@@ -128,8 +127,7 @@ const Navbar = () => {
                 <div className="flex items-center space-x-3">
                   <Link
                     to="/login"
-                    className="px-4 py-2 text-sm font-medium hover:text-purple-600 transition-colors"
-                    style={{ color: "var(--color-navbar-link)" }}
+                    className="px-4 py-2 text-sm font-medium text-white hover:text-blue-300 transition-colors"
                   >
                     Login
                   </Link>
@@ -156,13 +154,12 @@ const Navbar = () => {
       </nav>
 
       <nav className="fixed top-0 left-0 right-0 z-50 md:hidden">
-        <div className="bg-white/60 backdrop-blur-xl border-b border-white/20 px-4 py-3 shadow-lg">
+        <div className="bg-white/10 backdrop-blur-lg border-b border-white/20 shadow-lg px-4 py-3">
           <div className="flex items-center justify-between">
             <Link
               to="/"
-              className="flex items-center space-x-3 text-xl font-bold"
+              className="flex items-center space-x-3 text-xl font-bold text-white"
               onClick={() => setIsMobileMenuOpen(false)}
-              style={{ color: "var(--color-navbar-link)" }}
             >
               <img src="/Logo.png" alt="Euphoria Logo" className="w-10 h-10" />
               <span>Euphoria</span>
@@ -170,15 +167,9 @@ const Navbar = () => {
 
             <div className="flex items-center space-x-3">
               {isAuthenticated && (
-                <div className="flex items-center space-x-2 px-2 py-1 rounded-full bg-white/50">
-                  <ProfileIcon
-                    className="w-4 h-4"
-                    style={{ color: "var(--color-navbar-link)" }}
-                  />
-                  <span
-                    className="text-sm font-medium"
-                    style={{ color: "var(--color-navbar-link)" }}
-                  >
+                <div className="flex items-center space-x-2 px-2 py-1 rounded-full bg-white/20">
+                  <ProfileIcon className="w-4 h-4 text-white" />
+                  <span className="text-sm font-medium text-white">
                     {getUserDisplayName()}
                   </span>
                 </div>
@@ -186,8 +177,7 @@ const Navbar = () => {
 
               <button
                 onClick={toggleMobileMenu}
-                className="p-2 rounded-full bg-white/30 hover:bg-white/50 transition-colors"
-                style={{ color: "var(--color-navbar-link)" }}
+                className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors text-white"
               >
                 {isMobileMenuOpen ? (
                   <CloseIcon className="w-5 h-5" />
@@ -206,7 +196,7 @@ const Navbar = () => {
                     to={path}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActivePage(path) ? "shadow-md" : "hover:bg-white/50"
+                      isActivePage(path) ? "shadow-md" : "hover:bg-white/20"
                     }`}
                     style={
                       isActivePage(path)
@@ -215,7 +205,7 @@ const Navbar = () => {
                             color: "#ffffff",
                           }
                         : {
-                            color: "var(--color-navbar-link)",
+                            color: "#ffffff",
                           }
                     }
                   >
@@ -227,7 +217,7 @@ const Navbar = () => {
                   {isAuthenticated ? (
                     <button
                       onClick={handleLogout}
-                      className="flex items-center space-x-3 w-full px-4 py-3 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50/50 transition-all duration-200"
+                      className="flex items-center space-x-3 w-full px-4 py-3 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/20 transition-all duration-200"
                     >
                       <LogoutIcon className="w-5 h-5" />
                       <span>Logout</span>
@@ -237,8 +227,7 @@ const Navbar = () => {
                       <Link
                         to="/login"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center justify-center w-full px-4 py-3 rounded-lg text-sm font-medium hover:bg-white/50 transition-colors"
-                        style={{ color: "var(--color-navbar-link)" }}
+                        className="flex items-center justify-center w-full px-4 py-3 rounded-lg text-sm font-medium text-white hover:bg-white/20 transition-colors"
                       >
                         Login
                       </Link>

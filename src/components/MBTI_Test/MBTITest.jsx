@@ -4,6 +4,7 @@ import { useMBTI } from "../../context/MBTIContext";
 import { useAuth } from "../../context/AuthContext";
 import { mbtiService } from "../../services/mbtiService";
 import Loading from "../common/Loading";
+import Meteors from "../common/Meteors";
 
 const MBTITest = () => {
   const navigate = useNavigate();
@@ -36,6 +37,36 @@ const MBTITest = () => {
       handleStartTest();
     }
   }, [testInProgress, questions.length]);
+
+  // Check for stored test answers (from pre-login completion)
+  useEffect(() => {
+    const storedAnswers = localStorage.getItem("mbti_test_answers");
+    const testCompleted = localStorage.getItem("mbti_test_completed");
+
+    if (
+      isAuthenticated &&
+      storedAnswers &&
+      testCompleted &&
+      questions.length > 0
+    ) {
+      try {
+        const parsedAnswers = JSON.parse(storedAnswers);
+        // Restore answers to the context
+        Object.entries(parsedAnswers).forEach(([questionId, answer]) => {
+          setAnswer(questionId, answer);
+        });
+
+        // Auto-submit the test if it was completed before login
+        setTimeout(() => {
+          handleSubmit();
+        }, 1000);
+      } catch (error) {
+        console.error("Error restoring test answers:", error);
+        localStorage.removeItem("mbti_test_answers");
+        localStorage.removeItem("mbti_test_completed");
+      }
+    }
+  }, [isAuthenticated, questions.length]);
 
   // Set selected answer when question changes
   useEffect(() => {
@@ -79,24 +110,63 @@ const MBTITest = () => {
     if (questions.length > 0 && questions[actualQuestionIndex]) {
       const questionId = questions[actualQuestionIndex]._id;
       setAnswer(questionId, "");
+
+      // Add smooth scroll animation to the question
+      setTimeout(() => {
+        const questionElement = document.querySelector(
+          `[data-question-index="${questionIndex}"]`
+        );
+        if (questionElement) {
+          questionElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "nearest",
+          });
+        }
+      }, 100);
     }
   };
 
   const handleNextPage = () => {
     if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1);
+      // Smooth scroll to top with animation
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
+      // Smooth scroll to top with animation
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
   };
 
   const handleSubmit = async () => {
     if (!isTestComplete()) {
       alert("Please answer all questions before submitting.");
+      return;
+    }
+
+    // If user is not authenticated, redirect to login
+    if (!isAuthenticated) {
+      // Store test answers in localStorage to preserve them after login
+      localStorage.setItem("mbti_test_answers", JSON.stringify(answers));
+      localStorage.setItem("mbti_test_completed", "true");
+      navigate("/login", {
+        state: {
+          from: { pathname: "/test" },
+          message:
+            "Please log in to save your test results and view your personalized MBTI report.",
+        },
+      });
       return;
     }
 
@@ -109,17 +179,14 @@ const MBTITest = () => {
         })
       );
 
-      let response;
-      if (isAuthenticated) {
-        // Use authenticated submission
-        response = await submitTest();
-      } else {
-        // Use guest submission
-        response = await mbtiService.submitTestGuest(answersArray);
-      }
+      // Use authenticated submission
+      const response = await submitTest();
 
       if (response.success) {
-        // Redirect to result page with result ID for fetching
+        // Clear stored test data since we're submitting
+        localStorage.removeItem("mbti_test_answers");
+        localStorage.removeItem("mbti_test_completed");
+        // Redirect to result page with result ID
         navigate(`/result/${response.result.id}`);
       } else {
         alert(response.message || "Failed to submit test");
@@ -138,8 +205,9 @@ const MBTITest = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br">
-        <div className="bg-white/70 backdrop-blur-xl border border-white/20 rounded-3xl p-12 shadow-2xl">
+      <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
+        <Meteors number={5} />
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 relative z-10">
           <Loading
             message="Loading your personality test..."
             size="large"
@@ -152,8 +220,9 @@ const MBTITest = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br">
-        <div className="bg-white/70 backdrop-blur-xl border border-white/20 rounded-3xl p-12 max-w-md w-full text-center shadow-2xl">
+      <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
+        <Meteors number={5} />
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 max-w-md w-full text-center relative z-10">
           <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg
               className="w-8 h-8 text-white"
@@ -169,13 +238,13 @@ const MBTITest = () => {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent mb-4">
+          <h2 className="text-2xl font-bold text-white mb-4">
             Oops! Something went wrong
           </h2>
-          <p className="text-gray-700 mb-8 leading-relaxed">{error}</p>
+          <p className="text-neutral-100 mb-8 leading-relaxed">{error}</p>
           <button
             onClick={handleStartTest}
-            className="w-full px-8 py-4 bg-gradient-to-r text-white rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold"
+            className="w-full px-8 py-4 text-white rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold"
             style={{ backgroundColor: "var(--color-custom-2)" }}
           >
             Try Again
@@ -187,8 +256,9 @@ const MBTITest = () => {
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br">
-        <div className="bg-white/70 backdrop-blur-xl border border-white/20 rounded-3xl p-12 max-w-md w-full text-center shadow-2xl">
+      <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
+        <Meteors number={5} />
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 max-w-md w-full text-center relative z-10">
           <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg
               className="w-8 h-8 text-white"
@@ -204,16 +274,16 @@ const MBTITest = () => {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent mb-4">
+          <h2 className="text-2xl font-bold text-white mb-4">
             No Questions Available
           </h2>
-          <p className="text-gray-700 mb-8 leading-relaxed">
+          <p className="text-neutral-100 mb-8 leading-relaxed">
             There are no test questions available at the moment. Please try
             again later.
           </p>
           <button
             onClick={() => navigate("/")}
-            className="w-full px-8 py-4 text-white rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold"
+            className="w-full px-8 py-4 text-white rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold"
             style={{ backgroundColor: "var(--color-custom-2)" }}
           >
             Go Home
@@ -226,25 +296,28 @@ const MBTITest = () => {
   const progress = getProgress();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 overflow-hidden">
+      {/* Meteor shower background */}
+      <Meteors number={20} />
+
+      {/* Static stars background with CSS */}
+      <div className="absolute inset-0 stars-background opacity-60"></div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="backdrop-blur-xl bg-white border border-white/20 rounded-3xl p-8 mb-8 shadow-2xl shadow-blue-500/10">
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 mb-8">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1
-                className="text-4xl font-bold mb-2"
-                style={{ color: "var(--color-custom-2)" }}
-              >
+              <h1 className="text-4xl font-bold mb-2 text-white">
                 MBTI Personality Test
               </h1>
-              <p className="text-gray-600 text-lg">
+              <p className="text-neutral-100 text-lg">
                 Discover your unique personality type
               </p>
             </div>
             <button
               onClick={handleRestart}
-              className="px-8 py-3 text-white rounded-full hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold ml-auto"
+              className="px-8 py-3 text-white rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold ml-auto"
               style={{ backgroundColor: "var(--color-custom-2)" }}
             >
               Restart Test
@@ -252,10 +325,9 @@ const MBTITest = () => {
           </div>
 
           {/* Progress Bar */}
-          <div className="relative w-full bg-gray-200/30 rounded-full h-3 mb-6 overflow-hidden backdrop-blur-sm">
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-200/20 to-gray-300/20 rounded-full"></div>
+          <div className="relative w-full bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl h-3 mb-6 overflow-hidden">
             <div
-              className="relative h-3 rounded-full transition-all duration-500 shadow-sm"
+              className="relative h-3 rounded-2xl transition-all duration-500 shadow-sm"
               style={{
                 width: `${progress}%`,
                 backgroundColor: "var(--color-custom-2)",
@@ -264,18 +336,13 @@ const MBTITest = () => {
           </div>
 
           <div className="flex justify-between items-center text-sm">
-            <span className="text-gray-600 font-medium">
+            <span className="text-neutral-100 font-medium">
               Page {currentPage + 1} of {totalPages} • Questions{" "}
               {currentPage * questionsPerPage + 1}-
               {Math.min((currentPage + 1) * questionsPerPage, questions.length)}{" "}
               of {questions.length}
             </span>
-            <span
-              className="font-bold"
-              style={{ color: "var(--color-custom-2)" }}
-            >
-              {progress}% Complete
-            </span>
+            <span className="font-bold text-white">{progress}% Complete</span>
           </div>
         </div>
 
@@ -289,7 +356,8 @@ const MBTITest = () => {
             return (
               <div
                 key={questionId}
-                className="backdrop-blur-xl bg-white border border-white/20 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 group"
+                data-question-index={index}
+                className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 hover:bg-white/15 transition-all duration-300 group animate-slideInFromTop"
               >
                 <div className="flex items-start justify-between mb-6">
                   <div className="flex items-start space-x-4">
@@ -300,17 +368,18 @@ const MBTITest = () => {
                       <span>{actualQuestionIndex + 1}</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-gray-800 leading-relaxed group-hover:text-gray-900 transition-colors duration-200">
+                      <h3 className="text-xl font-semibold text-white leading-relaxed group-hover:text-neutral-100 transition-colors duration-200">
                         {question.question}
                       </h3>
                     </div>
                   </div>
-                  
+
                   {/* Clear Selection Button - Top Right */}
                   {currentAnswer && (
                     <button
                       onClick={() => handleClearSelection(index)}
-                      className="px-3 py-1 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors border border-red-200 hover:border-red-300 flex-shrink-0"
+                      className="px-6 py-2 text-sm text-white rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg flex-shrink-0 font-medium transform animate-fadeIn"
+                      style={{ backgroundColor: "var(--color-custom-2)" }}
                     >
                       Clear Selection
                     </button>
@@ -323,31 +392,31 @@ const MBTITest = () => {
                       value: "1",
                       label: "Strongly Disagree",
                       size: "w-20 h-20",
-                      customColor: "var(--color-custom-6)"
+                      customColor: "var(--color-custom-6)",
                     },
-                    { 
-                      value: "2", 
-                      label: "Disagree", 
+                    {
+                      value: "2",
+                      label: "Disagree",
                       size: "w-18 h-18",
-                      customColor: "var(--color-custom-8)"
+                      customColor: "var(--color-custom-8)",
                     },
-                    { 
-                      value: "3", 
-                      label: "Neutral", 
+                    {
+                      value: "3",
+                      label: "Neutral",
                       size: "w-16 h-16",
-                      color: "bg-gray-100 hover:bg-gray-200 border-gray-300"
+                      color: "bg-gray-100 hover:bg-gray-200 border-gray-300",
                     },
-                    { 
-                      value: "4", 
-                      label: "Agree", 
+                    {
+                      value: "4",
+                      label: "Agree",
                       size: "w-18 h-18",
-                      customColor: "var(--color-custom-9)"
+                      customColor: "var(--color-custom-9)",
                     },
-                    { 
-                      value: "5", 
-                      label: "Strongly Agree", 
+                    {
+                      value: "5",
+                      label: "Strongly Agree",
                       size: "w-20 h-20",
-                      customColor: "var(--color-custom-4)"
+                      customColor: "var(--color-custom-4)",
                     },
                   ].map((option) => (
                     <div
@@ -369,22 +438,34 @@ const MBTITest = () => {
                           className="sr-only"
                         />
                         <div
-                          className={`${option.size} ${option.color || ''} rounded-full border-2 transition-all duration-200 flex items-center justify-center ${
+                          className={`${option.size} ${
+                            option.color || ""
+                          } rounded-full border-2 transition-all duration-200 flex items-center justify-center ${
                             currentAnswer === option.value
-                              ? "ring-4 ring-purple-300 border-purple-500 shadow-lg"
+                              ? "ring-2 shadow-lg transform scale-105"
                               : "border-gray-300 hover:shadow-md"
                           }`}
                           style={
                             currentAnswer === option.value
-                              ? { backgroundColor: "var(--color-custom-2)", borderColor: "var(--color-custom-2)" }
+                              ? {
+                                  backgroundColor:
+                                    option.customColor || "#e5e7eb",
+                                  borderColor: option.customColor || "#d1d5db",
+                                  filter: "brightness(0.7) saturate(1.2)",
+                                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                                }
                               : option.customColor
-                              ? { backgroundColor: option.customColor, borderColor: option.customColor, opacity: 0.8 }
+                              ? {
+                                  backgroundColor: option.customColor,
+                                  borderColor: option.customColor,
+                                  opacity: 0.8,
+                                }
                               : {}
                           }
                         >
                           {currentAnswer === option.value && (
                             <svg
-                              className="w-6 h-6 text-white"
+                              className="w-6 h-6 text-white drop-shadow-md"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -399,7 +480,7 @@ const MBTITest = () => {
                           )}
                         </div>
                       </label>
-                      <span className="text-xs text-gray-600 text-center font-medium max-w-20">
+                      <span className="text-xs text-neutral-100 text-center font-medium max-w-20">
                         {option.label}
                       </span>
                     </div>
@@ -411,12 +492,12 @@ const MBTITest = () => {
         </div>
 
         {/* Navigation */}
-        <div className="bg-white border border-white/20 rounded-3xl p-8 shadow-2xl">
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8">
           <div className="flex justify-between items-center">
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 0}
-              className="flex items-center space-x-2 px-8 py-4 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-500 font-semibold"
+              className="flex items-center space-x-2 px-8 py-4 bg-white/20 backdrop-blur-sm border border-white/30 text-white rounded-2xl hover:bg-white/30 hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 font-semibold"
             >
               <svg
                 className="w-5 h-5"
@@ -450,12 +531,12 @@ const MBTITest = () => {
                   />
                 ))}
               </div>
-              <p className="text-sm text-gray-600 font-medium">
+              <p className="text-sm text-neutral-100 font-medium">
                 {Object.keys(answers).length} of {questions.length} questions
                 answered
               </p>
               {isTestComplete() && (
-                <p className="text-sm text-green-600 font-bold animate-pulse">
+                <p className="text-sm text-green-300 font-bold animate-pulse">
                   ✓ All questions completed! Ready to submit.
                 </p>
               )}
@@ -465,7 +546,7 @@ const MBTITest = () => {
               <button
                 onClick={handleSubmit}
                 disabled={!isTestComplete() || isLoading}
-                className="flex items-center space-x-2 px-8 py-4 text-white rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                className="flex items-center space-x-2 px-8 py-4 text-white rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 font-semibold"
                 style={{ backgroundColor: "var(--color-custom-2)" }}
               >
                 <span>{isLoading ? "Submitting..." : "Submit Test"}</span>
@@ -486,7 +567,7 @@ const MBTITest = () => {
             ) : (
               <button
                 onClick={handleNextPage}
-                className="flex items-center space-x-2 px-8 py-4 text-white rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold"
+                className="flex items-center space-x-2 px-8 py-4 text-white rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold"
                 style={{ backgroundColor: "var(--color-custom-2)" }}
               >
                 <span>Next</span>
