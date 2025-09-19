@@ -70,27 +70,43 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // Initialize auth state from localStorage
+  // Initialize auth state from localStorage with JWT validation
   useEffect(() => {
     const initializeAuth = () => {
       try {
+        dispatch({ type: AuthActionTypes.SET_LOADING, payload: true });
+
+        // Get user data from localStorage
         const { user, token, isAuthenticated } = authService.getCurrentUser();
 
-        if (isAuthenticated) {
-          dispatch({
-            type: AuthActionTypes.SET_USER,
-            payload: { user, token },
-          });
+        if (isAuthenticated && token) {
+          // Check if token is still valid
+          if (authService.isTokenValid()) {
+            // Token is valid, restore user session
+            dispatch({
+              type: AuthActionTypes.SET_USER,
+              payload: { user, token },
+            });
+          } else {
+            // Token is expired, clean it up
+            authService.cleanExpiredToken();
+            dispatch({
+              type: AuthActionTypes.SET_LOADING,
+              payload: false,
+            });
+          }
         } else {
+          // No token or user data
           dispatch({
             type: AuthActionTypes.SET_LOADING,
             payload: false,
           });
         }
       } catch (error) {
+        console.error("Auth initialization error:", error);
         dispatch({
-          type: AuthActionTypes.SET_ERROR,
-          payload: "Failed to initialize authentication",
+          type: AuthActionTypes.SET_LOADING,
+          payload: false,
         });
       }
     };

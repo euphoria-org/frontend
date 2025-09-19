@@ -165,9 +165,122 @@ export const authService = {
     }
   },
 
-  // Check if user is authenticated
   isAuthenticated: () => {
     const token = localStorage.getItem("token");
-    return !!token;
+    return !!token && authService.isTokenValid();
+  },
+
+  // Validate JWT token
+  isTokenValid: () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        return false;
+      }
+
+      // Decode JWT token to check expiration
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const currentTime = Date.now() / 1000;
+
+      // Check if token is expired
+      if (payload.exp < currentTime) {
+        // Token is expired, return false but don't automatically logout
+        // Let the calling code decide what to do
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      // If there's any error in decoding, consider token invalid
+      // But don't automatically logout - let calling code handle it
+      console.warn("Error validating token:", error);
+      return false;
+    }
+  },
+
+  // Clean expired token
+  cleanExpiredToken: () => {
+    if (!authService.isTokenValid()) {
+      const token = localStorage.getItem("token");
+      if (token) {
+        // Only remove if token exists but is invalid/expired
+        authService.logout();
+        return true; // Token was expired and removed
+      }
+    }
+    return false; // Token is valid or doesn't exist
+  },
+
+  // Validate and refresh user session
+  validateSession: async () => {
+    try {
+      // First check if token exists and is valid
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        return {
+          success: false,
+          message: "No token found",
+          shouldLogout: false, // Don't force logout if no token
+        };
+      }
+
+      // Check token validity
+      if (!authService.isTokenValid()) {
+        // Token is expired or invalid
+        authService.logout();
+        return {
+          success: false,
+          message: "Token expired",
+          shouldLogout: true,
+        };
+      }
+
+      // Token is valid, no need for backend verification for now
+      // You can add backend verification later if needed
+      return {
+        success: true,
+        message: "Session valid",
+      };
+
+      /* Optional backend verification - uncomment if you have the endpoint
+      const response = await apiConnector(
+        "GET",
+        API_ENDPOINTS.AUTH.VERIFY_TOKEN || "/auth/verify"
+      );
+
+      if (!response.success) {
+        authService.logout();
+        return {
+          success: false,
+          message: "Invalid session",
+          shouldLogout: true
+        };
+      }
+
+      return {
+        success: true,
+        message: "Session valid"
+      };
+      */
+    } catch (error) {
+      // Don't automatically logout on network errors
+      console.warn("Session validation error:", error);
+
+      // If token is valid locally, keep the session
+      if (authService.isTokenValid()) {
+        return {
+          success: true,
+          message: "Session valid (offline)",
+        };
+      }
+
+      return {
+        success: false,
+        message: "Session validation failed",
+        shouldLogout: false, // Don't force logout on network errors
+      };
+    }
   },
 };

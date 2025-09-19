@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { LoadingIcon } from "../../icons";
+import Loading from "../common/Loading";
 
 const OAuthCallback = () => {
   const navigate = useNavigate();
@@ -10,7 +10,6 @@ const OAuthCallback = () => {
   const [hasProcessed, setHasProcessed] = useState(false);
 
   useEffect(() => {
-    // Prevent multiple executions
     if (hasProcessed) return;
 
     const handleOAuthCallback = async () => {
@@ -67,13 +66,14 @@ const OAuthCallback = () => {
   }, [searchParams, navigate, hasProcessed]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
-      <div className="text-center">
-        <LoadingIcon className="w-16 h-16 text-purple-600 mx-auto mb-4" />
-        <p className="text-purple-700 text-lg">
-          Completing Google authentication...
-        </p>
-        <p className="text-purple-500 text-sm mt-2">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <div className="bg-white/70 backdrop-blur-xl border border-white/20 rounded-3xl p-12 shadow-2xl text-center">
+        <Loading
+          message="Completing Google authentication..."
+          size="large"
+          variant="custom"
+        />
+        <p className="text-gray-600 text-sm mt-4">
           Please wait while we log you in.
         </p>
       </div>

@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import {
-  LockIcon,
-  EyeIcon,
-  EyeOffIcon,
-  LoadingIcon,
-  CheckIcon,
-} from "../../icons";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { authService } from "../../services/authService";
+import { EyeIcon, EyeOffIcon, CheckIcon, CloseIcon } from "../../icons";
+import Loading from "../common/Loading";
 
 const UpdatePassword = () => {
   const [passwords, setPasswords] = useState({
@@ -129,7 +124,7 @@ const UpdatePassword = () => {
   if (isCheckingToken) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
-        <LoadingIcon className="w-8 h-8 text-gray-600" />
+        <Loading message="Verifying token..." size="large" variant="custom" />
       </div>
     );
   }
@@ -545,8 +540,14 @@ const UpdatePassword = () => {
                   "--tw-ring-opacity": "0.3",
                 }}
               >
-                {isLoading && <LoadingIcon className="w-5 h-5 mr-2" />}
-                {isLoading ? "Updating Password..." : "Update Password"}
+                {isLoading ? (
+                  <div className="flex items-center">
+                    <Loading size="small" variant="custom" className="mr-2" />
+                    <span>Updating Password...</span>
+                  </div>
+                ) : (
+                  "Update Password"
+                )}
               </button>
             </div>
 
