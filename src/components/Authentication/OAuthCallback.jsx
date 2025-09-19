@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import Loading from "../common/Loading";
+import { LoginSkeleton } from "../common/skeletons";
 
 const OAuthCallback = () => {
   const navigate = useNavigate();
@@ -65,20 +65,7 @@ const OAuthCallback = () => {
     handleOAuthCallback();
   }, [searchParams, navigate, hasProcessed]);
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-      <div className="bg-white/70 backdrop-blur-xl border border-white/20 rounded-3xl p-12 shadow-2xl text-center">
-        <Loading
-          message="Completing Google authentication..."
-          size="large"
-          variant="custom"
-        />
-        <p className="text-gray-600 text-sm mt-4">
-          Please wait while we log you in.
-        </p>
-      </div>
-    </div>
-  );
+  return <LoginSkeleton />;
 };
 
 export default OAuthCallback;

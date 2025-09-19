@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { TestIcon, UserIcon } from "../icons";
 import Footer from "./layout/Footer";
 import Meteors from "./common/Meteors";
+import { AboutSkeleton } from "./common/skeletons";
 
 const About = () => {
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  // Add 1.5-second timer to show skeleton loader
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const mbtiDimensions = [
     {
       id: 1,
@@ -215,6 +227,10 @@ const About = () => {
       desc: "Bold, imaginative, strong-willed",
     },
   ];
+
+  if (showSkeleton) {
+    return <AboutSkeleton />;
+  }
 
   return (
     <>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { mbtiService } from "../../services/mbtiService";
-import Loading from "../common/Loading";
+import { TestSkeleton } from "../common/skeletons";
 import Meteors from "../common/Meteors";
 
 const TestResult = () => {
@@ -41,18 +41,7 @@ const TestResult = () => {
   }, [resultId]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 overflow-hidden">
-        <Meteors number={5} />
-        <div className="backdrop-blur-xl bg-white border border-white/20 rounded-3xl p-12 shadow-2xl relative z-10">
-          <Loading
-            message="Loading your personality test results..."
-            size="large"
-            variant="custom"
-          />
-        </div>
-      </div>
-    );
+    return <TestSkeleton />;
   }
 
   if (error) {

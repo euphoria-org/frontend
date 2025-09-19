@@ -10,6 +10,7 @@ import {
   LockIcon,
 } from "../../icons";
 import Loading from "../common/Loading";
+import { UpdatePasswordSkeleton } from "../common/skeletons";
 import Meteors from "../common/Meteors";
 
 const UpdatePassword = () => {
@@ -130,19 +131,7 @@ const UpdatePassword = () => {
   };
 
   if (isCheckingToken) {
-    return (
-      <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        {/* Meteors background */}
-        <Meteors number={25} />
-
-        {/* Static stars background */}
-        <div className="absolute inset-0 stars-background opacity-70"></div>
-
-        <div className="relative z-10 bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12">
-          <Loading message="Verifying token..." size="large" variant="custom" />
-        </div>
-      </div>
-    );
+    return <UpdatePasswordSkeleton />;
   }
 
   if (!token || !isTokenValid) {

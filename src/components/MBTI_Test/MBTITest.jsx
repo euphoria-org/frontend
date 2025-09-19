@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useMBTI } from "../../context/MBTIContext";
 import { useAuth } from "../../context/AuthContext";
 import { mbtiService } from "../../services/mbtiService";
-import Loading from "../common/Loading";
+import { TestSkeleton } from "../common/skeletons";
 import Meteors from "../common/Meteors";
 
 const MBTITest = () => {
@@ -29,16 +29,23 @@ const MBTITest = () => {
 
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const questionsPerPage = 5;
 
-  // Initialize test (now available for both authenticated users and guests)
   useEffect(() => {
     if (!testInProgress && questions.length === 0) {
       handleStartTest();
     }
   }, [testInProgress, questions.length]);
 
-  // Check for stored test answers (from pre-login completion)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     const storedAnswers = localStorage.getItem("mbti_test_answers");
     const testCompleted = localStorage.getItem("mbti_test_completed");
@@ -203,55 +210,13 @@ const MBTITest = () => {
     handleStartTest();
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
-        <Meteors number={5} />
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 relative z-10">
-          <Loading
-            message="Loading your personality test..."
-            size="large"
-            variant="custom"
-          />
-        </div>
-      </div>
-    );
+  if (isLoading || showSkeleton) {
+    return <TestSkeleton />;
   }
 
+  // Remove error page - just clear error and continue
   if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
-        <Meteors number={5} />
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 max-w-md w-full text-center relative z-10">
-          <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg
-              className="w-8 h-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 18.5c-.77.833.192 2.5 1.732 2.5z"
-              />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-white mb-4">
-            Oops! Something went wrong
-          </h2>
-          <p className="text-neutral-100 mb-8 leading-relaxed">{error}</p>
-          <button
-            onClick={handleStartTest}
-            className="w-full px-8 py-4 text-white rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold"
-            style={{ backgroundColor: "var(--color-custom-2)" }}
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
+    clearError();
   }
 
   if (questions.length === 0) {

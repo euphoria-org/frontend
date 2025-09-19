@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { TestIcon, UserIcon } from "../icons";
 import Footer from "./layout/Footer";
 import useCountUp from "../utils/useCountUp";
 import Meteors from "./common/Meteors";
+import { HomeSkeleton } from "./common/skeletons";
 
 const Home = () => {
   const { user, isAuthenticated } = useAuth();
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  // Add 1.5-second timer to show skeleton loader
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Statistics with animated counters
   const testAccuracy = useCountUp(94, 2500);
@@ -78,6 +89,10 @@ const Home = () => {
       available: false,
     },
   ];
+
+  if (showSkeleton) {
+    return <HomeSkeleton />;
+  }
 
   return (
     <>
