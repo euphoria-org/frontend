@@ -24,6 +24,9 @@ const Skeleton = ({
   const animationClasses = {
     shimmer:
       "animate-shimmer bg-gradient-to-r from-white/5 via-white/15 to-white/5 bg-[length:200%_100%]",
+    "pulse-shimmer":
+      "animate-pulse-shimmer bg-gradient-to-r from-transparent via-white/20 to-transparent bg-[length:200%_100%]",
+    "gentle-pulse": "animate-gentle-pulse",
     pulse: "animate-pulse",
     none: "",
   };

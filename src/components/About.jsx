@@ -5,6 +5,22 @@ import { TestIcon, UserIcon } from "../icons";
 import Footer from "./layout/Footer";
 import Meteors from "./common/Meteors";
 import { AboutSkeleton } from "./common/skeletons";
+import Architect from "./Avatars/Architect";
+import Logician from "./Avatars/Logician";
+import Commander from "./Avatars/Commander";
+import Debater from "./Avatars/Debater";
+import Advocate from "./Avatars/Advocate";
+import Mediator from "./Avatars/Mediator";
+import Protagonist from "./Avatars/Protagonist";
+import Campaigner from "./Avatars/Campaigner";
+import Logistician from "./Avatars/Logistician";
+import Defender from "./Avatars/Defender";
+import Executive from "./Avatars/Executive";
+import Consul from "./Avatars/Consul";
+import Virtuoso from "./Avatars/Virtuoso";
+import Adventurer from "./Avatars/Adventurer";
+import Entrepreneur from "./Avatars/Entrepreneur";
+import Entertainer from "./Avatars/Entertainer";
 
 const About = () => {
   const [showSkeleton, setShowSkeleton] = useState(true);
@@ -153,78 +169,126 @@ const About = () => {
     },
   ];
 
+  // MBTI personality types organized by groups as on 16personalities.com
   const personalityTypes = [
-    {
-      type: "ISTJ",
-      name: "The Inspector",
-      desc: "Responsible, organized, practical",
-    },
-    {
-      type: "ISFJ",
-      name: "The Protector",
-      desc: "Caring, reliable, conscientious",
-    },
-    {
-      type: "INFJ",
-      name: "The Advocate",
-      desc: "Creative, insightful, principled",
-    },
+    // Analysts (NT) - Purple theme
     {
       type: "INTJ",
       name: "The Architect",
-      desc: "Independent, strategic, determined",
-    },
-    {
-      type: "ISTP",
-      name: "The Virtuoso",
-      desc: "Bold, practical, experimental",
-    },
-    {
-      type: "ISFP",
-      name: "The Adventurer",
-      desc: "Flexible, charming, artistic",
-    },
-    {
-      type: "INFP",
-      name: "The Mediator",
-      desc: "Idealistic, creative, caring",
+      desc: "Imaginative and strategic thinkers, with a plan for everything.",
+      component: Architect,
+      group: "Analyst",
     },
     {
       type: "INTP",
-      name: "The Thinker",
-      desc: "Innovative, curious, flexible",
-    },
-    {
-      type: "ESTP",
-      name: "The Entrepreneur",
-      desc: "Energetic, perceptive, spontaneous",
-    },
-    {
-      type: "ESFP",
-      name: "The Entertainer",
-      desc: "Outgoing, friendly, spontaneous",
-    },
-    {
-      type: "ENFP",
-      name: "The Campaigner",
-      desc: "Enthusiastic, creative, sociable",
-    },
-    { type: "ENTP", name: "The Debater", desc: "Smart, curious, playful" },
-    {
-      type: "ESTJ",
-      name: "The Executive",
-      desc: "Organized, practical, logical",
-    },
-    { type: "ESFJ", name: "The Consul", desc: "Caring, social, popular" },
-    {
-      type: "ENFJ",
-      name: "The Protagonist",
-      desc: "Charismatic, inspiring, natural leaders",
+      name: "The Logician",
+      desc: "Innovative inventors with an unquenchable thirst for knowledge.",
+      component: Logician,
+      group: "Analyst",
     },
     {
       type: "ENTJ",
       name: "The Commander",
-      desc: "Bold, imaginative, strong-willed",
+      desc: "Bold, imaginative and strong-willed leaders, always finding a way.",
+      component: Commander,
+      group: "Analyst",
+    },
+    {
+      type: "ENTP",
+      name: "The Debater",
+      desc: "Smart and curious thinkers who cannot resist an intellectual challenge.",
+      component: Debater,
+      group: "Analyst",
+    },
+
+    // Diplomats (NF) - Green theme
+    {
+      type: "INFJ",
+      name: "The Advocate",
+      desc: "Quiet and mystical, yet very inspiring and tireless idealists.",
+      component: Advocate,
+      group: "Diplomat",
+    },
+    {
+      type: "INFP",
+      name: "The Mediator",
+      desc: "Poetic, kind and altruistic people, always eager to help good causes.",
+      component: Mediator,
+      group: "Diplomat",
+    },
+    {
+      type: "ENFJ",
+      name: "The Protagonist",
+      desc: "Charismatic and inspiring leaders, able to mesmerize listeners.",
+      component: Protagonist,
+      group: "Diplomat",
+    },
+    {
+      type: "ENFP",
+      name: "The Campaigner",
+      desc: "Enthusiastic, creative and sociable free spirits, who can always find a reason to smile.",
+      component: Campaigner,
+      group: "Diplomat",
+    },
+
+    // Sentinels (SJ) - Blue theme
+    {
+      type: "ISTJ",
+      name: "The Logistician",
+      desc: "Practical and fact-minded, reliability cannot be doubted.",
+      component: Logistician,
+      group: "Sentinel",
+    },
+    {
+      type: "ISFJ",
+      name: "The Defender",
+      desc: "Very dedicated and warm protectors, always ready to defend loved ones.",
+      component: Defender,
+      group: "Sentinel",
+    },
+    {
+      type: "ESTJ",
+      name: "The Executive",
+      desc: "Excellent administrators, unsurpassed at managing things or people.",
+      component: Executive,
+      group: "Sentinel",
+    },
+    {
+      type: "ESFJ",
+      name: "The Consul",
+      desc: "Extraordinarily caring, social and popular people, always eager to help.",
+      component: Consul,
+      group: "Sentinel",
+    },
+
+    // Explorers (SP) - Yellow theme
+    {
+      type: "ISTP",
+      name: "The Virtuoso",
+      desc: "Bold and practical experimenters, masters of all kinds of tools.",
+      component: Virtuoso,
+      group: "Explorer",
+    },
+    {
+      type: "ISFP",
+      name: "The Adventurer",
+      desc: "Flexible and charming artists, always ready to explore new possibilities.",
+      component: Adventurer,
+      group: "Explorer",
+    },
+    {
+      type: "ESTP",
+      name: "The Entrepreneur",
+      desc: "Smart, energetic and very perceptive people, truly enjoy living on the edge.",
+      component: Entrepreneur,
+      group: "Explorer",
+    },
+    {
+      type: "ESFP",
+      name: "The Entertainer",
+      desc: "Spontaneous, energetic and enthusiastic people – life is never boring around them.",
+      component: Entertainer,
+      group: "Explorer",
     },
   ];
 
@@ -236,7 +300,6 @@ const About = () => {
     <>
       <div className="min-h-screen relative overflow-hidden">
         <Meteors number={25} />
-
         <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
           <div className="relative text-center mb-20">
             <div className="relative z-10">
@@ -323,9 +386,11 @@ const About = () => {
               </div>
             </div>
           </div>
+        </div>
 
-          {/* What is MBTI */}
-          <div className="relative bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-10 mb-16 overflow-hidden transition-all duration-300">
+        {/* What is MBTI Section - Before Avatars */}
+        <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-16">
+          <div className="relative bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-10 overflow-hidden transition-all duration-300">
             <div className="relative z-10">
               <div className="text-center mb-12">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl mb-6">
@@ -434,442 +499,54 @@ const About = () => {
                   </div>
                 </div>
 
-                <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-2xl p-8 transition-all duration-300">
-                  <div className="flex items-center mb-6">
-                    <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-4">
-                      <svg
-                        className="w-6 h-6 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-2xl font-bold text-white">
-                      Benefits of Understanding Your Type
-                    </h3>
-                  </div>
-
-                  <div className="space-y-4">
-                    {[
-                      {
-                        icon: "🎯",
-                        text: "Enhanced self-awareness and personal development",
-                      },
-                      {
-                        icon: "💬",
-                        text: "Improved communication and relationship building",
-                      },
-                      {
-                        icon: "🚀",
-                        text: "Better career decision-making and job satisfaction",
-                      },
-                      {
-                        icon: "👥",
-                        text: "More effective teamwork and leadership skills",
-                      },
-                      {
-                        icon: "😌",
-                        text: "Reduced stress through understanding natural preferences",
-                      },
-                      {
-                        icon: "🤝",
-                        text: "Greater appreciation for individual differences",
-                      },
-                      {
-                        icon: "🧠",
-                        text: "Improved problem-solving and decision-making approaches",
-                      },
-                    ].map((benefit, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center space-x-3 group"
-                      >
-                        <span className="text-2xl group-hover:scale-110 transition-transform duration-200">
-                          {benefit.icon}
-                        </span>
-                        <span className="text-neutral-100 font-medium group-hover:text-blue-300 transition-colors duration-200">
-                          {benefit.text}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-2xl p-12 mb-16  transition-all duration-300 overflow-hidden relative">
-            <div className="relative z-10">
-              <div className="text-center mb-16">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl mb-8">
-                  <svg
-                    className="w-10 h-10 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
-                    />
-                  </svg>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                  The Four MBTI Dimensions
-                </h2>
-                <p className="text-xl text-neutral-100 max-w-3xl mx-auto">
-                  Each dimension represents a fundamental aspect of how you
-                  interact with the world and process information
-                </p>
-                <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full mt-6"></div>
-              </div>
-
-              <div className="space-y-16">
-                {mbtiDimensions.map((dimension, index) => {
-                  const gradients = [
-                    "from-red-500 to-pink-500",
-                    "from-blue-500 to-cyan-500",
-                    "from-green-500 to-emerald-500",
-                    "from-purple-500 to-indigo-500",
-                  ];
-                  const bgGradients = [
-                    "from-red-50 to-pink-50",
-                    "from-blue-50 to-cyan-50",
-                    "from-green-50 to-emerald-50",
-                    "from-purple-50 to-indigo-50",
-                  ];
-
-                  return (
-                    <div
-                      key={dimension.id}
-                      className="grid lg:grid-cols-2 gap-12 items-center"
-                    >
-                      {dimension.leftSide ? (
-                        <>
-                          {/* Info Section */}
-                          <div className="space-y-8">
-                            <div
-                              className={`bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 transition-all duration-300`}
-                            >
-                              <div
-                                className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${gradients[index]} rounded-2xl mb-6`}
-                              >
-                                <span className="text-2xl font-bold text-white">
-                                  {dimension.id}
-                                </span>
-                              </div>
-                              <h3 className="text-3xl font-bold mb-4 text-white">
-                                {dimension.title}
-                              </h3>
-                              <p className="text-xl text-blue-300 mb-6 font-medium">
-                                {dimension.subtitle}
-                              </p>
-                              <p className="text-neutral-100 leading-relaxed text-lg">
-                                {dimension.description}
-                              </p>
-                            </div>
+                <div className="relative">
+                  <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 transition-all duration-300">
+                    <div className="text-center mb-8">
+                      <h3 className="text-3xl font-bold text-white mb-6">
+                        Your Journey to Self-Discovery
+                      </h3>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-center space-x-3">
+                          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                            <span className="text-white font-bold text-sm">
+                              1
+                            </span>
                           </div>
-
-                          {/* Traits Section */}
-                          <div className="grid gap-6">
-                            {dimension.traits.map((trait, traitIndex) => (
-                              <div
-                                key={traitIndex}
-                                className="group bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-2xl p-8 hover:bg-white/20 hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
-                              >
-                                <div className="flex items-start space-x-4">
-                                  <div
-                                    className={`flex-shrink-0 w-14 h-14 bg-gradient-to-r ${gradients[index]} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
-                                  >
-                                    <span className="text-white font-bold text-lg">
-                                      {trait.name.charAt(0)}
-                                    </span>
-                                  </div>
-                                  <div className="flex-1">
-                                    <h4 className="text-2xl font-bold text-white mb-3">
-                                      {trait.name}
-                                    </h4>
-                                    <div className="space-y-3">
-                                      <p className="text-neutral-100">
-                                        <span className="font-semibold text-white">
-                                          Focus:
-                                        </span>{" "}
-                                        {trait.focus}
-                                      </p>
-                                      <p className="text-neutral-100">
-                                        <span className="font-semibold text-white">
-                                          {dimension.id === 2
-                                            ? "Information preference"
-                                            : dimension.id === 3
-                                            ? "Values"
-                                            : dimension.id === 4
-                                            ? "Lifestyle"
-                                            : "Energy source"}
-                                          :
-                                        </span>{" "}
-                                        {trait.energySource}
-                                      </p>
-                                      <p className="text-neutral-100">
-                                        <span className="font-semibold text-white">
-                                          Characteristics:
-                                        </span>{" "}
-                                        {trait.characteristics}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          {/* Traits Section */}
-                          <div className="grid gap-6 lg:order-1">
-                            {dimension.traits.map((trait, traitIndex) => (
-                              <div
-                                key={traitIndex}
-                                className="group bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-2xl p-8 hover:bg-white/20 hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
-                              >
-                                <div className="flex items-start space-x-4">
-                                  <div
-                                    className={`flex-shrink-0 w-14 h-14 bg-gradient-to-r ${gradients[index]} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
-                                  >
-                                    <span className="text-white font-bold text-lg">
-                                      {trait.name.charAt(0)}
-                                    </span>
-                                  </div>
-                                  <div className="flex-1">
-                                    <h4 className="text-2xl font-bold text-white mb-3">
-                                      {trait.name}
-                                    </h4>
-                                    <div className="space-y-3">
-                                      <p className="text-neutral-100">
-                                        <span className="font-semibold text-white">
-                                          Focus:
-                                        </span>{" "}
-                                        {trait.focus}
-                                      </p>
-                                      <p className="text-neutral-100">
-                                        <span className="font-semibold text-white">
-                                          {dimension.id === 2
-                                            ? "Information preference"
-                                            : dimension.id === 3
-                                            ? "Values"
-                                            : dimension.id === 4
-                                            ? "Lifestyle"
-                                            : "Energy source"}
-                                          :
-                                        </span>{" "}
-                                        {trait.energySource}
-                                      </p>
-                                      <p className="text-neutral-100">
-                                        <span className="font-semibold text-white">
-                                          Characteristics:
-                                        </span>{" "}
-                                        {trait.characteristics}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Info Section */}
-                          <div className="space-y-8 lg:order-2">
-                            <div
-                              className={`bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 transition-all duration-300`}
-                            >
-                              <div
-                                className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${gradients[index]} rounded-2xl mb-6`}
-                              >
-                                <span className="text-2xl font-bold text-white">
-                                  {dimension.id}
-                                </span>
-                              </div>
-                              <h3 className="text-3xl font-bold mb-4 text-white">
-                                {dimension.title}
-                              </h3>
-                              <p className="text-xl text-blue-300 mb-6 font-medium">
-                                {dimension.subtitle}
-                              </p>
-                              <p className="text-neutral-100 leading-relaxed text-lg">
-                                {dimension.description}
-                              </p>
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 mb-16 overflow-hidden relative transition-all duration-300">
-            <div className="relative z-10">
-              <div className="text-center mb-16">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl mb-8">
-                  <svg
-                    className="w-10 h-10 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                  The 16 MBTI Personality Types
-                </h2>
-                <p className="text-xl text-neutral-100 mb-8 max-w-4xl mx-auto leading-relaxed">
-                  Each of the 16 types represents a unique combination of the
-                  four preferences, creating distinct personality profiles with
-                  their own strengths, challenges, and natural tendencies.
-                </p>
-                <div className="w-24 h-1 bg-gradient-to-r from-yellow-500 to-orange-500 mx-auto rounded-full"></div>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {personalityTypes.map((personality, index) => {
-                  const colors = [
-                    {
-                      bg: "from-red-500 to-pink-500",
-                      light: "from-red-50 to-pink-50",
-                      border: "border-red-200",
-                    },
-                    {
-                      bg: "from-blue-500 to-cyan-500",
-                      light: "from-blue-50 to-cyan-50",
-                      border: "border-blue-200",
-                    },
-                    {
-                      bg: "from-green-500 to-emerald-500",
-                      light: "from-green-50 to-emerald-50",
-                      border: "border-green-200",
-                    },
-                    {
-                      bg: "from-purple-500 to-indigo-500",
-                      light: "from-purple-50 to-indigo-50",
-                      border: "border-purple-200",
-                    },
-                    {
-                      bg: "from-yellow-500 to-orange-500",
-                      light: "from-yellow-50 to-orange-50",
-                      border: "border-yellow-200",
-                    },
-                    {
-                      bg: "from-pink-500 to-rose-500",
-                      light: "from-pink-50 to-rose-50",
-                      border: "border-pink-200",
-                    },
-                    {
-                      bg: "from-teal-500 to-cyan-500",
-                      light: "from-teal-50 to-cyan-50",
-                      border: "border-teal-200",
-                    },
-                    {
-                      bg: "from-indigo-500 to-purple-500",
-                      light: "from-indigo-50 to-purple-50",
-                      border: "border-indigo-200",
-                    },
-                    {
-                      bg: "from-orange-500 to-red-500",
-                      light: "from-orange-50 to-red-50",
-                      border: "border-orange-200",
-                    },
-                    {
-                      bg: "from-emerald-500 to-green-500",
-                      light: "from-emerald-50 to-green-50",
-                      border: "border-emerald-200",
-                    },
-                    {
-                      bg: "from-cyan-500 to-blue-500",
-                      light: "from-cyan-50 to-blue-50",
-                      border: "border-cyan-200",
-                    },
-                    {
-                      bg: "from-violet-500 to-purple-500",
-                      light: "from-violet-50 to-purple-50",
-                      border: "border-violet-200",
-                    },
-                    {
-                      bg: "from-rose-500 to-pink-500",
-                      light: "from-rose-50 to-pink-50",
-                      border: "border-rose-200",
-                    },
-                    {
-                      bg: "from-lime-500 to-green-500",
-                      light: "from-lime-50 to-green-50",
-                      border: "border-lime-200",
-                    },
-                    {
-                      bg: "from-sky-500 to-blue-500",
-                      light: "from-sky-50 to-blue-50",
-                      border: "border-sky-200",
-                    },
-                    {
-                      bg: "from-amber-500 to-yellow-500",
-                      light: "from-amber-50 to-yellow-50",
-                      border: "border-amber-200",
-                    },
-                  ];
-                  const colorSet = colors[index % colors.length];
-
-                  return (
-                    <div
-                      key={personality.type}
-                      className={`group bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300 cursor-pointer relative overflow-hidden`}
-                    >
-                      {/* Hover overlay */}
-                      <div
-                        className={`absolute inset-0 bg-gradient-to-br ${colorSet.bg} opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-2xl`}
-                      ></div>
-
-                      <div className="relative z-10">
-                        <div
-                          className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${colorSet.bg} rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300`}
-                        >
-                          <span className="text-white font-bold text-lg">
-                            {personality.type}
-                          </span>
+                          <p className="text-neutral-100">
+                            Take the comprehensive assessment
+                          </p>
                         </div>
-
-                        <h4 className="font-bold text-xl text-white mb-2 group-hover:text-blue-300 transition-colors duration-300">
-                          {personality.type}
-                        </h4>
-
-                        <h5 className="font-semibold text-base text-blue-300 mb-3 group-hover:text-blue-200 transition-colors duration-300">
-                          {personality.name}
-                        </h5>
-
-                        <p className="text-sm text-neutral-100 leading-relaxed group-hover:text-white transition-colors duration-300">
-                          {personality.desc}
-                        </p>
+                        <div className="flex items-center justify-center space-x-3">
+                          <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                            <span className="text-white font-bold text-sm">
+                              2
+                            </span>
+                          </div>
+                          <p className="text-neutral-100">
+                            Discover your unique personality type
+                          </p>
+                        </div>
+                        <div className="flex items-center justify-center space-x-3">
+                          <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center">
+                            <span className="text-white font-bold text-sm">
+                              3
+                            </span>
+                          </div>
+                          <p className="text-neutral-100">
+                            Unlock insights for personal growth
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  );
-                })}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Applications and Benefits */}
+        {/* Real-World Applications Section - Before Avatars */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 mb-16 overflow-hidden relative transition-all duration-300">
             <div className="relative z-10">
               <div className="text-center mb-16">
@@ -979,7 +656,7 @@ const About = () => {
             </div>
           </div>
 
-          {/* How Our Platform Works */}
+          {/* How Assessment Works Section */}
           <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 mb-16 overflow-hidden relative transition-all duration-300">
             <div className="relative z-10">
               <div className="text-center mb-16">
@@ -1031,8 +708,6 @@ const About = () => {
                       </svg>
                     ),
                     gradient: "from-red-500 to-pink-500",
-                    lightGradient: "from-red-50 to-pink-50",
-                    borderColor: "border-red-200",
                   },
                   {
                     step: 2,
@@ -1055,8 +730,6 @@ const About = () => {
                       </svg>
                     ),
                     gradient: "from-blue-500 to-cyan-500",
-                    lightGradient: "from-blue-50 to-cyan-50",
-                    borderColor: "border-blue-200",
                   },
                   {
                     step: 3,
@@ -1079,46 +752,134 @@ const About = () => {
                       </svg>
                     ),
                     gradient: "from-green-500 to-emerald-500",
-                    lightGradient: "from-green-50 to-emerald-50",
-                    borderColor: "border-green-200",
                   },
                 ].map((item, index) => (
-                  <div key={item.step} className="group relative">
-                    <div
-                      className={`bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 h-full text-center transform group-hover:scale-105 transition-all duration-300 relative overflow-hidden`}
-                    >
-                      {/* Hover overlay */}
-                      <div
-                        className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-3xl`}
-                      ></div>
-
-                      <div className="relative z-10">
-                        {/* Step indicator */}
+                  <div
+                    key={index}
+                    className="group relative bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 hover:scale-105 transition-all duration-300"
+                  >
+                    <div className="relative z-10 text-center">
+                      <div className="flex items-center justify-center space-x-4 mb-6">
                         <div
-                          className={`inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r ${item.gradient} rounded-2xl mb-6 group-hover:scale-110 transition-all duration-300 shadow-lg relative`}
+                          className={`w-12 h-12 bg-gradient-to-r ${item.gradient} rounded-xl flex items-center justify-center font-bold text-lg text-white shadow-lg`}
+                        >
+                          {item.step}
+                        </div>
+                        <div
+                          className={`w-14 h-14 bg-gradient-to-r ${item.gradient} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg`}
                         >
                           {item.icon}
-                          <div className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
-                            <span className="text-sm font-bold text-gray-700">
-                              {item.step}
-                            </span>
-                          </div>
                         </div>
-
-                        <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-blue-300 transition-colors duration-300">
-                          {item.title}
-                        </h3>
-
-                        <p className="text-neutral-100 leading-relaxed mb-6 group-hover:text-white transition-colors duration-300">
-                          {item.description}
-                        </p>
                       </div>
+
+                      <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-blue-300 transition-colors duration-300">
+                        {item.title}
+                      </h3>
+
+                      <p className="text-neutral-100 leading-relaxed group-hover:text-white transition-colors duration-300">
+                        {item.description}
+                      </p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Full Width Avatar Section with Glassmorphic Background */}
+        <div className="w-full bg-white/10 backdrop-blur-lg border-t border-white/20 shadow-lg relative z-10 py-20">
+          {/* MBTI Groups Grid with Headings */}
+          {[
+            {
+              name: "ANALYST",
+              types: personalityTypes.slice(0, 4),
+              color: "from-purple-400 to-indigo-400",
+            },
+            {
+              name: "DIPLOMAT",
+              types: personalityTypes.slice(4, 8),
+              color: "from-green-400 to-emerald-400",
+            },
+            {
+              name: "SENTINEL",
+              types: personalityTypes.slice(8, 12),
+              color: "from-blue-400 to-cyan-400",
+            },
+            {
+              name: "EXPLORER",
+              types: personalityTypes.slice(12, 16),
+              color: "from-yellow-400 to-orange-400",
+            },
+          ].map((group, groupIndex) => (
+            <div
+              key={group.name}
+              className={`${
+                groupIndex > 0 ? "mt-24" : ""
+              } max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`}
+            >
+              {/* Group Header */}
+              <div className="text-center mb-16">
+                <h3
+                  className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${group.color} bg-clip-text text-transparent mb-4`}
+                >
+                  {group.name}
+                </h3>
+                <div
+                  className={`w-32 h-1 bg-gradient-to-r ${group.color} mx-auto rounded-full opacity-60`}
+                ></div>
+              </div>
+
+              {/* Avatars Grid for this group - Perfect centering and spacing */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 lg:gap-16">
+                {group.types.map((personality, index) => {
+                  const AvatarComponent = personality.component;
+
+                  return (
+                    <div
+                      key={personality.type}
+                      className="flex flex-col items-center justify-center text-center space-y-6 group transform hover:scale-105 transition-all duration-500 animate-[fadeInUp_0.8s_ease-out] cursor-pointer"
+                      style={{
+                        animationDelay: `${(groupIndex * 4 + index) * 120}ms`,
+                      }}
+                    >
+                      {/* Avatar Container */}
+                      <div className="flex flex-col items-center justify-center w-full">
+                        {/* Avatar Image */}
+                        <div className="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 mx-auto mb-4 rounded-3xl overflow-hidden transition-all duration-500 group-hover:scale-105 shadow-lg hover:shadow-xl">
+                          <div className="w-full h-full flex items-center justify-center p-6 bg-gradient-to-br from-white/5 to-white/10">
+                            <AvatarComponent className="w-full h-full object-contain" />
+                          </div>
+                        </div>
+
+                        {/* Type Code Badge - Perfectly Centered */}
+                        <div className="flex items-center justify-center mb-3">
+                          <div className="inline-flex items-center justify-center px-4 py-2 md:px-6 md:py-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 transition-all duration-500 group-hover:bg-white/20 group-hover:border-white/30 shadow-md hover:shadow-lg">
+                            <span className="font-bold text-lg md:text-xl tracking-wider text-white transition-colors duration-500 group-hover:text-blue-200">
+                              {personality.type}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Text Content - Centered and Spaced */}
+                      <div className="flex flex-col items-center justify-center space-y-3 w-full max-w-xs mx-auto">
+                        {/* Personality Name */}
+                        <h4 className="font-bold text-lg md:text-xl text-white group-hover:text-blue-200 transition-colors duration-500 leading-tight text-center">
+                          {personality.name}
+                        </h4>
+
+                        {/* Description */}
+                        <p className="text-sm md:text-base text-neutral-200 leading-relaxed group-hover:text-white transition-colors duration-500 text-center px-2">
+                          {personality.desc}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
       <Footer />
