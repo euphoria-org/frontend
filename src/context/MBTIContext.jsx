@@ -214,6 +214,79 @@ export const MBTIProvider = ({ children }) => {
     }
   };
 
+  // Submit test for guests (temporary storage)
+  const submitTestGuest = async (sessionId) => {
+    try {
+      dispatch({ type: MBTIActionTypes.SET_LOADING, payload: true });
+      dispatch({ type: MBTIActionTypes.CLEAR_ERROR });
+
+      // Convert answers object to array format expected by backend
+      const answersArray = Object.entries(state.answers).map(
+        ([questionId, answer]) => ({
+          questionId,
+          answer,
+        })
+      );
+
+      const response = await mbtiService.submitTestGuest(
+        answersArray,
+        sessionId
+      );
+
+      if (response.success) {
+        dispatch({
+          type: MBTIActionTypes.SET_RESULT,
+          payload: response.result,
+        });
+        return { success: true, result: response.result };
+      } else {
+        dispatch({
+          type: MBTIActionTypes.SET_ERROR,
+          payload: response.message,
+        });
+        return { success: false, message: response.message };
+      }
+    } catch (error) {
+      const errorMessage = error.message || "Failed to submit test";
+      dispatch({
+        type: MBTIActionTypes.SET_ERROR,
+        payload: errorMessage,
+      });
+      return { success: false, message: errorMessage };
+    }
+  };
+
+  // Claim temporary result after login
+  const claimTemporaryResult = async (sessionId) => {
+    try {
+      dispatch({ type: MBTIActionTypes.SET_LOADING, payload: true });
+      dispatch({ type: MBTIActionTypes.CLEAR_ERROR });
+
+      const response = await mbtiService.claimResult(sessionId);
+
+      if (response.success) {
+        dispatch({
+          type: MBTIActionTypes.SET_RESULT,
+          payload: response.result,
+        });
+        return { success: true, result: response.result };
+      } else {
+        dispatch({
+          type: MBTIActionTypes.SET_ERROR,
+          payload: response.message,
+        });
+        return { success: false, message: response.message };
+      }
+    } catch (error) {
+      const errorMessage = error.message || "Failed to claim result";
+      dispatch({
+        type: MBTIActionTypes.SET_ERROR,
+        payload: errorMessage,
+      });
+      return { success: false, message: errorMessage };
+    }
+  };
+
   // Get user results
   const fetchUserResults = async () => {
     try {
@@ -276,6 +349,8 @@ export const MBTIProvider = ({ children }) => {
     nextQuestion,
     previousQuestion,
     submitTest,
+    submitTestGuest,
+    claimTemporaryResult,
     fetchUserResults,
     resetTest,
     clearError,

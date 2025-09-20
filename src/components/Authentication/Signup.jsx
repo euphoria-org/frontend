@@ -31,8 +31,19 @@ const Signup = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      const from = location.state?.from?.pathname || "/";
-      navigate(from, { replace: true });
+      // Check if there's a pending MBTI test
+      const storedAnswers = localStorage.getItem("mbti_test_answers");
+      const testCompleted = localStorage.getItem("mbti_test_completed");
+      const sessionId = localStorage.getItem("mbti_session_id");
+
+      if (storedAnswers && testCompleted && sessionId) {
+        // User has a pending MBTI test, redirect to test page to handle claiming
+        navigate("/test", { replace: true });
+      } else {
+        // Normal redirect
+        const from = location.state?.from?.pathname || "/";
+        navigate(from, { replace: true });
+      }
     }
   }, [isAuthenticated, navigate, location]);
 
@@ -107,8 +118,19 @@ const Signup = () => {
       // Show success message for 3 seconds before redirecting
       setShowSuccessMessage(true);
       setTimeout(() => {
-        const from = location.state?.from?.pathname || "/";
-        navigate(from, { replace: true });
+        // Check if there's a pending MBTI test
+        const storedAnswers = localStorage.getItem("mbti_test_answers");
+        const testCompleted = localStorage.getItem("mbti_test_completed");
+        const sessionId = localStorage.getItem("mbti_session_id");
+
+        if (storedAnswers && testCompleted && sessionId) {
+          // User has a pending MBTI test, redirect to test page to handle claiming
+          navigate("/test", { replace: true });
+        } else {
+          // Normal redirect
+          const from = location.state?.from?.pathname || "/";
+          navigate(from, { replace: true });
+        }
       }, 3000);
     }
   };

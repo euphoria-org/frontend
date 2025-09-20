@@ -21,6 +21,8 @@ const MBTITest = () => {
     nextQuestion,
     previousQuestion,
     submitTest,
+    submitTestGuest,
+    claimTemporaryResult,
     resetTest,
     clearError,
     isTestComplete,
@@ -31,6 +33,18 @@ const MBTITest = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [showSkeleton, setShowSkeleton] = useState(true);
   const questionsPerPage = 5;
+
+  // Generate session ID if not exists
+  const getSessionId = () => {
+    let sessionId = localStorage.getItem("mbti_session_id");
+    if (!sessionId) {
+      sessionId = `session_${Date.now()}_${Math.random()
+        .toString(36)
+        .substr(2, 9)}`;
+      localStorage.setItem("mbti_session_id", sessionId);
+    }
+    return sessionId;
+  };
 
   useEffect(() => {
     if (!testInProgress && questions.length === 0) {
@@ -49,11 +63,13 @@ const MBTITest = () => {
   useEffect(() => {
     const storedAnswers = localStorage.getItem("mbti_test_answers");
     const testCompleted = localStorage.getItem("mbti_test_completed");
+    const sessionId = localStorage.getItem("mbti_session_id");
 
     if (
       isAuthenticated &&
       storedAnswers &&
       testCompleted &&
+      sessionId &&
       questions.length > 0
     ) {
       try {
@@ -63,19 +79,37 @@ const MBTITest = () => {
           setAnswer(questionId, answer);
         });
 
-        // Auto-submit the test if it was completed before login
-        setTimeout(() => {
-          handleSubmit();
+        // Try to claim the temporary result
+        setTimeout(async () => {
+          try {
+            const claimResponse = await claimTemporaryResult(sessionId);
+            if (claimResponse.success) {
+              // Successfully claimed, redirect to result
+              localStorage.removeItem("mbti_test_answers");
+              localStorage.removeItem("mbti_test_completed");
+              localStorage.removeItem("mbti_session_id");
+              navigate(`/result/${claimResponse.result.id}`);
+            } else {
+              // Failed to claim, might need to resubmit
+              console.warn("Failed to claim result:", claimResponse.message);
+              // Auto-submit as authenticated user
+              handleSubmit();
+            }
+          } catch (error) {
+            console.error("Error claiming result:", error);
+            // Fallback to resubmitting
+            handleSubmit();
+          }
         }, 1000);
       } catch (error) {
         console.error("Error restoring test answers:", error);
         localStorage.removeItem("mbti_test_answers");
         localStorage.removeItem("mbti_test_completed");
+        localStorage.removeItem("mbti_session_id");
       }
     }
   }, [isAuthenticated, questions.length]);
 
-  // Set selected answer when question changes
   useEffect(() => {
     if (questions.length > 0 && questions[currentQuestion]) {
       const questionId = questions[currentQuestion]._id;
@@ -83,11 +117,22 @@ const MBTITest = () => {
     }
   }, [currentQuestion, questions, answers]);
 
-  // Calculate current page based on questions
   const getCurrentPageQuestions = () => {
     const startIndex = currentPage * questionsPerPage;
     const endIndex = Math.min(startIndex + questionsPerPage, questions.length);
     return questions.slice(startIndex, endIndex);
+  };
+
+  const isCurrentPageComplete = () => {
+    const startIndex = currentPage * questionsPerPage;
+    const endIndex = Math.min(startIndex + questionsPerPage, questions.length);
+
+    for (let i = startIndex; i < endIndex; i++) {
+      if (!answers[questions[i]._id]) {
+        return false;
+      }
+    }
+    return true;
   };
 
   const totalPages = Math.ceil(questions.length / questionsPerPage);
@@ -162,37 +207,44 @@ const MBTITest = () => {
       return;
     }
 
-    // If user is not authenticated, redirect to login
+    // If user is not authenticated, submit as guest with session ID
     if (!isAuthenticated) {
-      // Store test answers in localStorage to preserve them after login
-      localStorage.setItem("mbti_test_answers", JSON.stringify(answers));
-      localStorage.setItem("mbti_test_completed", "true");
-      navigate("/login", {
-        state: {
-          from: { pathname: "/test" },
-          message:
-            "Please log in to save your test results and view your personalized MBTI report.",
-        },
-      });
+      try {
+        const sessionId = getSessionId();
+        const response = await submitTestGuest(sessionId);
+
+        if (response.success) {
+          // Store test completion data in localStorage
+          localStorage.setItem("mbti_test_answers", JSON.stringify(answers));
+          localStorage.setItem("mbti_test_completed", "true");
+
+          // Navigate to login with message
+          navigate("/login", {
+            state: {
+              from: { pathname: "/test" },
+              message:
+                "Please log in to save your test results and view your personalized MBTI report.",
+            },
+          });
+        } else {
+          alert(response.message || "Failed to submit test");
+        }
+      } catch (error) {
+        console.error("Error submitting test:", error);
+        alert("Failed to submit test. Please try again.");
+      }
       return;
     }
 
+    // User is authenticated, submit directly
     try {
-      // Convert answers object to array format expected by backend
-      const answersArray = Object.entries(answers).map(
-        ([questionId, answer]) => ({
-          questionId,
-          answer,
-        })
-      );
-
-      // Use authenticated submission
       const response = await submitTest();
 
       if (response.success) {
-        // Clear stored test data since we're submitting
+        // Clear stored test data since we're submitting as authenticated user
         localStorage.removeItem("mbti_test_answers");
         localStorage.removeItem("mbti_test_completed");
+        localStorage.removeItem("mbti_session_id");
         // Redirect to result page with result ID
         navigate(`/result/${response.result.id}`);
       } else {
@@ -500,6 +552,11 @@ const MBTITest = () => {
                 {Object.keys(answers).length} of {questions.length} questions
                 answered
               </p>
+              {!isCurrentPageComplete() && currentPage < totalPages - 1 && (
+                <p className="text-sm text-yellow-300 font-medium">
+                  Please answer all questions on this page to continue
+                </p>
+              )}
               {isTestComplete() && (
                 <p className="text-sm text-green-300 font-bold animate-pulse">
                   ✓ All questions completed! Ready to submit.
@@ -532,7 +589,8 @@ const MBTITest = () => {
             ) : (
               <button
                 onClick={handleNextPage}
-                className="flex items-center space-x-2 px-8 py-4 text-white rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold"
+                disabled={!isCurrentPageComplete()}
+                className="flex items-center space-x-2 px-8 py-4 text-white rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 font-semibold"
                 style={{ backgroundColor: "var(--color-custom-2)" }}
               >
                 <span>Next</span>

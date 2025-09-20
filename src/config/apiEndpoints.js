@@ -1,7 +1,6 @@
 const BASE_URL = "http://localhost:8080";
 
 export const API_ENDPOINTS = {
-  // Authentication endpoints
   AUTH: {
     SIGNUP: `${BASE_URL}/api/user/signup`,
     LOGIN: `${BASE_URL}/api/user/login`,
@@ -14,16 +13,15 @@ export const API_ENDPOINTS = {
     PROFILE: `${BASE_URL}/api/user/profile`,
   },
 
-  // MBTI Test endpoints
   MBTI: {
     GET_QUESTIONS: `${BASE_URL}/api/mbti/questions`,
     SUBMIT_TEST: `${BASE_URL}/api/mbti/submit-test`,
     SUBMIT_TEST_GUEST: `${BASE_URL}/api/mbti/submit-test-guest`,
+    CLAIM_RESULT: `${BASE_URL}/api/mbti/claim-result`,
     GET_RESULT: `${BASE_URL}/api/mbti/result`,
     GET_USER_RESULTS: `${BASE_URL}/api/mbti/my-results`,
   },
 
-  // User endpoints
   USER: {
     PROFILE: `${BASE_URL}/api/user/profile`,
     UPDATE_PROFILE: `${BASE_URL}/api/user/update-profile`,

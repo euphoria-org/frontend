@@ -25,8 +25,19 @@ const Login = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      const from = location.state?.from?.pathname || "/";
-      navigate(from, { replace: true });
+      // Check if there's a pending MBTI test
+      const storedAnswers = localStorage.getItem("mbti_test_answers");
+      const testCompleted = localStorage.getItem("mbti_test_completed");
+      const sessionId = localStorage.getItem("mbti_session_id");
+
+      if (storedAnswers && testCompleted && sessionId) {
+        // User has a pending MBTI test, redirect to test page to handle claiming
+        navigate("/test", { replace: true });
+      } else {
+        // Normal redirect
+        const from = location.state?.from?.pathname || "/";
+        navigate(from, { replace: true });
+      }
     }
   }, [isAuthenticated, navigate, location]);
 
@@ -51,15 +62,21 @@ const Login = () => {
     const result = await login(formData);
 
     if (result.success) {
-      const from = location.state?.from?.pathname || "/";
-      navigate(from, { replace: true });
+      const storedAnswers = localStorage.getItem("mbti_test_answers");
+      const testCompleted = localStorage.getItem("mbti_test_completed");
+      const sessionId = localStorage.getItem("mbti_session_id");
+
+      if (storedAnswers && testCompleted && sessionId) {
+        navigate("/test", { replace: true });
+      } else {
+        const from = location.state?.from?.pathname || "/";
+        navigate(from, { replace: true });
+      }
     }
   };
 
-  // Handle Google OAuth
   const handleGoogleLogin = () => {
     setIsGoogleLoading(true);
-    // Redirect to Google OAuth endpoint
     window.location.href = "http://localhost:8080/auth/google";
   };
 

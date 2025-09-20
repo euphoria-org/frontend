@@ -2,7 +2,6 @@ import apiConnector from "../config/apiConnector";
 import { API_ENDPOINTS } from "../config/apiEndpoints";
 
 export const mbtiService = {
-  // Get all MBTI questions
   getQuestions: async () => {
     try {
       const response = await apiConnector(
@@ -18,7 +17,6 @@ export const mbtiService = {
     }
   },
 
-  // Submit MBTI test answers (for authenticated users)
   submitTest: async (answers) => {
     try {
       const response = await apiConnector(
@@ -35,13 +33,12 @@ export const mbtiService = {
     }
   },
 
-  // Submit MBTI test answers (for guests)
-  submitTestGuest: async (answers) => {
+  submitTestGuest: async (answers, sessionId) => {
     try {
       const response = await apiConnector(
         "POST",
         API_ENDPOINTS.MBTI.SUBMIT_TEST_GUEST,
-        { responses: answers }
+        { responses: answers, sessionId }
       );
       return response;
     } catch (error) {
@@ -52,7 +49,22 @@ export const mbtiService = {
     }
   },
 
-  // Get MBTI result by ID
+  claimResult: async (sessionId) => {
+    try {
+      const response = await apiConnector(
+        "POST",
+        API_ENDPOINTS.MBTI.CLAIM_RESULT,
+        { sessionId }
+      );
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message || "Failed to claim result",
+      };
+    }
+  },
+
   getResult: async (resultId) => {
     try {
       const response = await apiConnector(
@@ -68,7 +80,6 @@ export const mbtiService = {
     }
   },
 
-  // Get user's MBTI test results
   getUserResults: async () => {
     try {
       const response = await apiConnector(
