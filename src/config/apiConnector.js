@@ -1,4 +1,3 @@
-// API Connector utility for making HTTP requests
 const apiConnector = async (
   method,
   url,
@@ -7,41 +6,33 @@ const apiConnector = async (
   params = {}
 ) => {
   try {
-    // Get token from localStorage if available
     const token = localStorage.getItem("token");
 
-    // Default headers
     const defaultHeaders = {
       "Content-Type": "application/json",
       ...headers,
     };
 
-    // Add authorization header if token exists
     if (token) {
       defaultHeaders.Authorization = `Bearer ${token}`;
     }
 
-    // Configure request options
     const config = {
       method: method.toUpperCase(),
       headers: defaultHeaders,
     };
 
-    // Add body for POST, PUT, PATCH requests
     if (bodyData && ["POST", "PUT", "PATCH"].includes(method.toUpperCase())) {
       config.body = JSON.stringify(bodyData);
     }
 
-    // Add query parameters to URL
     const urlWithParams = new URL(url);
     Object.keys(params).forEach((key) => {
       urlWithParams.searchParams.append(key, params[key]);
     });
 
-    // Make the request
     const response = await fetch(urlWithParams.toString(), config);
 
-    // Parse response
     let data;
     const contentType = response.headers.get("content-type");
 
@@ -51,7 +42,6 @@ const apiConnector = async (
       data = await response.text();
     }
 
-    // Handle response
     if (!response.ok) {
       throw new Error(data.message || `HTTP Error: ${response.status}`);
     }
@@ -59,6 +49,7 @@ const apiConnector = async (
     return {
       success: true,
       data: data.data || data,
+      result: data.result,
       message: data.message,
       status: response.status,
     };

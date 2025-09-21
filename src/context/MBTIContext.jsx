@@ -175,13 +175,12 @@ export const MBTIProvider = ({ children }) => {
     }
   };
 
-  // Submit test
+  
   const submitTest = async () => {
     try {
       dispatch({ type: MBTIActionTypes.SET_LOADING, payload: true });
       dispatch({ type: MBTIActionTypes.CLEAR_ERROR });
 
-      // Convert answers object to array format expected by backend
       const answersArray = Object.entries(state.answers).map(
         ([questionId, answer]) => ({
           questionId,
@@ -191,20 +190,23 @@ export const MBTIProvider = ({ children }) => {
 
       const response = await mbtiService.submitTest(answersArray);
 
-      if (response.success) {
+      if (response && response.success) {
         dispatch({
           type: MBTIActionTypes.SET_RESULT,
           payload: response.result,
         });
         return { success: true, result: response.result };
       } else {
+        const errorMessage = response?.message || "Unknown error occurred";
+        console.error("MBTIContext: Submit failed:", errorMessage);
         dispatch({
           type: MBTIActionTypes.SET_ERROR,
-          payload: response.message,
+          payload: errorMessage,
         });
-        return { success: false, message: response.message };
+        return { success: false, message: errorMessage };
       }
     } catch (error) {
+      console.error("MBTIContext: Submit error:", error);
       const errorMessage = error.message || "Failed to submit test";
       dispatch({
         type: MBTIActionTypes.SET_ERROR,
@@ -214,13 +216,11 @@ export const MBTIProvider = ({ children }) => {
     }
   };
 
-  // Submit test for guests (temporary storage)
   const submitTestGuest = async (sessionId) => {
     try {
       dispatch({ type: MBTIActionTypes.SET_LOADING, payload: true });
       dispatch({ type: MBTIActionTypes.CLEAR_ERROR });
 
-      // Convert answers object to array format expected by backend
       const answersArray = Object.entries(state.answers).map(
         ([questionId, answer]) => ({
           questionId,
@@ -256,7 +256,6 @@ export const MBTIProvider = ({ children }) => {
     }
   };
 
-  // Claim temporary result after login
   const claimTemporaryResult = async (sessionId) => {
     try {
       dispatch({ type: MBTIActionTypes.SET_LOADING, payload: true });
@@ -287,7 +286,6 @@ export const MBTIProvider = ({ children }) => {
     }
   };
 
-  // Get user results
   const fetchUserResults = async () => {
     try {
       dispatch({ type: MBTIActionTypes.SET_LOADING, payload: true });

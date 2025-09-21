@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useMBTI } from "../../context/MBTIContext";
 import { useAuth } from "../../context/AuthContext";
 import { mbtiService } from "../../services/mbtiService";
@@ -8,6 +8,7 @@ import Meteors from "../common/Meteors";
 
 const MBTITest = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated } = useAuth();
   const {
     questions,
@@ -18,11 +19,8 @@ const MBTITest = () => {
     testInProgress,
     startTest,
     setAnswer,
-    nextQuestion,
-    previousQuestion,
     submitTest,
     submitTestGuest,
-    claimTemporaryResult,
     resetTest,
     clearError,
     isTestComplete,
@@ -32,6 +30,7 @@ const MBTITest = () => {
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [showSkeleton, setShowSkeleton] = useState(true);
+  const [navigationMessage, setNavigationMessage] = useState("");
   const questionsPerPage = 5;
 
   // Generate session ID if not exists
@@ -46,11 +45,33 @@ const MBTITest = () => {
     return sessionId;
   };
 
+  // Handle navigation messages
   useEffect(() => {
+    if (location.state?.message) {
+      setNavigationMessage(location.state.message);
+      // Clear the message after showing it
+      setTimeout(() => {
+        setNavigationMessage("");
+        // Clear the navigation state
+        navigate(location.pathname, { replace: true });
+      }, 5000);
+    }
+  }, [location.state, navigate, location.pathname]);
+
+  useEffect(() => {
+    const testCompleted = localStorage.getItem("mbti_test_completed");
+    const sessionId = localStorage.getItem("mbti_session_id");
+
+    if (isAuthenticated && testCompleted === "true" && sessionId) {
+      
+      navigate("/result", { replace: true });
+      return;
+    }
+
     if (!testInProgress && questions.length === 0) {
       handleStartTest();
     }
-  }, [testInProgress, questions.length]);
+  }, [testInProgress, questions.length, isAuthenticated, navigate]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -62,45 +83,13 @@ const MBTITest = () => {
 
   useEffect(() => {
     const storedAnswers = localStorage.getItem("mbti_test_answers");
-    const testCompleted = localStorage.getItem("mbti_test_completed");
-    const sessionId = localStorage.getItem("mbti_session_id");
 
-    if (
-      isAuthenticated &&
-      storedAnswers &&
-      testCompleted &&
-      sessionId &&
-      questions.length > 0
-    ) {
+    if (storedAnswers && questions.length > 0) {
       try {
         const parsedAnswers = JSON.parse(storedAnswers);
-        // Restore answers to the context
         Object.entries(parsedAnswers).forEach(([questionId, answer]) => {
           setAnswer(questionId, answer);
         });
-
-        // Try to claim the temporary result
-        setTimeout(async () => {
-          try {
-            const claimResponse = await claimTemporaryResult(sessionId);
-            if (claimResponse.success) {
-              // Successfully claimed, redirect to result
-              localStorage.removeItem("mbti_test_answers");
-              localStorage.removeItem("mbti_test_completed");
-              localStorage.removeItem("mbti_session_id");
-              navigate(`/result/${claimResponse.result.id}`);
-            } else {
-              // Failed to claim, might need to resubmit
-              console.warn("Failed to claim result:", claimResponse.message);
-              // Auto-submit as authenticated user
-              handleSubmit();
-            }
-          } catch (error) {
-            console.error("Error claiming result:", error);
-            // Fallback to resubmitting
-            handleSubmit();
-          }
-        }, 1000);
       } catch (error) {
         console.error("Error restoring test answers:", error);
         localStorage.removeItem("mbti_test_answers");
@@ -108,7 +97,7 @@ const MBTITest = () => {
         localStorage.removeItem("mbti_session_id");
       }
     }
-  }, [isAuthenticated, questions.length]);
+  }, [questions.length]);
 
   useEffect(() => {
     if (questions.length > 0 && questions[currentQuestion]) {
@@ -240,15 +229,23 @@ const MBTITest = () => {
     try {
       const response = await submitTest();
 
-      if (response.success) {
-        // Clear stored test data since we're submitting as authenticated user
+      if (response && response.success) {
+
         localStorage.removeItem("mbti_test_answers");
         localStorage.removeItem("mbti_test_completed");
         localStorage.removeItem("mbti_session_id");
-        // Redirect to result page with result ID
-        navigate(`/result/${response.result.id}`);
+
+        if (response.result && response.result.id) {
+
+          navigate(`/result/${response.result.id}`);
+        } else {
+          console.error("MBTITest: No result ID in response", response);
+
+          navigate("/result");
+        }
       } else {
-        alert(response.message || "Failed to submit test");
+        console.error("MBTITest: Submit failed with response:", response);
+        alert(response?.message || "Failed to submit test");
       }
     } catch (error) {
       console.error("Error submitting test:", error);
@@ -340,6 +337,15 @@ const MBTITest = () => {
               Restart Test
             </button>
           </div>
+
+          {/* Navigation Message */}
+          {navigationMessage && (
+            <div className="mb-6 p-4 bg-blue-500/20 border border-blue-400/30 rounded-2xl backdrop-blur-sm">
+              <p className="text-blue-100 text-center font-medium">
+                {navigationMessage}
+              </p>
+            </div>
+          )}
 
           {/* Progress Bar */}
           <div className="relative w-full bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl h-3 mb-6 overflow-hidden">

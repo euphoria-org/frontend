@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useMBTI } from "../../context/MBTIContext";
 import {
   EmailIcon,
   LockIcon,
@@ -17,26 +18,31 @@ const Login = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isClaimingResult, setIsClaimingResult] = useState(false);
 
   const { login, isLoading, error, clearError, isAuthenticated } = useAuth();
+  const { claimTemporaryResult } = useMBTI();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      const storedAnswers = localStorage.getItem("mbti_test_answers");
-      const testCompleted = localStorage.getItem("mbti_test_completed");
-      const sessionId = localStorage.getItem("mbti_session_id");
-
-      if (storedAnswers && testCompleted && sessionId) {
-        navigate("/test", { replace: true });
-      } else {
-        const from = location.state?.from?.pathname || "/";
-        navigate(from, { replace: true });
-      }
+      handlePostLoginFlow();
     }
   }, [isAuthenticated, navigate, location]);
+
+  const handlePostLoginFlow = async () => {
+    const storedAnswers = localStorage.getItem("mbti_test_answers");
+    const testCompleted = localStorage.getItem("mbti_test_completed");
+    const sessionId = localStorage.getItem("mbti_session_id");
+
+    if (storedAnswers && testCompleted && sessionId) {
+      navigate("/result", { replace: true });
+    } else {
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -57,16 +63,8 @@ const Login = () => {
     const result = await login(formData);
 
     if (result.success) {
-      const storedAnswers = localStorage.getItem("mbti_test_answers");
-      const testCompleted = localStorage.getItem("mbti_test_completed");
-      const sessionId = localStorage.getItem("mbti_session_id");
-
-      if (storedAnswers && testCompleted && sessionId) {
-        navigate("/test", { replace: true });
-      } else {
-        const from = location.state?.from?.pathname || "/";
-        navigate(from, { replace: true });
-      }
+      // Post-login flow will be handled by useEffect
+      handlePostLoginFlow();
     }
   };
 
@@ -89,6 +87,23 @@ const Login = () => {
             <p className="text-base text-neutral-100 mb-6">
               Ready to discover what makes you unique?
             </p>
+
+            {localStorage.getItem("mbti_test_completed") && (
+              <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-blue-300/50 text-blue-100 px-4 py-3 rounded-2xl mb-4">
+                <span className="block sm:inline text-sm">
+                  🎉 Great job completing the MBTI test! Please sign in to save
+                  your results and view your personalized report.
+                </span>
+              </div>
+            )}
+
+            {location.state?.message && (
+              <div className="bg-blue-500/20 backdrop-blur-sm border border-blue-300/50 text-blue-100 px-4 py-3 rounded-2xl mb-4">
+                <span className="block sm:inline text-sm">
+                  {location.state.message}
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-6">
@@ -233,7 +248,7 @@ const Login = () => {
               <div>
                 <button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isLoading || isClaimingResult}
                   className="group relative w-full flex justify-center py-3 px-6 text-sm font-semibold rounded-2xl text-white transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   style={{
                     backgroundColor: "var(--color-custom-2)",
@@ -241,8 +256,14 @@ const Login = () => {
                     "--tw-ring-opacity": "0.3",
                   }}
                 >
-                  {isLoading && <LoadingIcon className="w-5 h-5 mr-2" />}
-                  {isLoading ? "Signing in..." : "Sign in"}
+                  {(isLoading || isClaimingResult) && (
+                    <LoadingIcon className="w-5 h-5 mr-2" />
+                  )}
+                  {isClaimingResult
+                    ? "Retrieving your results..."
+                    : isLoading
+                    ? "Signing in..."
+                    : "Sign in"}
                 </button>
               </div>
 
