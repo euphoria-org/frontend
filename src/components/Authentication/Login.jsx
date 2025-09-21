@@ -25,23 +25,19 @@ const Login = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      // Check if there's a pending MBTI test
       const storedAnswers = localStorage.getItem("mbti_test_answers");
       const testCompleted = localStorage.getItem("mbti_test_completed");
       const sessionId = localStorage.getItem("mbti_session_id");
 
       if (storedAnswers && testCompleted && sessionId) {
-        // User has a pending MBTI test, redirect to test page to handle claiming
         navigate("/test", { replace: true });
       } else {
-        // Normal redirect
         const from = location.state?.from?.pathname || "/";
         navigate(from, { replace: true });
       }
     }
   }, [isAuthenticated, navigate, location]);
 
-  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -51,7 +47,6 @@ const Login = () => {
     if (error) clearError();
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -82,10 +77,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Meteors background */}
       <Meteors number={25} />
-
-      {/* Static stars background */}
       <div className="absolute inset-0 stars-background opacity-70"></div>
 
       <div className="relative z-10 flex items-center justify-center min-h-screen py-6 px-4 sm:px-6 lg:px-8">

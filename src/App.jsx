@@ -14,6 +14,7 @@ import OAuthCallback from "./components/Authentication/OAuthCallback";
 import MBTITest from "./components/MBTI_Test/MBTITest";
 import TestResult from "./components/MBTI_Test/TestResult";
 import ScrollToTop from "./components/common/ScrollToTop";
+import Error from "./components/Error";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/update-password" element={<UpdatePassword />} />
             <Route path="/reset-password" element={<UpdatePassword />} />
             <Route path="/auth/success" element={<OAuthCallback />} />
+            <Route path="*" element={<Error />} />
           </Routes>
         </BrowserRouter>
       </MBTIProvider>

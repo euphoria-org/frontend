@@ -243,7 +243,6 @@
   }
 }
 
-/* Static stars background */
 .stars-background {
   background-image: radial-gradient(2px 2px at 20px 30px, #fff, transparent),
     radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.8), transparent),
@@ -331,7 +330,6 @@
   animation: gentle-pulse 3s ease-in-out infinite;
 }
 
-/* Enhanced personality card styles */
 .personality-card {
   min-height: 100%;
   display: flex;
@@ -340,7 +338,6 @@
   align-items: center;
 }
 
-/* Responsive avatar sizes */
 @media (max-width: 640px) {
   .avatar-container {
     width: 200px;

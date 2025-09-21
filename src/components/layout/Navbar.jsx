@@ -42,7 +42,6 @@ const Navbar = () => {
       user.firstName ||
       (user.email ? user.email.split("@")[0] : "User");
 
-    // Get name till first space or 12 characters, whichever is shorter
     const firstSpaceIndex = fullName.indexOf(" ");
     if (firstSpaceIndex > 0 && firstSpaceIndex <= 12) {
       return fullName.substring(0, firstSpaceIndex);
@@ -53,7 +52,6 @@ const Navbar = () => {
 
   const navLinks = [
     { path: "/", label: "Home", icon: HomeIcon },
-
     { path: "/about", label: "About", icon: AboutIcon },
   ];
 
