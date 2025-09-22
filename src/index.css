@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 .cantarell-regular {
   font-family: "Cantarell", sans-serif;
   font-weight: 400;
@@ -23,7 +24,6 @@
   font-style: italic;
 }
 
-/* Set Cantarell as default font */
 * {
   font-family: "Cantarell", sans-serif;
 }
@@ -31,8 +31,6 @@
 @theme {
   --color-navbar-link: #848897;
   --color-header: #282828;
-
-  /* Euphoria Color Palette */
   --color-primary: #35063e;
   --color-primary-light: #4e2460;
   --color-primary-dark: #230229;
@@ -44,7 +42,6 @@
   --color-gray-light: #e0e0e0;
   --color-gray-dark: #333333;
 
-  /* Purple Shades */
   --color-purple-50: #faf5ff;
   --color-purple-100: #f3e8ff;
   --color-purple-200: #e9d5ff;
@@ -56,7 +53,6 @@
   --color-purple-800: #230229;
   --color-purple-900: #1c0a22;
 
-  /* Gray Shades */
   --color-gray-50: #f9fafb;
   --color-gray-100: #e0e0e0;
   --color-gray-200: #e5e7eb;
@@ -68,7 +64,6 @@
   --color-gray-800: #1f2937;
   --color-gray-900: #111827;
 
-  /* Accent Shades */
   --color-amber-50: #fffbeb;
   --color-amber-100: #fef3c7;
   --color-amber-200: #fde68a;
@@ -80,11 +75,9 @@
   --color-amber-800: #92400e;
   --color-amber-900: #78350f;
 
-  /* Gradient Colors */
   --color-light-blue: #c6ecff;
   --color-light-lavender: #e0d5ff;
 
-  /* Custom Color Palette */
   --color-custom-1: #ced4f1;
   --color-custom-2: #446f7c;
   --color-custom-3: #ececfb;
@@ -97,7 +90,6 @@
   --color-custom-10: #9ca5b2;
 }
 
-/* Custom Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -130,13 +122,12 @@
   background: var(--color-custom-3);
 }
 
-/* Firefox Scrollbar */
+
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--color-custom-2) var(--color-custom-3);
 }
 
-/* Custom scrollbar for specific containers */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: var(--color-custom-2) transparent;
@@ -162,7 +153,6 @@
   background: var(--color-custom-4);
 }
 
-/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -193,7 +183,6 @@
   animation: slideInFromTop 0.4s ease-out;
 }
 
-/* Meteor Effect */
 @keyframes meteorAnimation {
   0% {
     transform: translateX(-100px) translateY(-100px);
@@ -230,7 +219,6 @@
   animation-timing-function: linear;
 }
 
-/* Twinkling stars animation */
 @keyframes twinkle {
   0%,
   100% {

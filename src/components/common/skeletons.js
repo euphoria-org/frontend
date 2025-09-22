@@ -13,6 +13,14 @@ export {
 export { default as HomeSkeleton } from "./HomeSkeleton";
 export { default as AboutSkeleton } from "./AboutSkeleton";
 export { default as TestSkeleton } from "./TestSkeleton";
+export {
+  default as DashboardSkeleton,
+  MBTIResultsSkeleton,
+} from "./DashboardSkeleton";
+export {
+  default as ProfileSkeleton,
+  MBTICardSkeleton,
+} from "./ProfileSkeleton";
 
 export {
   default as AuthSkeleton,

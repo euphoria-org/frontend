@@ -5,10 +5,26 @@ import MBTIResultsSection from "./MBTIResultsSection";
 import Footer from "../layout/Footer";
 import { UserIcon, TestIcon, PermaIcon, IQIcon } from "../../icons";
 import Meteors from "../common/Meteors";
+import { DashboardSkeleton } from "../common/skeletons";
 
 const Dashboard = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  // Add skeleton loading timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Show skeleton while loading
+  if (showSkeleton) {
+    return <DashboardSkeleton />;
+  }
 
   const tabs = [
     { id: "profile", label: "Profile", icon: UserIcon, disabled: false },

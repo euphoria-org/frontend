@@ -25,7 +25,6 @@ import Entertainer from "./Avatars/Entertainer";
 const About = () => {
   const [showSkeleton, setShowSkeleton] = useState(true);
 
-  // Add 1.5-second timer to show skeleton loader
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSkeleton(false);
@@ -169,9 +168,8 @@ const About = () => {
     },
   ];
 
-  // MBTI personality types organized by groups as on 16personalities.com
   const personalityTypes = [
-    // Analysts (NT) - Purple theme
+
     {
       type: "INTJ",
       name: "The Architect",
@@ -200,8 +198,6 @@ const About = () => {
       component: Debater,
       group: "Analyst",
     },
-
-    // Diplomats (NF) - Green theme
     {
       type: "INFJ",
       name: "The Advocate",
@@ -230,8 +226,6 @@ const About = () => {
       component: Campaigner,
       group: "Diplomat",
     },
-
-    // Sentinels (SJ) - Blue theme
     {
       type: "ISTJ",
       name: "The Logistician",
@@ -260,8 +254,6 @@ const About = () => {
       component: Consul,
       group: "Sentinel",
     },
-
-    // Explorers (SP) - Yellow theme
     {
       type: "ISTP",
       name: "The Virtuoso",
@@ -545,7 +537,6 @@ const About = () => {
           </div>
         </div>
 
-        {/* Real-World Applications Section - Before Avatars */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 mb-16 overflow-hidden relative transition-all duration-300">
             <div className="relative z-10">
@@ -602,7 +593,6 @@ const About = () => {
                       <div
                         className={`bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 h-full transform group-hover:scale-105 transition-all duration-300`}
                       >
-                        {/* Hover overlay */}
                         <div
                           className={`absolute inset-0 bg-gradient-to-br ${colorSet.bg} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-3xl`}
                         ></div>
@@ -656,7 +646,6 @@ const About = () => {
             </div>
           </div>
 
-          {/* How Assessment Works Section */}
           <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 mb-16 overflow-hidden relative transition-all duration-300">
             <div className="relative z-10">
               <div className="text-center mb-16">
@@ -787,9 +776,7 @@ const About = () => {
           </div>
         </div>
 
-        {/* Full Width Avatar Section with Glassmorphic Background */}
         <div className="w-full bg-white/10 backdrop-blur-lg border-t border-white/20 shadow-lg relative z-10 py-20">
-          {/* MBTI Groups Grid with Headings */}
           {[
             {
               name: "ANALYST",
@@ -818,7 +805,7 @@ const About = () => {
                 groupIndex > 0 ? "mt-24" : ""
               } max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`}
             >
-              {/* Group Header */}
+
               <div className="text-center mb-16">
                 <h3
                   className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${group.color} bg-clip-text text-transparent mb-4`}
@@ -830,7 +817,6 @@ const About = () => {
                 ></div>
               </div>
 
-              {/* Avatars Grid for this group - Perfect centering and spacing */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 lg:gap-16">
                 {group.types.map((personality, index) => {
                   const AvatarComponent = personality.component;
@@ -843,9 +829,7 @@ const About = () => {
                         animationDelay: `${(groupIndex * 4 + index) * 120}ms`,
                       }}
                     >
-                      {/* Avatar Container */}
                       <div className="flex flex-col items-center justify-center w-full">
-                        {/* Avatar Image */}
                         <div className="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 mx-auto mb-4 rounded-3xl overflow-hidden transition-all duration-500 group-hover:scale-105 shadow-lg hover:shadow-xl">
                           <div className="w-full h-full flex items-center justify-center p-6 bg-gradient-to-br from-white/5 to-white/10">
                             <AvatarComponent className="w-full h-full object-contain" />

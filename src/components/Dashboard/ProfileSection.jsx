@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { authService } from "../../services/authService";
 import { LoadingIcon, CheckIcon, XIcon } from "../../icons";
 import PasswordChange from "./PasswordChange";
+import { MBTICardSkeleton } from "../common/skeletons";
 import Architect from "../Avatars/Architect";
 import Advocate from "../Avatars/Advocate";
 import Mediator from "../Avatars/Mediator";
@@ -27,6 +28,7 @@ const ProfileSection = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [latestMBTI, setLatestMBTI] = useState(null);
+  const [mbtiLoading, setMbtiLoading] = useState(true);
 
   const [profileData, setProfileData] = useState({
     name: user?.name || "",
@@ -45,12 +47,15 @@ const ProfileSection = () => {
 
   const fetchLatestMBTI = async () => {
     try {
+      setMbtiLoading(true);
       const response = await authService.getUserMBTIResults();
       if (response.success && response.data.length > 0) {
-        setLatestMBTI(response.data[0]); // Get the latest result
+        setLatestMBTI(response.data[0]);
       }
     } catch (err) {
       console.error("Error fetching MBTI results:", err);
+    } finally {
+      setMbtiLoading(false);
     }
   };
 
@@ -78,22 +83,22 @@ const ProfileSection = () => {
 
   const getAvatarComponent = (mbtiType) => {
     const avatarMap = {
-      INTJ: Architect, // The Architect
-      INFJ: Advocate, // The Advocate
-      INFP: Mediator, // The Mediator
-      ENFJ: Protagonist, // The Protagonist
-      ENFP: Campaigner, // The Campaigner
-      ENTP: Debater, // The Debater
-      INTP: Logician, // The Logician
-      ENTJ: Commander, // The Commander
-      ISTJ: Logistician, // The Logistician
-      ISFJ: Defender, // The Defender
-      ESTJ: Executive, // The Executive
-      ESFJ: Consul, // The Consul
-      ISTP: Virtuoso, // The Virtuoso
-      ISFP: Adventurer, // The Adventurer
-      ESTP: Entrepreneur, // The Entrepreneur
-      ESFP: Entertainer, // The Entertainer
+      INTJ: Architect,
+      INFJ: Advocate,
+      INFP: Mediator,
+      ENFJ: Protagonist,
+      ENFP: Campaigner,
+      ENTP: Debater,
+      INTP: Logician,
+      ENTJ: Commander,
+      ISTJ: Logistician,
+      ISFJ: Defender,
+      ESTJ: Executive,
+      ESFJ: Consul,
+      ISTP: Virtuoso,
+      ISFP: Adventurer,
+      ESTP: Entrepreneur,
+      ESFP: Entertainer,
     };
 
     const AvatarComponent = avatarMap[mbtiType];
@@ -119,7 +124,7 @@ const ProfileSection = () => {
       if (response.success) {
         setMessage("Profile updated successfully!");
         updateUser(response.data);
-        setIsEditing(false); // Exit edit mode after successful update
+        setIsEditing(false);
       }
     } catch (err) {
       setError(err.message || "Failed to update profile");
@@ -168,67 +173,88 @@ const ProfileSection = () => {
           </div>
         )}
 
-        {/* User Profile Display Card */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 shadow-lg">
-          <h3 className="text-xl font-semibold text-white mb-6">
-            Profile Overview
-          </h3>
-
-          <div className={`flex items-start ${latestMBTI ? "space-x-6" : ""}`}>
-            {/* Avatar Section - Only show if user has taken MBTI test */}
-            {latestMBTI && (
-              <div className="flex-shrink-0">
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center min-h-[200px] w-[200px] flex flex-col justify-center">
-                  <div className="h-32 w-32 mx-auto mb-4">
-                    {getAvatarComponent(latestMBTI.mbtiType)}
-                  </div>
-                  <div className="space-y-2">
-                    <div className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-sm font-bold border border-blue-400/30">
-                      {latestMBTI.mbtiType}
-                    </div>
-                    <p className="text-white/80 text-xs">
-                      {getMBTIDescription(latestMBTI.mbtiType)}
-                    </p>
-                  </div>
+        <div className="flex flex-col lg:flex-row gap-6 mb-8">
+          <div className="lg:w-1/3 flex">
+            {mbtiLoading ? (
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center h-full w-full">
+                <div className="h-80 w-80 mx-auto mb-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl animate-pulse-shimmer bg-gradient-to-br from-white/15 via-white/8 to-white/5 bg-[length:200%_200%] shadow-md"></div>
+                <div className="h-4 w-24 mx-auto bg-white/8 rounded animate-pulse"></div>
+              </div>
+            ) : latestMBTI ? (
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center h-full w-full">
+                <div className="h-80 w-80 mx-auto mb-4">
+                  {getAvatarComponent(latestMBTI.mbtiType)}
                 </div>
+              </div>
+            ) : (
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center h-full w-full">
+                <div className="h-80 w-80 mx-auto mb-4 bg-white/5 rounded-2xl flex items-center justify-center">
+                  <span className="text-white/40 text-sm">No Avatar</span>
+                </div>
+                <p className="text-white/60 text-sm">
+                  Take MBTI test to get your avatar
+                </p>
               </div>
             )}
+          </div>
 
-            <div className="flex-1 space-y-4">
-              <div>
-                <span className="text-sm font-medium text-white/60">Name:</span>
-                <p className="text-white font-medium text-lg">{user?.name}</p>
-              </div>
-              <div>
-                <span className="text-sm font-medium text-white/60">
-                  Email:
-                </span>
-                <p className="text-white">{user?.email}</p>
-              </div>
-              {latestMBTI && (
+          <div className="lg:w-2/3 flex">
+            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 shadow-lg h-full w-full">
+              <h3 className="text-xl font-semibold text-white mb-6">
+                Profile Overview
+              </h3>
+
+              <div className="space-y-4">
                 <div>
                   <span className="text-sm font-medium text-white/60">
-                    Personality Type:
+                    Name:
                   </span>
-                  <div className="flex items-center space-x-2 mt-1">
-                    <span className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-sm font-bold border border-blue-400/30">
-                      {latestMBTI.mbtiType}
-                    </span>
-                    <span className="text-white/80">
-                      {getMBTIDescription(latestMBTI.mbtiType)}
-                    </span>
-                  </div>
+                  <p className="text-white font-medium text-lg">{user?.name}</p>
                 </div>
-              )}
-              <div>
-                <span className="text-sm font-medium text-white/60">
-                  Member Since:
-                </span>
-                <p className="text-white">
-                  {user?.createdAt
-                    ? new Date(user.createdAt).toLocaleDateString()
-                    : "N/A"}
-                </p>
+                <div>
+                  <span className="text-sm font-medium text-white/60">
+                    Email:
+                  </span>
+                  <p className="text-white">{user?.email}</p>
+                </div>
+                {mbtiLoading ? (
+                  <div>
+                    <span className="text-sm font-medium text-white/60">
+                      Personality Type:
+                    </span>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <div className="h-6 w-16 bg-blue-500/20 rounded-full animate-pulse-shimmer bg-gradient-to-r from-blue-400/10 via-blue-400/25 to-blue-400/10 bg-[length:200%_100%]"></div>
+                      <div
+                        className="h-4 w-32 bg-white/8 rounded animate-pulse"
+                        style={{ animationDelay: "0.1s" }}
+                      ></div>
+                    </div>
+                  </div>
+                ) : latestMBTI ? (
+                  <div>
+                    <span className="text-sm font-medium text-white/60">
+                      Personality Type:
+                    </span>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <span className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-sm font-bold border border-blue-400/30">
+                        {latestMBTI.mbtiType}
+                      </span>
+                      <span className="text-white/80">
+                        {getMBTIDescription(latestMBTI.mbtiType)}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
+                <div>
+                  <span className="text-sm font-medium text-white/60">
+                    Member Since:
+                  </span>
+                  <p className="text-white">
+                    {user?.createdAt
+                      ? new Date(user.createdAt).toLocaleDateString()
+                      : "N/A"}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -241,18 +267,10 @@ const ProfileSection = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div>
                 <h4 className="text-lg font-medium text-white">
                   Edit Profile Information
                 </h4>
-                {!isEditing && (
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="bg-custom-2 text-white px-4 py-2 rounded-lg hover:bg-custom-2/80 transition-all duration-200"
-                  >
-                    Edit
-                  </button>
-                )}
               </div>
 
               {isEditing ? (
@@ -325,6 +343,14 @@ const ProfileSection = () => {
                       Email
                     </label>
                     <p className="text-white">{user?.email}</p>
+                  </div>
+                  <div className="pt-4">
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="bg-custom-2 text-white px-4 py-2 rounded-lg hover:bg-custom-2/80 transition-all duration-200"
+                    >
+                      Edit
+                    </button>
                   </div>
                 </div>
               )}

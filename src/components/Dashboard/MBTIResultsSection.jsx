@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
 import { LoadingIcon, TestIcon, ResultIcon } from "../../icons";
+import { MBTIResultsSkeleton } from "../common/skeletons";
 
 const MBTIResultsSection = () => {
   const [results, setResults] = useState([]);
@@ -60,14 +61,7 @@ const MBTIResultsSection = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="p-6 flex items-center justify-center min-h-64">
-        <div className="flex items-center space-x-2">
-          <LoadingIcon className="animate-spin h-6 w-6 text-blue-400" />
-          <span className="text-white/80">Loading your MBTI results...</span>
-        </div>
-      </div>
-    );
+    return <MBTIResultsSkeleton />;
   }
 
   if (error) {
