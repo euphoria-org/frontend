@@ -14,3 +14,5 @@ export { default as CheckIcon } from "./CheckIcon";
 export { default as XIcon } from "./XIcon";
 export { default as MenuIcon } from "./MenuIcon";
 export { default as CloseIcon } from "./CloseIcon";
+export { default as PermaIcon } from "./PermaIcon";
+export { default as IQIcon } from "./IQIcon";

@@ -188,6 +188,21 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: AuthActionTypes.LOGOUT });
   };
 
+  // Update user function (for profile updates)
+  const updateUser = (updatedUser) => {
+    // Update localStorage
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+    // Update context state
+    dispatch({
+      type: AuthActionTypes.SET_USER,
+      payload: {
+        user: updatedUser,
+        token: state.token,
+      },
+    });
+  };
+
   // Clear error function
   const clearError = () => {
     dispatch({ type: AuthActionTypes.CLEAR_ERROR });
@@ -305,6 +320,7 @@ export const AuthProvider = ({ children }) => {
     login,
     signup,
     logout,
+    updateUser,
     clearError,
     forgotPassword,
     resetPassword,

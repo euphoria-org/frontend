@@ -13,6 +13,7 @@ import UpdatePassword from "./components/Authentication/UpdatePassword";
 import OAuthCallback from "./components/Authentication/OAuthCallback";
 import MBTITest from "./components/MBTI_Test/MBTITest";
 import TestResult from "./components/MBTI_Test/TestResult";
+import Dashboard from "./components/Dashboard/Dashboard";
 import ScrollToTop from "./components/common/ScrollToTop";
 import Error from "./components/Error";
 
@@ -29,6 +30,14 @@ function App() {
               <Route path="test" element={<MBTITest />} />
               <Route path="result" element={<TestResult />} />
               <Route path="result/:resultId" element={<TestResult />} />
+              <Route
+                path="dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

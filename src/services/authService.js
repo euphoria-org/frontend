@@ -117,16 +117,12 @@ export const authService = {
   },
 
   // Update password (for logged-in users)
-  updatePassword: async (currentPassword, newPassword, confirmNewPassword) => {
+  updatePassword: async (passwordData) => {
     try {
       const response = await apiConnector(
         "PUT",
         API_ENDPOINTS.AUTH.UPDATE_PASSWORD,
-        {
-          currentPassword,
-          newPassword,
-          confirmNewPassword,
-        }
+        passwordData
       );
       return response;
     } catch (error) {
@@ -137,7 +133,64 @@ export const authService = {
     }
   },
 
-  // Get current user from localStorage
+  updateProfile: async (profileData) => {
+    try {
+      const response = await apiConnector(
+        "PUT",
+        API_ENDPOINTS.USER.UPDATE_PROFILE,
+        profileData
+      );
+
+      if (response.success && response.data) {
+        localStorage.setItem("user", JSON.stringify(response.data));
+      }
+
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message || "Profile update failed",
+      };
+    }
+  },
+
+  changePassword: async (passwordData) => {
+    try {
+      const requestData = {
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+        confirmNewPassword: passwordData.confirmPassword,
+      };
+
+      const response = await apiConnector(
+        "PUT",
+        API_ENDPOINTS.AUTH.UPDATE_PASSWORD,
+        requestData
+      );
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message || "Password change failed",
+      };
+    }
+  },
+
+  getUserMBTIResults: async () => {
+    try {
+      const response = await apiConnector(
+        "GET",
+        `${API_ENDPOINTS.AUTH.PROFILE.replace("/profile", "")}/mbti-results`
+      );
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message || "Failed to fetch MBTI results",
+      };
+    }
+  },
+
   getCurrentUser: () => {
     try {
       const user = localStorage.getItem("user");
@@ -179,56 +232,43 @@ export const authService = {
         return false;
       }
 
-      // Decode JWT token to check expiration
       const payload = JSON.parse(atob(token.split(".")[1]));
       const currentTime = Date.now() / 1000;
 
-      // Check if token is expired
       if (payload.exp < currentTime) {
-        // Token is expired, return false but don't automatically logout
-        // Let the calling code decide what to do
         return false;
       }
 
       return true;
     } catch (error) {
-      // If there's any error in decoding, consider token invalid
-      // But don't automatically logout - let calling code handle it
       console.warn("Error validating token:", error);
       return false;
     }
   },
 
-  // Clean expired token
   cleanExpiredToken: () => {
     if (!authService.isTokenValid()) {
       const token = localStorage.getItem("token");
       if (token) {
-        // Only remove if token exists but is invalid/expired
         authService.logout();
-        return true; // Token was expired and removed
+        return true;
       }
     }
-    return false; // Token is valid or doesn't exist
+    return false;
   },
 
-  // Validate and refresh user session
   validateSession: async () => {
     try {
-      // First check if token exists and is valid
       const token = localStorage.getItem("token");
-
       if (!token) {
         return {
           success: false,
           message: "No token found",
-          shouldLogout: false, // Don't force logout if no token
+          shouldLogout: false,
         };
       }
 
-      // Check token validity
       if (!authService.isTokenValid()) {
-        // Token is expired or invalid
         authService.logout();
         return {
           success: false,
@@ -237,38 +277,13 @@ export const authService = {
         };
       }
 
-      // Token is valid, no need for backend verification for now
-      // You can add backend verification later if needed
       return {
         success: true,
         message: "Session valid",
       };
-
-      /* Optional backend verification - uncomment if you have the endpoint
-      const response = await apiConnector(
-        "GET",
-        API_ENDPOINTS.AUTH.VERIFY_TOKEN || "/auth/verify"
-      );
-
-      if (!response.success) {
-        authService.logout();
-        return {
-          success: false,
-          message: "Invalid session",
-          shouldLogout: true
-        };
-      }
-
-      return {
-        success: true,
-        message: "Session valid"
-      };
-      */
     } catch (error) {
-      // Don't automatically logout on network errors
       console.warn("Session validation error:", error);
 
-      // If token is valid locally, keep the session
       if (authService.isTokenValid()) {
         return {
           success: true,
