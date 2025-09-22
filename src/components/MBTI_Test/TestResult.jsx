@@ -535,52 +535,101 @@ const TestResult = () => {
       <div className="absolute inset-0 stars-background opacity-60"></div>
 
       <div className="w-[90%] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 mb-8 w-full">
-          <div className="flex flex-col md:flex-row items-center gap-8 min-h-[200px]">
-            <div className="flex-shrink-0 h-[200px] w-[200px]">
-              {AvatarComponent ? (
-                <AvatarComponent />
-              ) : (
-                <div className="w-full h-full rounded-full flex items-center justify-center bg-custom-2 text-white text-4xl font-bold">
-                  {result.personalityType}
-                </div>
-              )}
-            </div>
-            <div className="flex-1 text-center md:text-left">
-              <div className="mb-4">
-                <span className="text-5xl font-bold text-white">
-                  {result.personalityType} - {personalityInfo.title}
-                </span>
+        {/* Hero Result Card */}
+        <div className="relative bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl rounded-3xl p-8 mb-8 w-full overflow-hidden group hover:bg-white/15 transition-all duration-500">
+          {/* Animated background gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          
+          <div className="relative flex flex-col md:flex-row items-center gap-8 min-h-[200px]">
+            <div className="flex-shrink-0 h-[200px] w-[200px] relative group/avatar">
+              <div className="absolute inset-0 rounded-full opacity-20 animate-pulse" style={{ boxShadow: "0 0 40px var(--color-custom-2)" }}></div>
+              <div className="relative transform transition-transform duration-300 group-hover/avatar:scale-105">
+                {AvatarComponent ? (
+                  <AvatarComponent />
+                ) : (
+                  <div className="w-full h-full rounded-full flex items-center justify-center text-white text-4xl font-bold border-4 border-white/20" style={{ backgroundColor: "var(--color-custom-2)" }}>
+                    {result.personalityType}
+                  </div>
+                )}
               </div>
-              <p className="text-lg text-neutral-100 leading-relaxed">
+              {/* Floating badge */}
+              <div className="absolute -top-2 -right-2 w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg animate-bounce" style={{ backgroundColor: "var(--color-custom-2)" }}>
+                {result.personalityType}
+              </div>
+            </div>
+            
+            <div className="flex-1 text-center md:text-left">
+              <div className="mb-6">
+                <div className="mb-3">
+                  <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300 tracking-tight">
+                    {result.personalityType}
+                  </span>
+                </div>
+                <div className="h-1 w-32 mx-auto md:mx-0 rounded-full mb-4" style={{ backgroundColor: "var(--color-custom-2)" }}></div>
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-2 tracking-wide">
+                  {personalityInfo.title}
+                </h1>
+              </div>
+              <p className="text-xl text-neutral-100 leading-relaxed font-light max-w-3xl">
                 {personalityInfo.description}
               </p>
+              
+              {/* Success indicator */}
+              <div className="flex items-center justify-center md:justify-start mt-6 space-x-2">
+                <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-green-400 font-medium">Assessment Complete</span>
+              </div>
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 w-full">
-            <h3 className="text-2xl font-bold text-white mb-6">Key Traits</h3>
-            <div className="space-y-3">
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl rounded-3xl p-8 w-full hover:bg-white/15 transition-all duration-500 group">
+            <h3 className="text-3xl font-bold text-white mb-6 flex items-center">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--color-custom-2)" }}>
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              Key Strengths
+            </h3>
+            <div className="space-y-4">
               {personalityInfo.traits.map((trait, index) => (
-                <div key={index} className="flex items-center space-x-3">
-                  <div
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: "var(--color-custom-2)" }}
-                  ></div>
-                  <span className="text-white font-medium">{trait}</span>
+                <div key={index} className="flex items-center space-x-4 p-4 rounded-2xl border border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-300 cursor-pointer transform hover:scale-105 group/trait">
+                  <div className="flex-shrink-0">
+                    <div
+                      className="w-6 h-6 rounded-full flex items-center justify-center group-hover/trait:animate-pulse"
+                      style={{ backgroundColor: "var(--color-custom-2)" }}
+                    >
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                  </div>
+                  <span className="text-white font-semibold text-lg flex-1 group-hover/trait:text-gray-100 transition-colors duration-300">{trait}</span>
+                  <div className="opacity-0 group-hover/trait:opacity-100 transition-opacity duration-300">
+                    <svg className="w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Dimensions */}
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 w-full">
-            <h3 className="text-2xl font-bold text-white mb-6">
-              Personality Dimensions
+          {/* Enhanced Personality Dimensions */}
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl rounded-3xl p-8 w-full hover:bg-white/15 transition-all duration-500">
+            <h3 className="text-3xl font-bold text-white mb-6 flex items-center">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--color-custom-2)" }}>
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+              Your Personality Profile
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-6">
               {[
                 {
                   dimension: "Energy Direction",
@@ -590,8 +639,10 @@ const TestResult = () => {
                       : "Introversion",
                   description:
                     result.personalityType[0] === "E"
-                      ? "Gains energy from external world"
-                      : "Gains energy from internal world",
+                      ? "Gains energy from external world and social interaction"
+                      : "Gains energy from internal reflection and solitude",
+                  letter: result.personalityType[0],
+                  color: result.personalityType[0] === "E" ? "#f59e0b" : "#6366f1"
                 },
                 {
                   dimension: "Information Processing",
@@ -599,8 +650,10 @@ const TestResult = () => {
                     result.personalityType[1] === "S" ? "Sensing" : "Intuition",
                   description:
                     result.personalityType[1] === "S"
-                      ? "Focuses on facts and details"
-                      : "Focuses on patterns and possibilities",
+                      ? "Focuses on concrete facts, details, and present realities"
+                      : "Focuses on patterns, possibilities, and future potential",
+                  letter: result.personalityType[1],
+                  color: result.personalityType[1] === "S" ? "#10b981" : "#8b5cf6"
                 },
                 {
                   dimension: "Decision Making",
@@ -608,105 +661,147 @@ const TestResult = () => {
                     result.personalityType[2] === "T" ? "Thinking" : "Feeling",
                   description:
                     result.personalityType[2] === "T"
-                      ? "Makes decisions based on logic"
-                      : "Makes decisions based on values",
+                      ? "Makes decisions based on logical analysis and objective criteria"
+                      : "Makes decisions based on personal values and human impact",
+                  letter: result.personalityType[2],
+                  color: result.personalityType[2] === "T" ? "#06b6d4" : "#ec4899"
                 },
                 {
-                  dimension: "Lifestyle",
+                  dimension: "Lifestyle Approach",
                   result:
                     result.personalityType[3] === "J"
                       ? "Judging"
                       : "Perceiving",
                   description:
                     result.personalityType[3] === "J"
-                      ? "Prefers structure and closure"
-                      : "Prefers flexibility and openness",
+                      ? "Prefers structure, planning, and decisive closure"
+                      : "Prefers flexibility, spontaneity, and keeping options open",
+                  letter: result.personalityType[3],
+                  color: result.personalityType[3] === "J" ? "#dc2626" : "#059669"
                 },
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="border border-white/20 rounded-2xl p-4"
+                  className="relative border border-white/20 rounded-2xl p-6 hover:border-white/40 hover:bg-white/5 transition-all duration-300 transform hover:scale-105 group/dimension"
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-white font-semibold">
-                      {item.dimension}
-                    </span>
-                    <span className="text-white font-bold text-lg">
-                      {result.personalityType[index]}
-                    </span>
+                  <div className="absolute top-0 left-0 w-full h-1 rounded-t-2xl" style={{ backgroundColor: item.color }}></div>
+                  
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex-1">
+                      <h4 className="text-white font-bold text-xl mb-1">
+                        {item.dimension}
+                      </h4>
+                      <div className="text-lg font-semibold mb-2" style={{ color: item.color }}>
+                        {item.result}
+                      </div>
+                    </div>
+                    <div 
+                      className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-2xl group-hover/dimension:animate-pulse shadow-lg"
+                      style={{ backgroundColor: item.color }}
+                    >
+                      {item.letter}
+                    </div>
                   </div>
-                  <div className="text-sm text-neutral-100 mb-2">
-                    {item.result}
-                  </div>
-                  <div className="text-xs text-neutral-200">
+                  
+                  <p className="text-neutral-200 leading-relaxed">
                     {item.description}
-                  </div>
+                  </p>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Test Information */}
+        {/* Test Summary */}
         <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 mb-8 w-full">
-          <h3 className="text-2xl font-bold text-white mb-6">
-            Test Information
+          <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
+            <svg className="w-6 h-6 mr-3" style={{ color: "var(--color-custom-2)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Test Summary
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="text-center p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center" style={{ backgroundColor: "var(--color-custom-2)" }}>
+                <span className="text-white font-bold text-lg">{result.personalityType}</span>
+              </div>
+              <div className="text-2xl font-bold text-white mb-1">
                 {result.personalityType}
               </div>
-              <div className="text-sm text-neutral-100">Personality Type</div>
+              <div className="text-sm text-neutral-100">Your Personality Type</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white">
+            <div className="text-center p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center" style={{ backgroundColor: "var(--color-custom-2)" }}>
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div className="text-2xl font-bold text-white mb-1">
                 {new Date(result.completedAt).toLocaleDateString()}
               </div>
               <div className="text-sm text-neutral-100">Date Completed</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white">
+            <div className="text-center p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center" style={{ backgroundColor: "var(--color-custom-2)" }}>
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="text-2xl font-bold text-white mb-1">
                 {result.responses?.length || "N/A"}
               </div>
               <div className="text-sm text-neutral-100">Questions Answered</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white">
-                {Math.round(
-                  ((result.responses?.length || 0) /
-                    (result.responses?.length || 1)) *
-                    100
-                )}
-                %
-              </div>
-              <div className="text-sm text-neutral-100">Completion Rate</div>
-            </div>
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 w-full">
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        {/* Enhanced Actions */}
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl rounded-3xl p-8 w-full hover:bg-white/15 transition-all duration-500">
+          <div className="text-center mb-6">
+            <h4 className="text-2xl font-bold text-white mb-2">What's Next?</h4>
+            <p className="text-neutral-200">Continue your personality discovery journey</p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <button
               onClick={handleRetakeTest}
-              className="px-8 py-4 bg-white/20 text-white rounded-2xl hover:bg-white/30 hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold"
+              className="group relative px-8 py-4 bg-white/20 text-white rounded-2xl hover:bg-white/30 hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold overflow-hidden"
             >
-              Retake Test
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+              <div className="relative flex items-center justify-center space-x-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>Retake Assessment</span>
+              </div>
             </button>
+            
             <Link
               to="/"
-              className="px-8 py-4 text-white rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold text-center"
+              className="group relative px-8 py-4 text-white rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold text-center overflow-hidden"
               style={{ backgroundColor: "var(--color-custom-2)" }}
             >
-              Go to Home
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+              <div className="relative flex items-center justify-center space-x-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Explore More</span>
+              </div>
             </Link>
+            
             {isAuthenticated && (
               <Link
                 to="/dashboard"
-                className="px-8 py-4 bg-white/20 text-white rounded-2xl hover:bg-white/30 hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold text-center"
+                className="group relative px-8 py-4 bg-white/20 text-white rounded-2xl hover:bg-white/30 hover:scale-105 transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/20 font-semibold text-center overflow-hidden"
               >
-                View Dashboard
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                <div className="relative flex items-center justify-center space-x-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  <span>My Dashboard</span>
+                </div>
               </Link>
             )}
           </div>
