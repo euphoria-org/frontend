@@ -4,6 +4,45 @@ import { useMBTI } from "../../context/MBTIContext";
 import { useAuth } from "../../context/AuthContext";
 import { mbtiService } from "../../services/mbtiService";
 import Meteors from "../common/Meteors";
+import Architect from "../Avatars/Architect";
+import Logician from "../Avatars/Logician";
+import Commander from "../Avatars/Commander";
+import Debater from "../Avatars/Debater";
+import Advocate from "../Avatars/Advocate";
+import Mediator from "../Avatars/Mediator";
+import Protagonist from "../Avatars/Protagonist";
+import Campaigner from "../Avatars/Campaigner";
+import Logistician from "../Avatars/Logistician";
+import Defender from "../Avatars/Defender";
+import Executive from "../Avatars/Executive";
+import Consul from "../Avatars/Consul";
+import Virtuoso from "../Avatars/Virtuoso";
+import Adventurer from "../Avatars/Adventurer";
+import Entrepreneur from "../Avatars/Entrepreneur";
+import Entertainer from "../Avatars/Entertainer";
+
+const getAvatarComponent = (personalityType) => {
+  const avatarMap = {
+    INTJ: Architect,
+    INTP: Logician,
+    ENTJ: Commander,
+    ENTP: Debater,
+    INFJ: Advocate,
+    INFP: Mediator,
+    ENFJ: Protagonist,
+    ENFP: Campaigner,
+    ISTJ: Logistician,
+    ISFJ: Defender,
+    ESTJ: Executive,
+    ESFJ: Consul,
+    ISTP: Virtuoso,
+    ISFP: Adventurer,
+    ESTP: Entrepreneur,
+    ESFP: Entertainer,
+  };
+
+  return avatarMap[personalityType] || null;
+};
 
 const TestResult = () => {
   const { resultId } = useParams();
@@ -374,7 +413,7 @@ const TestResult = () => {
     return (
       <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
         <Meteors number={25} />
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 max-w-md w-full text-center relative z-10">
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 w-[90%] max-w-md text-center relative z-10">
           <div className="animate-spin w-16 h-16 border-4 border-white/30 border-t-white rounded-full mx-auto mb-6"></div>
           <h2 className="text-2xl font-bold text-white mb-4">
             Loading Results
@@ -391,7 +430,7 @@ const TestResult = () => {
     return (
       <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
         <Meteors number={25} />
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 max-w-md w-full text-center relative z-10">
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 w-[90%] max-w-md text-center relative z-10">
           <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg
               className="w-8 h-8 text-white"
@@ -427,7 +466,6 @@ const TestResult = () => {
             </button>
             <button
               onClick={() => {
-                // Force clear all data and reset state
                 localStorage.clear();
                 setResult(null);
                 setError(null);
@@ -454,7 +492,7 @@ const TestResult = () => {
     return (
       <div className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
         <Meteors number={25} />
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 max-w-md w-full text-center relative z-10">
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-12 w-[90%] max-w-md text-center relative z-10">
           <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg
               className="w-8 h-8 text-white"
@@ -489,36 +527,40 @@ const TestResult = () => {
   }
 
   const personalityInfo = getPersonalityDescription(result.personalityType);
+  const AvatarComponent = getAvatarComponent(result.personalityType);
 
   return (
     <div className="min-h-screen relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 overflow-hidden">
       <Meteors number={20} />
       <div className="absolute inset-0 stars-background opacity-60"></div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 mb-8 text-center">
-          <div
-            className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center text-white text-3xl font-bold"
-            style={{ backgroundColor: "var(--color-custom-2)" }}
-          >
-            {result.personalityType}
+      <div className="w-[90%] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 mb-8 w-full">
+          <div className="flex flex-col md:flex-row items-center gap-8 min-h-[200px]">
+            <div className="flex-shrink-0 h-[200px] w-[200px]">
+              {AvatarComponent ? (
+                <AvatarComponent />
+              ) : (
+                <div className="w-full h-full rounded-full flex items-center justify-center bg-custom-2 text-white text-4xl font-bold">
+                  {result.personalityType}
+                </div>
+              )}
+            </div>
+            <div className="flex-1 text-center md:text-left">
+              <div className="mb-4">
+                <span className="text-5xl font-bold text-white">
+                  {result.personalityType} - {personalityInfo.title}
+                </span>
+              </div>
+              <p className="text-lg text-neutral-100 leading-relaxed">
+                {personalityInfo.description}
+              </p>
+            </div>
           </div>
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Your Personality Type
-          </h1>
-          <h2 className="text-2xl font-semibold text-white/90 mb-4">
-            {personalityInfo.title}
-          </h2>
-          <p className="text-lg text-neutral-100 leading-relaxed max-w-2xl mx-auto">
-            {personalityInfo.description}
-          </p>
         </div>
 
-        {/* Personality Breakdown */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          {/* Traits */}
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 w-full">
             <h3 className="text-2xl font-bold text-white mb-6">Key Traits</h3>
             <div className="space-y-3">
               {personalityInfo.traits.map((trait, index) => (
@@ -534,7 +576,7 @@ const TestResult = () => {
           </div>
 
           {/* Dimensions */}
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8">
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 w-full">
             <h3 className="text-2xl font-bold text-white mb-6">
               Personality Dimensions
             </h3>
@@ -606,11 +648,11 @@ const TestResult = () => {
         </div>
 
         {/* Test Information */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 mb-8">
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 mb-8 w-full">
           <h3 className="text-2xl font-bold text-white mb-6">
             Test Information
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-white">
                 {result.personalityType}
@@ -644,7 +686,7 @@ const TestResult = () => {
         </div>
 
         {/* Actions */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8">
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-3xl p-8 w-full">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={handleRetakeTest}
