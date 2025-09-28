@@ -16,3 +16,5 @@ export { default as MenuIcon } from "./MenuIcon";
 export { default as CloseIcon } from "./CloseIcon";
 export { default as PermaIcon } from "./PermaIcon";
 export { default as IQIcon } from "./IQIcon";
+export { default as ChatIcon } from "./ChatIcon";
+export { default as SendIcon } from "./SendIcon";

@@ -26,4 +26,13 @@ export const API_ENDPOINTS = {
     PROFILE: `${BASE_URL}/api/user/profile`,
     UPDATE_PROFILE: `${BASE_URL}/api/user/profile`,
   },
+
+  CHATBOT: {
+    SEND_MESSAGE: `${BASE_URL}/api/chatbot/message`,
+    GET_CONVERSATIONS: `${BASE_URL}/api/chatbot/conversations`,
+    GET_CONVERSATION: `${BASE_URL}/api/chatbot/conversations`,
+    DELETE_CONVERSATION: `${BASE_URL}/api/chatbot/conversations`,
+    CLEAR_CONVERSATIONS: `${BASE_URL}/api/chatbot/conversations`,
+    HEALTH: `${BASE_URL}/api/chatbot/health`,
+  },
 };
