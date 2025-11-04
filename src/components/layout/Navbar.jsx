@@ -113,7 +113,7 @@ const Navbar = () => {
               className="flex items-center space-x-3 text-xl font-bold transition-colors text-white drop-shadow-sm"
             >
               <img src="/Logo.png" alt="Euphoria Logo" className="w-12 h-12" />
-              <span>Euphoria</span>
+              <span class="mr-8">Euphoria</span>
             </Link>
 
             <div className="flex items-center space-x-8">

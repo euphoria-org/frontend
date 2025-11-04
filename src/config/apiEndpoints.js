@@ -35,4 +35,13 @@ export const API_ENDPOINTS = {
     CLEAR_CONVERSATIONS: `${BASE_URL}/api/chatbot/conversations`,
     HEALTH: `${BASE_URL}/api/chatbot/health`,
   },
+
+  PERMA: {
+    GET_QUESTIONS: `${BASE_URL}/api/perma/questions`,
+    SUBMIT_TEST: `${BASE_URL}/api/perma/submit-test`,
+    SUBMIT_TEST_GUEST: `${BASE_URL}/api/perma/submit-test-guest`,
+    CLAIM_RESULT: `${BASE_URL}/api/perma/claim-result`,
+    GET_RESULT: `${BASE_URL}/api/perma/result`,
+    GET_USER_RESULTS: `${BASE_URL}/api/perma/my-results`,
+  },
 };
