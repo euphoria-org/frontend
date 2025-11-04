@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import ProfileSection from "./ProfileSection";
 import MBTIResultsSection from "./MBTIResultsSection";
+import PERMAResultsSection from "./PERMAResultsSection";
 import Footer from "../layout/Footer";
 import { UserIcon, TestIcon, PermaIcon, IQIcon } from "../../icons";
 import Meteors from "../common/Meteors";
@@ -38,7 +39,7 @@ const Dashboard = () => {
       id: "perma-results",
       label: "PERMA Results",
       icon: PermaIcon,
-      disabled: true,
+      disabled: false,
     },
     { id: "iq-results", label: "IQ Results", icon: IQIcon, disabled: true },
   ];
@@ -98,18 +99,7 @@ const Dashboard = () => {
         <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl overflow-hidden">
           {activeTab === "profile" && <ProfileSection />}
           {activeTab === "mbti-results" && <MBTIResultsSection />}
-          {activeTab === "perma-results" && (
-            <div className="p-8 text-center">
-              <PermaIcon className="h-16 w-16 text-white/40 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">
-                PERMA Results
-              </h3>
-              <p className="text-white/60">
-                PERMA wellbeing assessment results will be available here once
-                the test is implemented.
-              </p>
-            </div>
-          )}
+          {activeTab === "perma-results" && <PERMAResultsSection />}
           {activeTab === "iq-results" && (
             <div className="p-8 text-center">
               <IQIcon className="h-16 w-16 text-white/40 mx-auto mb-4" />

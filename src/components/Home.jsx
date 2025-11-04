@@ -66,7 +66,7 @@ const Home = () => {
         "Measure your wellbeing across five key dimensions: Positive Emotions, Engagement, Relationships, Meaning, and Achievement for a fulfilling life.",
       buttonText: "Take PERMA Test",
       route: "/perma-test",
-      available: false,
+      available: true,
     },
     {
       id: 2,
@@ -115,7 +115,7 @@ const Home = () => {
               return (
                 <div
                   key={testCard.id}
-                  className="p-8 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg hover:bg-white/20 hover:shadow-xl transition-all duration-300"
+                  className="p-8 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg hover:bg-white/20 hover:shadow-xl transition-all duration-300 flex flex-col"
                 >
                   <div className="flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                     <img
@@ -127,7 +127,7 @@ const Home = () => {
                   <h3 className="text-2xl font-bold mb-4 cantarell-bold text-white">
                     {testCard.title}
                   </h3>
-                  <p className="mb-8 leading-relaxed text-lg cantarell-regular text-neutral-100">
+                  <p className="mb-8 leading-relaxed text-lg cantarell-regular text-neutral-100 flex-grow">
                     {testCard.description}
                   </p>
 

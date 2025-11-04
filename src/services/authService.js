@@ -191,6 +191,21 @@ export const authService = {
     }
   },
 
+  getUserPERMAResults: async () => {
+    try {
+      const response = await apiConnector(
+        "GET",
+        `${API_ENDPOINTS.AUTH.PROFILE.replace("/profile", "")}/perma-results`
+      );
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message || "Failed to fetch PERMA results",
+      };
+    }
+  },
+
   getCurrentUser: () => {
     try {
       const user = localStorage.getItem("user");

@@ -93,7 +93,7 @@ const Navbar = () => {
       path: "/perma-test",
       label: "PERMA Test",
       description: "Wellbeing Assessment",
-      disabled: true,
+      disabled: false,
     },
     {
       path: "/iq-test",
@@ -194,29 +194,31 @@ const Navbar = () => {
                       />
                     </svg>
                   </button>
-
+                  {/* //bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-full px-8 py-3 */}
                   {isTestDropdownOpen && (
-                    <div className="absolute top-full mt-4 w-64 bg-white/25 backdrop-blur-lg border border-white/30 rounded-xl shadow-xl z-50">
-                      <div className="p-2">
-                        {testOptions.map((test) => (
-                          <button
-                            key={test.path}
-                            onClick={() =>
-                              handleTestSelection(test.path, test.disabled)
-                            }
-                            disabled={test.disabled}
-                            className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 ${
-                              test.disabled
-                                ? "text-white/40 cursor-not-allowed"
-                                : "text-white hover:bg-white/20 cursor-pointer"
-                            }`}
-                          >
-                            <div className="font-medium">{test.label}</div>
-                            <div className="text-sm text-white/60">
-                              {test.description}
-                            </div>
-                          </button>
-                        ))}
+                    <div className="absolute top-full mt-4 w-64 rounded-xl shadow-2xl z-50 border border-white/20 overflow-hidden">
+                      <div className="bg-gradient-to-br from-slate-900/80 via-purple-900/80 to-indigo-900/80 backdrop-blur-xl">
+                        <div className="p-2">
+                          {testOptions.map((test) => (
+                            <button
+                              key={test.path}
+                              onClick={() =>
+                                handleTestSelection(test.path, test.disabled)
+                              }
+                              disabled={test.disabled}
+                              className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 ${
+                                test.disabled
+                                  ? "text-white/60 cursor-not-allowed bg-white/10"
+                                  : "text-white hover:bg-white/10 cursor-pointer"
+                              }`}
+                            >
+                              <div className="font-semibold">{test.label}</div>
+                              <div className="text-sm text-white/80">
+                                {test.description}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   )}

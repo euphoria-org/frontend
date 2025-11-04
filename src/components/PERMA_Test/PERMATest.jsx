@@ -114,6 +114,7 @@ const PERMATest = () => {
 
   const totalPages = Math.ceil(questions.length / questionsPerPage);
   const currentPageQuestions = getCurrentPageQuestions();
+  const scaleOptions = Array.from({ length: 11 }, (_, index) => index);
 
   const handleStartTest = async () => {
     clearError();
@@ -342,36 +343,58 @@ const PERMATest = () => {
                   </div>
                 </div>
 
-                {/* 0-10 Scale Slider */}
+                {/* 0-10 Scale Selector */}
                 <div className="ml-14">
-                  <div className="flex justify-between items-center mb-2">
+                  <div className="flex justify-between items-center mb-3">
                     <span className="text-sm text-neutral-200">Not at all (0)</span>
                     <span className="text-sm text-neutral-200">Completely (10)</span>
                   </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="10"
-                    step="1"
-                    value={currentAnswer !== undefined ? currentAnswer : 5}
-                    onChange={(e) =>
-                      handleAnswerSelect(index, parseInt(e.target.value))
-                    }
-                    className="w-full h-2 rounded-lg appearance-none cursor-pointer"
-                    style={{
-                      background: `linear-gradient(to right, var(--color-custom-2) 0%, var(--color-custom-2) ${
-                        ((currentAnswer !== undefined ? currentAnswer : 5) / 10) * 100
-                      }%, rgba(255,255,255,0.2) ${
-                        ((currentAnswer !== undefined ? currentAnswer : 5) / 10) * 100
-                      }%, rgba(255,255,255,0.2) 100%)`,
-                    }}
-                  />
+                  <div className="relative pt-6 pb-2">
+                    <div className="relative flex justify-between items-center">
+                      {scaleOptions.map((value) => {
+                        const isSelected = currentAnswer === value;
+
+                        return (
+                          <button
+                            type="button"
+                            key={value}
+                            onClick={() => handleAnswerSelect(index, value)}
+                            onKeyDown={(event) => {
+                              if (event.key === "Enter" || event.key === " ") {
+                                event.preventDefault();
+                                handleAnswerSelect(index, value);
+                              }
+                            }}
+                            className={`w-10 h-10 flex items-center justify-center rounded-full border transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-white/30 ${
+                              isSelected
+                                ? "text-slate-900 font-bold scale-110"
+                                : "text-white/80 hover:scale-105"
+                            }`}
+                            style={{
+                              backgroundColor: isSelected
+                                ? "var(--color-custom-2)"
+                                : "rgba(255,255,255,0.12)",
+                              borderColor: isSelected
+                                ? "var(--color-custom-2)"
+                                : "rgba(255,255,255,0.25)",
+                            }}
+                          >
+                            {value}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                   <div className="flex justify-center mt-4">
                     <div
-                      className="px-6 py-3 rounded-2xl text-white font-bold text-2xl shadow-lg"
-                      style={{ backgroundColor: "var(--color-custom-2)" }}
+                      className="px-5 py-2 rounded-2xl text-white font-semibold shadow-md border border-white/20"
+                      style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
                     >
-                      {currentAnswer !== undefined ? currentAnswer : 5}
+                      <span className="text-sm text-neutral-200 mr-2">Selected:</span>
+                      <span className="text-2xl font-bold">
+                        {currentAnswer !== undefined ? currentAnswer : "—"}
+                      </span>
+                      <span className="text-sm ml-1 text-neutral-200">/ 10</span>
                     </div>
                   </div>
                 </div>
