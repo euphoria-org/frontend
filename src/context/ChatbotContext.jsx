@@ -16,7 +16,7 @@ export const ChatbotProvider = ({ children }) => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hello! I'm Euphoria, your AI assistant. I'm here to help you with any questions about MBTI, personality types, or anything else you'd like to know. How can I assist you today?",
+      text: "Hello! I'm AURA, your AI wellness assistant. I'm here to help you with any questions about MBTI, PERMA well-being, IQ assessments, or anything else related to your mental wellness journey. How can I assist you today?",
       isBot: true,
       timestamp: new Date(),
     },
@@ -83,7 +83,7 @@ export const ChatbotProvider = ({ children }) => {
     setMessages([
       {
         id: 1,
-        text: "Hello! I'm Euphoria, your AI assistant. I'm here to help you with any questions about MBTI, personality types, or anything else you'd like to know. How can I assist you today?",
+        text: "Hello! I'm AURA, your AI wellness assistant. I'm here to help you with any questions about MBTI, PERMA well-being, IQ assessments, or anything else related to your mental wellness journey. How can I assist you today?",
         isBot: true,
         timestamp: new Date(),
       },

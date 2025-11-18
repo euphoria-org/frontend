@@ -49,12 +49,12 @@ const TypingIndicator = () => {
     <div className="flex justify-start mb-3">
       <div className="flex items-start space-x-2">
         <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-          <span className="text-white text-xs font-bold">E</span>
+          <span className="text-white text-xs font-bold">A</span>
         </div>
         <div className="bg-white/20 backdrop-blur-md border border-white/30 px-4 py-3 rounded-2xl rounded-bl-md shadow-lg">
           <div className="flex space-x-1 items-center">
             <span className="text-white/70 text-sm mr-2">
-              Euphoria is typing
+              AURA is typing
             </span>
             <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
             <div
@@ -125,10 +125,10 @@ const Chatbox = () => {
         <div className="flex items-center justify-between p-4 bg-white/10 border-b border-white/15 backdrop-blur-sm">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
-              <span className="text-white text-xs font-bold">E</span>
+              <span className="text-white text-xs font-bold">A</span>
             </div>
             <div>
-              <h3 className="text-white font-semibold">Euphoria</h3>
+              <h3 className="text-white font-semibold">AURA</h3>
               <p className="text-white/60 text-xs">Online • AI Assistant</p>
             </div>
           </div>
