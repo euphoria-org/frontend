@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { TestIcon, UserIcon } from "../icons";
+import { TestIcon, UserIcon, IQIcon, PermaIcon, MBTIIcon } from "../icons";
 import Footer from "./layout/Footer";
 import useCountUp from "../utils/useCountUp";
 import Meteors from "./common/Meteors";
@@ -10,8 +10,6 @@ import { HomeSkeleton } from "./common/skeletons";
 const Home = () => {
   const { user, isAuthenticated } = useAuth();
   const [showSkeleton, setShowSkeleton] = useState(true);
-
-  // Add 1.5-second timer to show skeleton loader
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSkeleton(false);
@@ -19,8 +17,6 @@ const Home = () => {
 
     return () => clearTimeout(timer);
   }, []);
-
-  // Statistics with animated counters
   const testAccuracy = useCountUp(94, 2500);
   const totalTests = useCountUp(15420, 3000);
   const activeUsers = useCountUp(8750, 2800);
@@ -60,7 +56,12 @@ const Home = () => {
   const testCards = [
     {
       id: 1,
-      image: "/PERMA.png",
+      image: null,
+      icon: (
+        <div className="w-20 h-20 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "var(--color-custom-2)" }}>
+          <PermaIcon className="w-12 h-12 text-white" />
+        </div>
+      ),
       title: "PERMA Assessment",
       description:
         "Measure your wellbeing across five key dimensions: Positive Emotions, Engagement, Relationships, Meaning, and Achievement for a fulfilling life.",
@@ -70,7 +71,12 @@ const Home = () => {
     },
     {
       id: 2,
-      image: "/MBTI.png",
+      image: null,
+      icon: (
+        <div className="w-20 h-20 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "var(--color-custom-2)" }}>
+          <MBTIIcon className="w-12 h-12 text-white" />
+        </div>
+      ),
       title: "MBTI Personality Test",
       description:
         "Discover your Myers-Briggs personality type through comprehensive questions that reveal your preferences in how you perceive the world and make decisions.",
@@ -80,13 +86,18 @@ const Home = () => {
     },
     {
       id: 3,
-      image: "/IQ.png",
+      image: null,
+      icon: (
+        <div className="w-20 h-20 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "var(--color-custom-2)" }}>
+          <IQIcon className="w-12 h-12 text-white" />
+        </div>
+      ),
       title: "IQ Assessment",
       description:
         "Evaluate your cognitive abilities through standardized intelligence testing that measures logical reasoning, pattern recognition, and problem-solving skills.",
       buttonText: "Take IQ Test",
       route: "/iq-test",
-      available: false,
+      available: true,
     },
   ];
 
@@ -118,11 +129,15 @@ const Home = () => {
                   className="p-8 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg hover:bg-white/20 hover:shadow-xl transition-all duration-300 flex flex-col"
                 >
                   <div className="flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <img
-                      src={testCard.image}
-                      alt={testCard.title}
-                      className="w-20 h-20 object-contain"
-                    />
+                    {testCard.icon ? (
+                      testCard.icon
+                    ) : (
+                      <img
+                        src={testCard.image}
+                        alt={testCard.title}
+                        className="w-20 h-20 object-contain"
+                      />
+                    )}
                   </div>
                   <h3 className="text-2xl font-bold mb-4 cantarell-bold text-white">
                     {testCard.title}

@@ -219,78 +219,299 @@ export const MBTIResultsSkeleton = () => {
         <div className="flex items-center space-x-2">
           <div className="h-4 w-4 bg-white/12 rounded animate-pulse"></div>
           <div
-            className="h-4 w-20 bg-white/10 rounded animate-pulse"
+            className="h-4 w-24 bg-white/10 rounded animate-pulse"
             style={{ animationDelay: "0.1s" }}
           ></div>
         </div>
       </div>
 
-      {/* Results Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <div
-            key={index}
-            className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-lg"
-            style={{ animationDelay: `${index * 0.1}s` }}
-          >
-            {/* Result Header */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="h-8 w-16 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-xl animate-pulse-shimmer bg-[length:200%_100%] shadow-md"></div>
-              <div className="h-4 w-20 bg-white/10 rounded animate-pulse"></div>
-            </div>
-
-            {/* Result Description */}
-            <div className="space-y-2 mb-4">
-              <div className="h-5 w-32 bg-white/12 rounded animate-pulse"></div>
-              <div
-                className="h-4 w-full bg-white/8 rounded animate-pulse"
-                style={{ animationDelay: "0.1s" }}
-              ></div>
-              <div
-                className="h-4 w-4/5 bg-white/8 rounded animate-pulse"
-                style={{ animationDelay: "0.2s" }}
-              ></div>
-            </div>
-
-            {/* Scores */}
-            <div className="space-y-3 mb-4">
-              {Array.from({ length: 4 }).map((_, scoreIndex) => (
-                <div
-                  key={scoreIndex}
-                  className="flex items-center justify-between"
-                >
-                  <div
-                    className="h-3 w-8 bg-white/10 rounded animate-pulse"
-                    style={{ animationDelay: `${scoreIndex * 0.05}s` }}
-                  ></div>
-                  <div className="flex-1 mx-3">
-                    <div className="h-2 bg-white/8 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-full animate-pulse-shimmer bg-[length:200%_100%]"
-                        style={{
-                          width: `${Math.random() * 40 + 40}%`,
-                          animationDelay: `${scoreIndex * 0.1}s`,
-                        }}
-                      ></div>
+      {/* Results Table */}
+      <div className="bg-white/5 backdrop-blur-lg border border-white/20 rounded-xl overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-white/10 border-b border-white/20">
+              <tr>
+                <th className="px-6 py-4 text-left">
+                  <div className="h-4 w-16 bg-white/15 rounded animate-pulse"></div>
+                </th>
+                <th className="px-6 py-4 text-left">
+                  <div className="h-4 w-28 bg-white/15 rounded animate-pulse" style={{ animationDelay: "0.05s" }}></div>
+                </th>
+                <th className="px-6 py-4 text-left">
+                  <div className="h-4 w-24 bg-white/15 rounded animate-pulse" style={{ animationDelay: "0.1s" }}></div>
+                </th>
+                <th className="px-6 py-4 text-left">
+                  <div className="h-4 w-32 bg-white/15 rounded animate-pulse" style={{ animationDelay: "0.15s" }}></div>
+                </th>
+                <th className="px-6 py-4 text-center">
+                  <div className="h-4 w-16 bg-white/15 rounded animate-pulse mx-auto" style={{ animationDelay: "0.2s" }}></div>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/10">
+              {Array.from({ length: 3 }).map((_, rowIndex) => (
+                <tr key={rowIndex} className="hover:bg-white/5">
+                  {/* Test # Column */}
+                  <td className="px-6 py-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="bg-blue-500/20 p-2 rounded-full border border-blue-400/30">
+                        <div className="h-4 w-4 bg-blue-400/30 rounded animate-pulse"></div>
+                      </div>
+                      <div className="h-5 w-8 bg-white/12 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1}s` }}></div>
                     </div>
-                  </div>
-                  <div
-                    className="h-3 w-8 bg-white/10 rounded animate-pulse"
-                    style={{ animationDelay: `${scoreIndex * 0.05 + 0.1}s` }}
-                  ></div>
-                </div>
+                  </td>
+                  {/* Personality Type Column */}
+                  <td className="px-6 py-4">
+                    <div className="h-6 w-16 bg-blue-500/20 border border-blue-400/30 rounded-full animate-pulse-shimmer bg-gradient-to-r from-blue-400/10 via-blue-400/25 to-blue-400/10 bg-[length:200%_100%]" style={{ animationDelay: `${rowIndex * 0.1 + 0.05}s` }}></div>
+                  </td>
+                  {/* Description Column */}
+                  <td className="px-6 py-4">
+                    <div className="space-y-2">
+                      <div className="h-4 w-32 bg-white/12 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1 + 0.1}s` }}></div>
+                      <div className="h-3 w-48 bg-white/8 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1 + 0.15}s` }}></div>
+                    </div>
+                  </td>
+                  {/* Date Column */}
+                  <td className="px-6 py-4">
+                    <div className="h-4 w-40 bg-white/10 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1 + 0.2}s` }}></div>
+                  </td>
+                  {/* Action Column */}
+                  <td className="px-6 py-4 text-center">
+                    <div className="h-4 w-24 bg-blue-400/20 rounded animate-pulse mx-auto" style={{ animationDelay: `${rowIndex * 0.1 + 0.25}s` }}></div>
+                  </td>
+                </tr>
               ))}
-            </div>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-            {/* Action Button */}
-            <div className="h-10 w-full bg-blue-500/15 backdrop-blur-sm border border-blue-400/25 rounded-lg animate-pulse-shimmer bg-gradient-to-r from-blue-400/8 via-blue-400/20 to-blue-400/8 bg-[length:200%_100%] shadow-sm"></div>
-          </div>
-        ))}
+export const PERMAResultsSkeleton = () => {
+  return (
+    <div className="p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="h-8 w-48 bg-white/15 backdrop-blur-sm border border-white/25 rounded-xl animate-pulse-shimmer bg-gradient-to-r from-white/10 via-white/25 to-white/10 bg-[length:200%_100%] shadow-lg"></div>
+        <div className="flex items-center space-x-2">
+          <div className="h-4 w-4 bg-white/12 rounded animate-pulse"></div>
+          <div
+            className="h-4 w-24 bg-white/10 rounded animate-pulse"
+            style={{ animationDelay: "0.1s" }}
+          ></div>
+        </div>
       </div>
 
-      {/* Take New Test Button */}
-      <div className="text-center mt-8">
-        <div className="h-12 w-48 mx-auto bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl animate-pulse-shimmer bg-[length:200%_100%] shadow-lg"></div>
+      {/* Results Table */}
+      <div className="bg-white/5 backdrop-blur-lg border border-white/20 rounded-xl overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-white/10 border-b border-white/20">
+              <tr>
+                <th className="px-6 py-4 text-left">
+                  <div className="h-4 w-16 bg-white/15 rounded animate-pulse"></div>
+                </th>
+                <th className="px-6 py-4 text-left">
+                  <div className="h-4 w-32 bg-white/15 rounded animate-pulse" style={{ animationDelay: "0.05s" }}></div>
+                </th>
+                <th className="px-6 py-4 text-left">
+                  <div className="h-4 w-28 bg-white/15 rounded animate-pulse" style={{ animationDelay: "0.1s" }}></div>
+                </th>
+                <th className="px-6 py-4 text-left">
+                  <div className="h-4 w-24 bg-white/15 rounded animate-pulse" style={{ animationDelay: "0.15s" }}></div>
+                </th>
+                <th className="px-6 py-4 text-left">
+                  <div className="h-4 w-32 bg-white/15 rounded animate-pulse" style={{ animationDelay: "0.2s" }}></div>
+                </th>
+                <th className="px-6 py-4 text-center">
+                  <div className="h-4 w-16 bg-white/15 rounded animate-pulse mx-auto" style={{ animationDelay: "0.25s" }}></div>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/10">
+              {Array.from({ length: 3 }).map((_, rowIndex) => (
+                <tr key={rowIndex} className="hover:bg-white/5">
+                  {/* Test # Column */}
+                  <td className="px-6 py-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="bg-purple-500/20 p-2 rounded-full border border-purple-400/30">
+                        <div className="h-4 w-4 bg-purple-400/30 rounded animate-pulse"></div>
+                      </div>
+                      <div className="h-5 w-8 bg-white/12 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1}s` }}></div>
+                    </div>
+                  </td>
+                  {/* Wellbeing Level Column */}
+                  <td className="px-6 py-4">
+                    <div className="space-y-1">
+                      <div className="h-6 w-24 bg-green-500/20 border border-green-400/30 rounded-full animate-pulse-shimmer bg-gradient-to-r from-green-400/10 via-green-400/25 to-green-400/10 bg-[length:200%_100%]" style={{ animationDelay: `${rowIndex * 0.1 + 0.05}s` }}></div>
+                      <div className="h-3 w-40 bg-white/8 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1 + 0.1}s` }}></div>
+                    </div>
+                  </td>
+                  {/* Average Score Column */}
+                  <td className="px-6 py-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="h-5 w-8 bg-white/15 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1 + 0.15}s` }}></div>
+                      <div className="h-4 w-8 bg-white/10 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1 + 0.18}s` }}></div>
+                    </div>
+                  </td>
+                  {/* Dimensions Column - 5 color-coded badges */}
+                  <td className="px-6 py-4">
+                    <div className="flex flex-wrap gap-2">
+                      {["purple", "blue", "pink", "yellow", "green"].map((color, dimIndex) => (
+                        <div
+                          key={dimIndex}
+                          className={`h-6 w-16 bg-${color}-500/20 border border-${color}-400/30 rounded animate-pulse-shimmer bg-gradient-to-r from-${color}-400/10 via-${color}-400/25 to-${color}-400/10 bg-[length:200%_100%]`}
+                          style={{ animationDelay: `${rowIndex * 0.1 + dimIndex * 0.05}s` }}
+                        ></div>
+                      ))}
+                    </div>
+                  </td>
+                  {/* Date Column */}
+                  <td className="px-6 py-4">
+                    <div className="h-4 w-40 bg-white/10 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1 + 0.25}s` }}></div>
+                  </td>
+                  {/* Action Column */}
+                  <td className="px-6 py-4 text-center">
+                    <div className="h-4 w-24 bg-purple-400/20 rounded animate-pulse mx-auto" style={{ animationDelay: `${rowIndex * 0.1 + 0.3}s` }}></div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const IQResultsSkeleton = () => {
+  return (
+    <div className="p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="h-8 w-48 bg-white/15 backdrop-blur-sm border border-white/25 rounded-xl animate-pulse-shimmer bg-gradient-to-r from-white/10 via-white/25 to-white/10 bg-[length:200%_100%] shadow-lg"></div>
+        <div className="flex items-center space-x-2">
+          <div className="h-4 w-4 bg-white/12 rounded animate-pulse"></div>
+          <div
+            className="h-4 w-24 bg-white/10 rounded animate-pulse"
+            style={{ animationDelay: "0.1s" }}
+          ></div>
+        </div>
+      </div>
+
+      <div className="space-y-6">
+        {/* Results Table */}
+        <div className="bg-white/5 backdrop-blur-lg border border-white/20 rounded-xl overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-white/10 border-b border-white/20">
+                <tr>
+                  <th className="px-6 py-4 text-left">
+                    <div className="h-4 w-16 bg-white/15 rounded animate-pulse"></div>
+                  </th>
+                  <th className="px-6 py-4 text-left">
+                    <div className="h-4 w-20 bg-white/15 rounded animate-pulse" style={{ animationDelay: "0.05s" }}></div>
+                  </th>
+                  <th className="px-6 py-4 text-left">
+                    <div className="h-4 w-36 bg-white/15 rounded animate-pulse" style={{ animationDelay: "0.1s" }}></div>
+                  </th>
+                  <th className="px-6 py-4 text-left">
+                    <div className="h-4 w-24 bg-white/15 rounded animate-pulse" style={{ animationDelay: "0.15s" }}></div>
+                  </th>
+                  <th className="px-6 py-4 text-left">
+                    <div className="h-4 w-32 bg-white/15 rounded animate-pulse" style={{ animationDelay: "0.2s" }}></div>
+                  </th>
+                  <th className="px-6 py-4 text-center">
+                    <div className="h-4 w-16 bg-white/15 rounded animate-pulse mx-auto" style={{ animationDelay: "0.25s" }}></div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/10">
+                {Array.from({ length: 3 }).map((_, rowIndex) => {
+                  // Varying colors for different IQ levels
+                  const colors = ["purple", "blue", "cyan"];
+                  const color = colors[rowIndex % colors.length];
+                  
+                  return (
+                    <tr key={rowIndex} className="hover:bg-white/5">
+                      {/* Test # Column */}
+                      <td className="px-6 py-4">
+                        <div className="flex items-center space-x-2">
+                          <div className={`bg-${color}-500/20 p-2 rounded-full border border-${color}-400/30`}>
+                            <div className={`h-4 w-4 bg-${color}-400/30 rounded animate-pulse`}></div>
+                          </div>
+                          <div className="h-5 w-8 bg-white/12 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1}s` }}></div>
+                        </div>
+                      </td>
+                      {/* IQ Score Column */}
+                      <td className="px-6 py-4">
+                        <div className={`h-7 w-16 bg-${color}-500/20 border border-${color}-400/30 rounded-full animate-pulse-shimmer bg-gradient-to-r from-${color}-400/10 via-${color}-400/25 to-${color}-400/10 bg-[length:200%_100%]`} style={{ animationDelay: `${rowIndex * 0.1 + 0.05}s` }}></div>
+                      </td>
+                      {/* Intelligence Level Column */}
+                      <td className="px-6 py-4">
+                        <div className="space-y-2">
+                          <div className="h-4 w-28 bg-white/12 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1 + 0.1}s` }}></div>
+                          <div className="h-3 w-52 bg-white/8 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1 + 0.15}s` }}></div>
+                        </div>
+                      </td>
+                      {/* Percentile Column with Progress Bar */}
+                      <td className="px-6 py-4">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-24 bg-white/10 rounded-full h-2">
+                            <div
+                              className={`bg-${color}-400 h-2 rounded-full animate-pulse-shimmer bg-gradient-to-r from-${color}-400/50 via-${color}-400/80 to-${color}-400/50 bg-[length:200%_100%]`}
+                              style={{ 
+                                width: `${65 + rowIndex * 10}%`,
+                                animationDelay: `${rowIndex * 0.1 + 0.2}s` 
+                              }}
+                            ></div>
+                          </div>
+                          <div className="h-4 w-10 bg-white/10 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1 + 0.25}s` }}></div>
+                        </div>
+                      </td>
+                      {/* Date Column */}
+                      <td className="px-6 py-4">
+                        <div className="h-4 w-40 bg-white/10 rounded animate-pulse" style={{ animationDelay: `${rowIndex * 0.1 + 0.3}s` }}></div>
+                      </td>
+                      {/* Action Column */}
+                      <td className="px-6 py-4 text-center">
+                        <div className={`h-4 w-24 bg-${color}-400/20 rounded animate-pulse mx-auto`} style={{ animationDelay: `${rowIndex * 0.1 + 0.35}s` }}></div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Summary Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {Array.from({ length: 3 }).map((_, index) => {
+            const colors = ["purple", "green", "blue"];
+            const color = colors[index];
+            
+            return (
+              <div
+                key={index}
+                className="bg-white/5 backdrop-blur-lg border border-white/20 rounded-xl p-4"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="h-3 w-24 bg-white/10 rounded animate-pulse mb-2" style={{ animationDelay: `${index * 0.05}s` }}></div>
+                    <div className="h-8 w-16 bg-white/15 rounded animate-pulse" style={{ animationDelay: `${index * 0.05 + 0.05}s` }}></div>
+                  </div>
+                  <div className={`bg-${color}-500/20 p-3 rounded-full`}>
+                    <div className={`h-6 w-6 bg-${color}-400/30 rounded animate-pulse`} style={{ animationDelay: `${index * 0.05 + 0.1}s` }}></div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

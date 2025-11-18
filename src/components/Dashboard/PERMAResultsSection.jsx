@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
 import { LoadingIcon, TestIcon, ResultIcon } from "../../icons";
-import { MBTIResultsSkeleton } from "../common/skeletons";
+import { PERMAResultsSkeleton } from "../common/skeletons";
 
 const PERMAResultsSection = () => {
   const [results, setResults] = useState([]);
@@ -81,7 +81,7 @@ const PERMAResultsSection = () => {
   };
 
   if (isLoading) {
-    return <MBTIResultsSkeleton />;
+    return <PERMAResultsSkeleton />;
   }
 
   if (error) {

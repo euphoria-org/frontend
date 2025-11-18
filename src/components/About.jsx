@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { TestIcon, UserIcon } from "../icons";
 import Footer from "./layout/Footer";
 import Meteors from "./common/Meteors";
-import { AboutSkeleton } from "./common/skeletons";
+import { MBTIAboutSkeleton } from "./common/skeletons";
 import Architect from "./Avatars/Architect";
 import Logician from "./Avatars/Logician";
 import Commander from "./Avatars/Commander";
@@ -285,7 +285,7 @@ const About = () => {
   ];
 
   if (showSkeleton) {
-    return <AboutSkeleton />;
+    return <MBTIAboutSkeleton />;
   }
 
   return (

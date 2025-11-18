@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import ProfileSection from "./ProfileSection";
 import MBTIResultsSection from "./MBTIResultsSection";
 import PERMAResultsSection from "./PERMAResultsSection";
+import IQResultsSection from "./IQResultsSection";
 import Footer from "../layout/Footer";
 import { UserIcon, TestIcon, PermaIcon, IQIcon } from "../../icons";
 import Meteors from "../common/Meteors";
@@ -41,7 +42,7 @@ const Dashboard = () => {
       icon: PermaIcon,
       disabled: false,
     },
-    { id: "iq-results", label: "IQ Results", icon: IQIcon, disabled: true },
+    { id: "iq-results", label: "IQ Results", icon: IQIcon, disabled: false },
   ];
 
   return (
@@ -100,18 +101,7 @@ const Dashboard = () => {
           {activeTab === "profile" && <ProfileSection />}
           {activeTab === "mbti-results" && <MBTIResultsSection />}
           {activeTab === "perma-results" && <PERMAResultsSection />}
-          {activeTab === "iq-results" && (
-            <div className="p-8 text-center">
-              <IQIcon className="h-16 w-16 text-white/40 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">
-                IQ Results
-              </h3>
-              <p className="text-white/60">
-                Intelligence assessment results will be available here once the
-                test is implemented.
-              </p>
-            </div>
-          )}
+          {activeTab === "iq-results" && <IQResultsSection />}
         </div>
       </div>
 

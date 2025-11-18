@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { usePERMA } from "../../context/PERMAContext";
 import { useAuth } from "../../context/AuthContext";
-import { TestSkeleton } from "../common/skeletons";
+import { PERMATestSkeleton } from "../common/skeletons";
 import Meteors from "../common/Meteors";
 
 const PERMATest = () => {
@@ -207,7 +207,7 @@ const PERMATest = () => {
   };
 
   if (isLoading || showSkeleton) {
-    return <TestSkeleton />;
+    return <PERMATestSkeleton />;
   }
 
   if (error) {

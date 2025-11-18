@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMBTI } from "../../context/MBTIContext";
 import { useAuth } from "../../context/AuthContext";
 import { mbtiService } from "../../services/mbtiService";
-import { TestSkeleton } from "../common/skeletons";
+import { MBTITestSkeleton } from "../common/skeletons";
 import Meteors from "../common/Meteors";
 
 const MBTITest = () => {
@@ -260,7 +260,7 @@ const MBTITest = () => {
   };
 
   if (isLoading || showSkeleton) {
-    return <TestSkeleton />;
+    return <MBTITestSkeleton />;
   }
 
   // Remove error page - just clear error and continue

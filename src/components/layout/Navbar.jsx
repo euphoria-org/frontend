@@ -122,6 +122,12 @@ const Navbar = () => {
       description: "Wellbeing Science",
       matches: ["/about/perma"],
     },
+    {
+      path: "/about/iq",
+      label: "About IQ",
+      description: "Intelligence Assessment",
+      matches: ["/about/iq"],
+    },
   ];
 
   const testOptions = [
@@ -141,7 +147,7 @@ const Navbar = () => {
       path: "/iq-test",
       label: "IQ Test",
       description: "Intelligence Assessment",
-      disabled: true,
+      disabled: false,
     },
   ];
 

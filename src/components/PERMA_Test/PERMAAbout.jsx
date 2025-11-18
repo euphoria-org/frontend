@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Meteors from "../common/Meteors";
 import Footer from "../layout/Footer";
-import { AboutSkeleton } from "../common/skeletons";
+import { PERMAAboutSkeleton } from "../common/skeletons";
 import { ResultIcon, TestIcon } from "../../icons";
 
 const PERMAAbout = () => {
@@ -113,7 +113,7 @@ const PERMAAbout = () => {
   ];
 
   if (showSkeleton) {
-    return <AboutSkeleton />;
+    return <PERMAAboutSkeleton />;
   }
 
   return (

@@ -44,4 +44,13 @@ export const API_ENDPOINTS = {
     GET_RESULT: `${BASE_URL}/api/perma/result`,
     GET_USER_RESULTS: `${BASE_URL}/api/perma/my-results`,
   },
+
+  IQ: {
+    GET_QUESTIONS: `${BASE_URL}/api/iq/questions`,
+    SUBMIT_TEST: `${BASE_URL}/api/iq/submit-test`,
+    SUBMIT_TEST_GUEST: `${BASE_URL}/api/iq/submit-test-guest`,
+    CLAIM_RESULT: `${BASE_URL}/api/iq/claim-result`,
+    GET_RESULT: `${BASE_URL}/api/iq/result`,
+    GET_USER_RESULTS: `${BASE_URL}/api/iq/my-results`,
+  },
 };
