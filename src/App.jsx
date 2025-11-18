@@ -7,6 +7,7 @@ import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./components/Home";
 import About from "./components/About";
+import PERMAAbout from "./components/PERMA_Test/PERMAAbout";
 import Login from "./components/Authentication/Login";
 import Signup from "./components/Authentication/Signup";
 import ForgotPassword from "./components/Authentication/ForgotPassword";
@@ -31,6 +32,8 @@ function App() {
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="about" element={<About />} />
+                <Route path="about/perma" element={<PERMAAbout />} />
+                <Route path="about/mbti" element={<About />} />
                 <Route path="test" element={<MBTITest />} />
                 <Route path="result" element={<TestResult />} />
                 <Route path="result/:resultId" element={<TestResult />} />

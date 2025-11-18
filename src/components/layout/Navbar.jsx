@@ -5,7 +5,6 @@ import {
   HomeIcon,
   TestIcon,
   AboutIcon,
-  ResultIcon,
   ProfileIcon,
   LogoutIcon,
   MenuIcon,
@@ -18,6 +17,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isTestDropdownOpen, setIsTestDropdownOpen] = useState(false);
+  const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -25,13 +25,21 @@ const Navbar = () => {
       if (isTestDropdownOpen && !event.target.closest(".test-dropdown")) {
         setIsTestDropdownOpen(false);
       }
+      if (isAboutDropdownOpen && !event.target.closest(".about-dropdown")) {
+        setIsAboutDropdownOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isTestDropdownOpen]);
+  }, [isTestDropdownOpen, isAboutDropdownOpen]);
+
+  useEffect(() => {
+    setIsTestDropdownOpen(false);
+    setIsAboutDropdownOpen(false);
+  }, [location.pathname]);
 
   const handleLogout = () => {
     logout();
@@ -41,22 +49,44 @@ const Navbar = () => {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsTestDropdownOpen(false);
+    setIsAboutDropdownOpen(false);
   };
 
   const toggleTestDropdown = () => {
     setIsTestDropdownOpen(!isTestDropdownOpen);
+    setIsAboutDropdownOpen(false);
+  };
+
+  const toggleAboutDropdown = () => {
+    setIsAboutDropdownOpen(!isAboutDropdownOpen);
+    setIsTestDropdownOpen(false);
   };
 
   const handleTestSelection = (testPath, isDisabled = false) => {
     if (!isDisabled) {
       navigate(testPath);
       setIsTestDropdownOpen(false);
+      setIsAboutDropdownOpen(false);
       setIsMobileMenuOpen(false);
     }
   };
 
+  const handleAboutSelection = (aboutPath) => {
+    navigate(aboutPath);
+    setIsAboutDropdownOpen(false);
+    setIsTestDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+  };
+
   const isActivePage = (path) => {
     return location.pathname === path;
+  };
+
+  const isAboutActive = () => {
+    return (
+      location.pathname === "/about" || location.pathname.startsWith("/about/")
+    );
   };
 
   const getUserDisplayName = () => {
@@ -77,9 +107,21 @@ const Navbar = () => {
     return fullName.length > 12 ? fullName.substring(0, 12) : fullName;
   };
 
-  const navLinks = [
-    { path: "/", label: "Home", icon: HomeIcon },
-    { path: "/about", label: "About", icon: AboutIcon },
+  const navLinks = [{ path: "/", label: "Home", icon: HomeIcon }];
+
+  const aboutOptions = [
+    {
+      path: "/about",
+      label: "About MBTI",
+      description: "Personality Insights",
+      matches: ["/about", "/about/mbti"],
+    },
+    {
+      path: "/about/perma",
+      label: "About PERMA",
+      description: "Wellbeing Science",
+      matches: ["/about/perma"],
+    },
   ];
 
   const testOptions = [
@@ -113,7 +155,7 @@ const Navbar = () => {
               className="flex items-center space-x-3 text-xl font-bold transition-colors text-white drop-shadow-sm"
             >
               <img src="/Logo.png" alt="Euphoria Logo" className="w-12 h-12" />
-              <span class="mr-8">Euphoria</span>
+              <span className="mr-8">Euphoria</span>
             </Link>
 
             <div className="flex items-center space-x-8">
@@ -150,6 +192,72 @@ const Navbar = () => {
                 </Link>
               ))}
 
+              <div className="relative about-dropdown">
+                <button
+                  onClick={toggleAboutDropdown}
+                  className={`flex items-center space-x-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                    isAboutActive() || isAboutDropdownOpen
+                      ? "shadow-md"
+                      : "hover:bg-white/20"
+                  }`}
+                  style={
+                    isAboutActive() || isAboutDropdownOpen
+                      ? {
+                          backgroundColor: "var(--color-custom-2)",
+                          color: "#ffffff",
+                        }
+                      : {
+                          color: "#ffffff",
+                        }
+                  }
+                >
+                  <AboutIcon className="w-4 h-4" />
+                  <span>About</span>
+                  <svg
+                    className="w-3 h-3 ml-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                {isAboutDropdownOpen && (
+                  <div className="absolute top-full mt-4 w-64 rounded-xl shadow-2xl z-50 border border-white/20 overflow-hidden">
+                    <div className="bg-gradient-to-br from-slate-900/80 via-purple-900/80 to-indigo-900/80 backdrop-blur-xl">
+                      <div className="p-2">
+                        {aboutOptions.map((option) => {
+                          const isActive = option.matches.includes(
+                            location.pathname
+                          );
+                          return (
+                            <button
+                              key={option.path}
+                              onClick={() => handleAboutSelection(option.path)}
+                              className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 ${
+                                isActive
+                                  ? "bg-white/15 text-white shadow-md"
+                                  : "text-white hover:bg-white/10"
+                              }`}
+                            >
+                              <div className="font-semibold">
+                                {option.label}
+                              </div>
+                              <div className="text-sm text-white/80">
+                                {option.description}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {isAuthenticated && (
                 <div className="relative test-dropdown">
                   <button
@@ -169,16 +277,6 @@ const Navbar = () => {
                             color: "#ffffff",
                           }
                     }
-                    onMouseEnter={(e) => {
-                      if (!isActivePage("/test") && !isTestDropdownOpen) {
-                        e.target.style.color = "var(--color-custom-4)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActivePage("/test") && !isTestDropdownOpen) {
-                        e.target.style.color = "#ffffff";
-                      }
-                    }}
                   >
                     <TestIcon className="w-4 h-4" />
                     <span>Take Test</span>
@@ -343,6 +441,44 @@ const Navbar = () => {
                     <span>{label}</span>
                   </Link>
                 ))}
+
+                <div className="space-y-2">
+                  <div className="text-white/60 text-sm font-medium px-4 py-2">
+                    About
+                  </div>
+                  {aboutOptions.map((option) => {
+                    const isActive = option.matches.includes(
+                      location.pathname
+                    );
+                    return (
+                      <button
+                        key={option.path}
+                        onClick={() => handleAboutSelection(option.path)}
+                        className={`w-full text-left flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          isActive
+                            ? "shadow-md"
+                            : "text-white hover:bg-white/20"
+                        }`}
+                        style={
+                          isActive
+                            ? {
+                                backgroundColor: "var(--color-custom-2)",
+                                color: "#ffffff",
+                              }
+                            : {}
+                        }
+                      >
+                        <AboutIcon className="w-5 h-5" />
+                        <div>
+                          <div className="font-medium">{option.label}</div>
+                          <div className="text-xs text-white/60">
+                            {option.description}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
 
                 {isAuthenticated && (
                   <div className="space-y-2">
