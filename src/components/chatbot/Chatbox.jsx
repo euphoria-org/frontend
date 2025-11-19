@@ -13,7 +13,7 @@ const ChatMessage = ({ message, isBot }) => {
       >
         {isBot && (
           <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-            <span className="text-white text-xs font-bold">E</span>
+            <span className="text-white text-xs font-bold">A</span>
           </div>
         )}
         <div
