@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { API_ENDPOINTS } from "../../config/apiEndpoints";
 import {
   EmailIcon,
   UserIcon,
@@ -139,7 +140,7 @@ const Signup = () => {
   const handleGoogleSignup = () => {
     setIsGoogleLoading(true);
     // Redirect to Google OAuth endpoint
-    window.location.href = "http://localhost:8080/auth/google";
+    window.location.href = API_ENDPOINTS.AUTH.GOOGLE_AUTH;
   };
 
   return (
