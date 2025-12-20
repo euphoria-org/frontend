@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { authService } from "../services/authService";
+import { API_ENDPOINTS } from "../config/apiEndpoints";
 
 // Initial state
 const initialState = {
@@ -276,7 +277,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", token);
 
       // Fetch user profile with the token
-      const response = await fetch("http://localhost:8080/api/user/profile", {
+      const response = await fetch(API_ENDPOINTS.USER.PROFILE, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
