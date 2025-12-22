@@ -58,7 +58,7 @@ const Home = () => {
       id: 1,
       image: null,
       icon: (
-        <div className="w-20 h-20 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "var(--color-custom-2)" }}>
+        <div className="w-20 h-20 rounded-2xl flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg">
           <PermaIcon className="w-12 h-12 text-white" />
         </div>
       ),
@@ -73,7 +73,7 @@ const Home = () => {
       id: 2,
       image: null,
       icon: (
-        <div className="w-20 h-20 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "var(--color-custom-2)" }}>
+        <div className="w-20 h-20 rounded-2xl flex items-center justify-center bg-gradient-to-br from-indigo-500 to-blue-500 shadow-lg">
           <MBTIIcon className="w-12 h-12 text-white" />
         </div>
       ),
@@ -88,7 +88,7 @@ const Home = () => {
       id: 3,
       image: null,
       icon: (
-        <div className="w-20 h-20 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "var(--color-custom-2)" }}>
+        <div className="w-20 h-20 rounded-2xl flex items-center justify-center bg-gradient-to-br from-emerald-500 to-teal-500 shadow-lg">
           <IQIcon className="w-12 h-12 text-white" />
         </div>
       ),
@@ -109,60 +109,75 @@ const Home = () => {
     <>
       <div className="min-h-screen relative overflow-hidden">
         <Meteors number={25} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 cantarell-bold text-white drop-shadow-lg">
-              Discover Your Personality Type
-            </h2>
-            <p className="text-xl text-gray-100 mb-12 max-w-4xl mx-auto leading-relaxed cantarell-regular">
-              Take our comprehensive assessments and gain insights into your
-              unique traits, preferences, and behavioral patterns. Understanding
-              yourself better can help you in personal growth, career decisions,
-              and relationships.
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 cantarell-bold text-white drop-shadow-2xl leading-tight">
+              Discover Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">True Self</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-100 mb-12 max-w-4xl mx-auto leading-relaxed cantarell-regular opacity-90">
+              Take our scientifically-validated assessments to gain deep insights into your
+              unique traits, wellbeing, and cognitive patterns. Start your journey of self-discovery today.
             </p>
+            <div className="flex flex-wrap justify-center items-center gap-6 mt-12 text-sm md:text-base text-neutral-100">
+              {["Scientifically Validated", "Instant Results", "Personalized Insights"].map((item) => (
+                <div key={item} className="flex items-center bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+                  <svg
+                    className="w-5 h-5 mr-2 text-emerald-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {item}
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-3 gap-10 mb-24">
             {testCards.map((testCard) => {
               return (
                 <div
                   key={testCard.id}
-                  className="p-8 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg hover:bg-white/20 hover:shadow-xl transition-all duration-300 flex flex-col"
+                  className="group p-10 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl hover:bg-white/15 hover:scale-[1.02] transition-all duration-500 flex flex-col"
                 >
-                  <div className="flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500">
                     {testCard.icon ? (
                       testCard.icon
                     ) : (
                       <img
                         src={testCard.image}
                         alt={testCard.title}
-                        className="w-20 h-20 object-contain"
+                        className="w-24 h-24 object-contain"
                       />
                     )}
                   </div>
-                  <h3 className="text-2xl font-bold mb-4 cantarell-bold text-white">
+                  <h3 className="text-2xl font-bold mb-4 cantarell-bold text-white text-center">
                     {testCard.title}
                   </h3>
-                  <p className="mb-8 leading-relaxed text-lg cantarell-regular text-neutral-100 flex-grow">
+                  <p className="mb-10 leading-relaxed text-lg cantarell-regular text-neutral-200 text-center flex-grow">
                     {testCard.description}
                   </p>
 
                   {testCard.available ? (
                     <Link
                       to={testCard.route}
-                      className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 text-white font-semibold rounded-xl hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg"
-                      style={{ backgroundColor: "var(--color-custom-2)" }}
+                      className="inline-flex items-center justify-center w-full space-x-3 px-8 py-5 text-white font-bold rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transform hover:shadow-purple-500/25 transition-all duration-300 shadow-xl"
                     >
                       <TestIcon className="w-6 h-6" />
                       <span>{testCard.buttonText}</span>
                     </Link>
                   ) : (
                     <div className="text-center">
-                      <p className="text-sm font-medium mb-4 text-gray-300">
+                      <p className="text-sm font-medium mb-4 text-gray-400">
                         Coming Soon
                       </p>
                       <button
                         disabled
-                        className="inline-flex items-center justify-center w-full space-x-2 px-8 py-4 bg-gray-600 text-gray-300 font-semibold rounded-xl cursor-not-allowed opacity-60"
+                        className="inline-flex items-center justify-center w-full space-x-2 px-8 py-5 bg-white/5 text-gray-400 font-semibold rounded-full cursor-not-allowed border border-white/10"
                       >
                         <TestIcon className="w-6 h-6" />
                         <span>Coming Soon</span>
@@ -175,31 +190,32 @@ const Home = () => {
           </div>
 
           {/* Statistics Section */}
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-2xl hover:bg-white/20 hover:shadow-xl transition-all duration-300 p-8 md:p-12 mb-16">
-            <div className="text-center">
-              <h3 className="text-3xl font-bold mb-8 cantarell-bold text-white">
+          {/* <div className="bg-white/10 backdrop-blur-2xl border border-white/20 shadow-2xl rounded-[2.5rem] p-12 md:p-20 mb-24 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-50"></div>
+            <div className="text-center relative z-10">
+              <h3 className="text-4xl md:text-5xl font-bold mb-16 cantarell-bold text-white">
                 Trusted by Thousands Worldwide
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
                 {statistics.map((stat) => (
                   <div key={stat.id} className="text-center group">
-                    <div className="mb-4">
-                      <span className="text-4xl md:text-5xl font-bold text-white">
+                    <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300">
+                      <span className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">
                         {stat.value}
                         {stat.suffix}
                       </span>
                     </div>
-                    <h4 className="text-lg font-semibold mb-2 text-white">
+                    <h4 className="text-xl font-bold mb-3 text-white">
                       {stat.label}
                     </h4>
-                    <p className="text-sm group-hover:opacity-90 transition-colors text-neutral-100">
+                    <p className="text-base text-neutral-300 opacity-80 group-hover:opacity-100 transition-opacity">
                       {stat.description}
                     </p>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <Footer />
